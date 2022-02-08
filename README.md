@@ -8,3 +8,7 @@ Sauna Telegram Bot
 2. Use version from `.dvmrc`
 3. If you use JetBrains IDE, please use this
    [guide](https://deno.land/manual@v1.11.3/getting_started/setup_your_environment#jetbrains-ides)
+
+# Deploy
+
+Application is deployed on [Deno Dash](https://dash.deno.com/projects/telegram-saunabot)
