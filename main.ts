@@ -14,7 +14,7 @@ serve((_req) => {
 });
 
 // Create bot object
-const bot = new Bot(settingsMap[`TELEGRAM_TOKEN`]); // <-- place your bot token inside this string
+const bot = new Bot(settingsMap[`TELEGRAM_TOKEN`]);
 
 // Listen for messages
 bot.command(`start`, (ctx) => ctx.reply(`Welcome! Send me a photo!`));
