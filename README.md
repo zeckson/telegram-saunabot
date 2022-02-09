@@ -11,4 +11,5 @@ Sauna Telegram Bot
 
 # Deploy
 
-Application is deployed on [Deno Dash](https://dash.deno.com/projects/telegram-saunabot)
+Application is deployed on
+[Deno Dash](https://dash.deno.com/projects/telegram-saunabot)
