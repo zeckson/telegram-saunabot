@@ -11,6 +11,8 @@ if (Deno[`readFileSync`]) {
 
 const token = Deno.env.get(`TELEGRAM_TOKEN`)?.trim();
 const deploymentId = Deno.env.get(`DENO_DEPLOYMENT_ID`);
+
+console.dir(Deno.env.toObject())
 console.log(`Deno deployment id: ${deploymentId}`);
 
 console.log(`TG token: "${token && token.length > 0 ? `set` : `not set`}"`);
