@@ -10,6 +10,8 @@ if (Deno[`readFileSync`]) {
 }
 
 const token = Deno.env.get(`TELEGRAM_TOKEN`)?.trim();
+const deploymentId = Deno.env.get(`DENO_DEPLOYMENT_ID`);
+console.log(`Deno deployment id: ${deploymentId}`);
 
 console.log(`TG token: "${token && token.length > 0 ? `set` : `not set`}"`);
 
@@ -43,4 +45,4 @@ bot.on(
 // Launch!
 bot.start();
 
-console.log(`Bot has been started: https://t.me/snezhdanov_bot`)
+console.log(`Bot has been started: https://t.me/snezhdanov_bot`);
