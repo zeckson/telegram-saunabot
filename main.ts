@@ -2,8 +2,20 @@ import { serve } from "https://deno.land/std@0.114.0/http/server.ts";
 import { config } from "https://deno.land/x/dotenv/mod.ts";
 import { Bot } from "https://deno.land/x/grammy/mod.ts";
 
-const settingsMap = config({ safe: true });
-console.log(settingsMap);
+if (Deno[`readFileSync`]) {
+  config({
+    safe: true,
+    export: true,
+  });
+}
+
+const token = Deno.env.get(`TELEGRAM_TOKEN`)?.trim();
+
+console.log(`TG token: "${token && token.length > 0 ? `set` : `not set`}"`);
+
+if (!token) {
+  Deno.exit(1);
+}
 
 console.log(`Listening on http://localhost:8000`);
 
@@ -14,7 +26,7 @@ serve((_req) => {
 });
 
 // Create bot object
-const bot = new Bot(settingsMap[`TELEGRAM_TOKEN`]);
+const bot = new Bot(token);
 
 // Listen for messages
 bot.command(`start`, (ctx) => ctx.reply(`Welcome! Send me a photo!`));
@@ -30,3 +42,5 @@ bot.on(
 
 // Launch!
 bot.start();
+
+console.log(`Bot has been started: https://t.me/snezhdanov_bot`)
