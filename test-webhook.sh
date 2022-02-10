@@ -2,6 +2,14 @@
 
 # https://core.telegram.org/bots/webhooks#the-verbose-version
 
+URL="$1"
+
+if [ -z "$URL" ]
+then
+  echo "URL is not provided!"
+  exit 1
+fi
+
 curl --tlsv1.2 -v -k -X POST -H "Content-Type: application/json" -H "Cache-Control: no-cache"  -d '{
 "update_id":10000,
 "message":{
@@ -21,4 +29,4 @@ curl --tlsv1.2 -v -k -X POST -H "Content-Type: application/json" -H "Cache-Contr
   },
   "text":"/start"
 }
-}' "https://telegram-saunabot-973cxm1pn9r0.deno.dev/bot"
+}' "$URL/bot"
