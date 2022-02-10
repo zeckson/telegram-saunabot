@@ -35,7 +35,7 @@ if (!deploymentId) {
     .get("/", (ctx) => {
       ctx.response.body = "Hello world!";
     })
-    .post(`/bot`, webhookCallback(bot, `oak`));
+    .use(`/bot`, webhookCallback(bot, `oak`));
 
   const app = new Application();
   // Logger
@@ -52,7 +52,7 @@ if (!deploymentId) {
 
   app.addEventListener(
     "listen",
-    (e) => console.log("Listening on http://localhost:8000"),
+    () => console.log("Listening on http://localhost:8000"),
   );
   await app.listen({ port: 8000 });
 }
