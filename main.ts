@@ -1,6 +1,7 @@
-import { serve } from "https://deno.land/std@0.114.0/http/server.ts";
 import { config } from "https://deno.land/x/dotenv/mod.ts";
-import { Bot } from "https://deno.land/x/grammy/mod.ts";
+import { webhookCallback } from "https://deno.land/x/grammy/mod.ts";
+import { Application, Router } from "https://deno.land/x/oak/mod.ts";
+import { createBot } from "./bot.ts";
 
 if (Deno[`readFileSync`]) {
   config({
@@ -10,10 +11,14 @@ if (Deno[`readFileSync`]) {
 }
 
 const token = Deno.env.get(`TELEGRAM_TOKEN`)?.trim();
+const projectId = Deno.env.get(`DENO_PROJECT_ID`) || `telegram-saunabot`;
 const deploymentId = Deno.env.get(`DENO_DEPLOYMENT_ID`);
 
-console.dir(Deno.env.toObject())
-console.log(`Deno deployment id: ${deploymentId}`);
+console.log(
+  `Deno deploy url: https://${projectId}${
+    deploymentId ? `-${deploymentId}` : ``
+  }.deno.dev`,
+);
 
 console.log(`TG token: "${token && token.length > 0 ? `set` : `not set`}"`);
 
@@ -21,30 +26,35 @@ if (!token) {
   Deno.exit(1);
 }
 
-console.log(`Listening on http://localhost:8000`);
+const bot = createBot(token);
+if (!deploymentId) {
+  bot.start();
+} else {
+  const router = new Router();
+  router
+    .get("/", (ctx) => {
+      ctx.response.body = "Hello world!";
+    })
+    .post(`/bot`, webhookCallback(bot, `oak`));
 
-serve((_req) => {
-  return new Response(`Hello World!`, {
-    headers: { "content-type": `text/plain` },
+  const app = new Application();
+  // Logger
+  app.use(async (ctx, next) => {
+    const start = Date.now();
+    await next();
+    const ms = Date.now() - start;
+    console.log(
+      `${ctx.request.method} ${ctx.request.url} - ${ctx.response.status} "${ctx.response.type}" in ${ms}ms`,
+    );
   });
-});
+  app.use(router.routes());
+  app.use(router.allowedMethods());
 
-// Create bot object
-const bot = new Bot(token);
-
-// Listen for messages
-bot.command(`start`, (ctx) => ctx.reply(`Welcome! Send me a photo!`));
-bot.on(`message:text`, (ctx) => ctx.reply(`That is text and not a photo!`));
-bot.on(`message:photo`, (ctx) => ctx.reply(`Nice photo! Is that you?`));
-bot.on(
-  `edited_message`,
-  (ctx) =>
-    ctx.reply(`Ha! Gotcha! You just edited this!`, {
-      reply_to_message_id: ctx.editedMessage.message_id,
-    }),
-);
-
-// Launch!
-bot.start();
+  app.addEventListener(
+    "listen",
+    (e) => console.log("Listening on http://localhost:8000"),
+  );
+  await app.listen({ port: 8000 });
+}
 
 console.log(`Bot has been started: https://t.me/snezhdanov_bot`);
