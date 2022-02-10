@@ -35,7 +35,7 @@ if (!deploymentId) {
     .get("/", (ctx) => {
       ctx.response.body = "Hello world!";
     })
-    .use(`/bot`, webhookCallback(bot, `oak`));
+    .post(`/bot`, webhookCallback(bot, `oak`));
 
   const app = new Application();
   // Logger
