@@ -47,10 +47,10 @@ if (!deploymentId) {
 
   const router = new Router();
   router
-      .get("/", (ctx) => {
-        ctx.response.body = "Hello world!";
-      })
-      .post(`/bot`, webhookCallback(bot, `oak`));
+    .get("/", (ctx) => {
+      ctx.response.body = "Hello world!";
+    })
+    .post(`/bot`, webhookCallback(bot, `oak`));
 
   app.use(router.routes());
   app.use(router.allowedMethods());
