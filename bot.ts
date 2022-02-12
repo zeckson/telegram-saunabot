@@ -1,9 +1,5 @@
 import { Bot } from "https://deno.land/x/grammy/mod.ts";
 
-const token = Deno.env.get(`TELEGRAM_TOKEN`)?.trim();
-const projectId = Deno.env.get(`DENO_PROJECT_ID`) || `telegram-saunabot`;
-const deploymentId = Deno.env.get(`DENO_DEPLOYMENT_ID`);
-
 export const createBot = (token: string) => {
   // Create bot object
   const bot = new Bot(token);
