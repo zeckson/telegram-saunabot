@@ -43,13 +43,15 @@ if (!deploymentId) {
   });
 
   // Telegram webhook
-  app.use(webhookCallback(bot, `oak`));
+  // app.use(webhookCallback(bot, `oak`));
 
   const router = new Router();
   router
       .get("/", (ctx) => {
         ctx.response.body = "Hello world!";
-      });
+      })
+      .post(`/bot`, webhookCallback(bot, `oak`));
+
   app.use(router.routes());
   app.use(router.allowedMethods());
 
