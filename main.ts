@@ -30,14 +30,8 @@ const bot = createBot(token);
 if (!deploymentId) {
   bot.start();
 } else {
-  const router = new Router();
-  router
-    .get("/", (ctx) => {
-      ctx.response.body = "Hello world!";
-    })
-    .post(`/bot`, webhookCallback(bot, `oak`));
-
   const app = new Application();
+
   // Logger
   app.use(async (ctx, next) => {
     const start = Date.now();
@@ -47,6 +41,15 @@ if (!deploymentId) {
       `${ctx.request.method} ${ctx.request.url} - ${ctx.response.status} "${ctx.response.type}" in ${ms}ms`,
     );
   });
+
+  // Telegram webhook
+  app.use(webhookCallback(bot, `oak`));
+
+  const router = new Router();
+  router
+      .get("/", (ctx) => {
+        ctx.response.body = "Hello world!";
+      });
   app.use(router.routes());
   app.use(router.allowedMethods());
 
