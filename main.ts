@@ -20,8 +20,10 @@ if (!token) {
 }
 
 const bot = createBot(token);
+await bot.init()
+
 if (!deploymentId) {
-  await bot.start();
+  bot.start();
 } else {
   await setupWebhook(bot);
   console.log(
@@ -31,4 +33,4 @@ if (!deploymentId) {
   );
 }
 
-console.log(`Bot has been started: https://t.me/snezhdanov_bot`);
+console.log(`Bot has been started: https://t.me/${bot.botInfo.username}`);
