@@ -6,7 +6,7 @@ export const createBot = (token: string) => {
 
   // Listen for messages
   bot.command(`start`, (ctx) => ctx.reply(`Welcome! Send me a photo!`));
-  bot.on(`message`, async (ctx) => console.log(`Message from: ${ctx.from}`))
+  bot.on(`message`, (ctx) => console.log(`Message from: ${ctx.from}`));
   bot.on(`message:text`, (ctx) => ctx.reply(`That is text and not a photo!`));
   bot.on(`message:photo`, (ctx) => ctx.reply(`Nice photo! Is that you?`));
   bot.on(
