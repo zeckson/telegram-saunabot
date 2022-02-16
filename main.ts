@@ -20,7 +20,7 @@ if (!token) {
 }
 
 const bot = createBot(token);
-await bot.init()
+await bot.init();
 
 if (!deploymentId) {
   bot.start();
