@@ -1,7 +1,7 @@
 import { config } from "https://deno.land/x/dotenv/mod.ts";
 import { webhookCallback } from "https://deno.land/x/grammy/mod.ts";
 import { Application, Router } from "https://deno.land/x/oak/mod.ts";
-import { createBot } from "./bot.ts";
+import { createBot } from "./src/bot.ts";
 
 if (Deno[`readFileSync`]) {
   config({
