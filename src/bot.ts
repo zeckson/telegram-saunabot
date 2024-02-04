@@ -1,5 +1,12 @@
 import { Bot, Context, NextFunction } from "./deps.ts";
 
+const token = Deno.env.get(`TELEGRAM_TOKEN`)?.trim();
+console.log(`TG token: "${token && token.length > 0 ? `set` : `not set`}"`);
+
+if (!token) {
+  Deno.exit(1);
+}
+
 const log = async (ctx: Context, next: NextFunction) => {
   const from = ctx.from || { username: `unknown`, id: `unknown` };
 
@@ -18,25 +25,23 @@ const log = async (ctx: Context, next: NextFunction) => {
   console.log(`Response time ${messageId}: ${Date.now() - before} ms`);
 };
 
-export const createBot = (token: string) => {
-  // Create bot object
-  const bot = new Bot(token);
+// Create bot object
+const bot = new Bot(token);
 
-  bot.use(log);
+bot.use(log);
 
-  // Listen for messages
-  bot.command(`start`, (ctx) => ctx.reply(`Welcome! Send me a photo!`));
+// Listen for messages
+bot.command(`start`, (ctx) => ctx.reply(`Welcome! Send me a photo!`));
 
-  bot.on(`message:text`, (ctx) => ctx.reply(`That is text and not a photo!`));
-  bot.on(`message:photo`, (ctx) => ctx.reply(`Nice photo! Is that you?`));
+bot.on(`message:text`, (ctx) => ctx.reply(`That is text and not a photo!`));
+bot.on(`message:photo`, (ctx) => ctx.reply(`Nice photo! Is that you?`));
 
-  bot.on(
-    `edited_message`,
-    (ctx) =>
-      ctx.reply(`Ha! Gotcha! You just edited this!`, {
-        reply_to_message_id: ctx.editedMessage.message_id,
-      }),
-  );
+bot.on(
+  `edited_message`,
+  (ctx) =>
+    ctx.reply(`Ha! Gotcha! You just edited this!`, {
+      reply_to_message_id: ctx.editedMessage.message_id,
+    }),
+);
 
-  return bot;
-};
+export { bot };
