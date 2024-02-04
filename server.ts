@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
     }
   }
 
-  console.log(
+  console.debug(
     `${req.method} ${req.url} - ${response.status} "${response.type}" in ${Date.now() - start}ms`,
   );
   return response;
@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
 console.log(`Deno deploy url: ${deployUrl}`);
 
 // 5. Set webhook only for production
-await bot.api.setWebhook(deployUrl);
+await bot.api.setWebhook(`${deployUrl}/${bot.token}`);
 
 await bot.init();
 
