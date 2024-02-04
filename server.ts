@@ -38,4 +38,6 @@ Deno.serve(async (req) => {
 
 console.log(`Deno deploy url: ${deployUrl}`);
 
+await bot.init();
+
 console.log(`Bot has been started: https://t.me/${bot.botInfo.username}`);
