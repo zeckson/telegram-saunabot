@@ -12,6 +12,9 @@ if (Deno[`readFileSync`]) {
 const token = Deno.env.get(`TELEGRAM_TOKEN`)?.trim();
 const projectId = Deno.env.get(`DENO_PROJECT_ID`) || `telegram-saunabot`;
 const deploymentId = Deno.env.get(`DENO_DEPLOYMENT_ID`);
+const deployUrl = deploymentId ?
+  `https://${projectId}${deploymentId ? `-${deploymentId}` : ``}.deno.dev` :
+  `http://localhost:8000`;
 
 console.log(`TG token: "${token && token.length > 0 ? `set` : `not set`}"`);
 
@@ -27,9 +30,7 @@ if (!deploymentId) {
 } else {
   await setupWebhook(bot);
   console.log(
-    `Deno deploy url: https://${projectId}${
-      deploymentId ? `-${deploymentId}` : ``
-    }.deno.dev`,
+    `Deno deploy url: ${deployUrl}`,
   );
 }
 
