@@ -1,9 +1,5 @@
 {
   "version": "3",
-  "redirects": {
-    "https://deno.land/x/dotenv/mod.ts": "https://deno.land/x/dotenv@v3.2.0/mod.ts",
-    "https://deno.land/x/grammy/mod.ts": "https://deno.land/x/grammy@v1.7.0/mod.ts"
-  },
   "remote": {
     "https://cdn.skypack.dev/-/@grammyjs/types@v2.6.0-cPMaGVlPbprnM8Sq7dE3/dist=es2019,mode=imports/optimized/@grammyjs/types.js": "fabf6997a3adf11e45d11e3c4d58d0634ab98f9d72f3116f3694123818ccd457",
     "https://cdn.skypack.dev/-/debug@v4.3.3-0XITH0hRj2rH5NQ5xJ30/dist=es2019,mode=imports/optimized/debug.js": "e15e793a72a684583834fbb81e8eab4a549c4519c9f79fab62ea8cbc002b14a1",
