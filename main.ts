@@ -1,9 +1,6 @@
-import { serve } from "https://deno.land/std@0.114.0/http/server.ts"
+import { bot } from "./src/bot.ts";
 
-console.log("Listening on http://localhost:8000")
+await bot.init();
+bot.start();
 
-serve((_req) => {
-  return new Response("Hello World!", {
-    headers: { "content-type": "text/plain" },
-  });
-})
+console.log(`Bot has been started: https://t.me/${bot.botInfo.username}`);
