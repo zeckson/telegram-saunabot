@@ -1,4 +1,4 @@
-import { Bot, Context, NextFunction } from "https://deno.land/x/grammy/mod.ts";
+import { Bot, Context, NextFunction } from "./deps.ts";
 
 const log = async (ctx: Context, next: NextFunction) => {
   const from = ctx.from || { username: `unknown`, id: `unknown` };

@@ -1,4 +1,4 @@
-import { config } from "https://deno.land/x/dotenv/mod.ts";
+import { config } from "./src/deps.ts";
 import { createBot } from "./src/bot.ts";
 import { setupWebhook } from "./src/webhook.ts";
 

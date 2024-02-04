@@ -1,5 +1,5 @@
 import { Bot, webhookCallback } from "https://deno.land/x/grammy/mod.ts";
-import { Application, Router } from "https://deno.land/x/oak/mod.ts";
+import { Application, Router } from "./deps.ts";
 
 const WEBHOOK_PORT = 8000;
 const WEBHOOK_PATH = `bot`;
