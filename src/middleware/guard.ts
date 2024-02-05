@@ -1,16 +1,24 @@
-import { Context, NextFunction } from "../deps.ts"
+import { Context, NextFunction } from '../deps.ts';
 
-const isAllowed = (status: "member" | "creator" | "administrator" | "restricted" | "left" | "kicked") => {
+const isAllowed = (
+  status:
+    | 'member'
+    | 'creator'
+    | 'administrator'
+    | 'restricted'
+    | 'left'
+    | 'kicked',
+) => {
   switch (status) {
-    case "member":
-    case "administrator":
-    case "creator":
-    case "restricted":
+    case 'member':
+    case 'administrator':
+    case 'creator':
+    case 'restricted':
       return true;
     default:
       return false;
   }
-}
+};
 
 export const isInChat = (groupId: string | number) => {
   return async (ctx: Context, next: NextFunction) => {
@@ -21,7 +29,6 @@ export const isInChat = (groupId: string | number) => {
       return ctx.reply('User is not in the group.');
     }
     try {
-
       // Check if the user is a member of the group
       const chatMember = await ctx.api.getChatMember(groupId, userID);
 
@@ -32,7 +39,7 @@ export const isInChat = (groupId: string | number) => {
 
         // TODO: send user to chat admin or provide link
 
-        return ctx.reply(`User is not allowed with status: ${status}`)
+        return ctx.reply(`User is not allowed with status: ${status}`);
       }
       // Continue handling
       return next();
@@ -41,5 +48,5 @@ export const isInChat = (groupId: string | number) => {
     }
     // Handle errors
     return ctx.reply('User is not in the group or not allowed!');
-  }
-}
+  };
+};

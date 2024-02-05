@@ -1,4 +1,4 @@
-import { NextFunction, Context } from "../deps.ts"
+import { Context, NextFunction } from '../deps.ts';
 
 export const log = async (ctx: Context, next: NextFunction) => {
   const from = ctx.from || { username: `unknown`, id: `unknown` };

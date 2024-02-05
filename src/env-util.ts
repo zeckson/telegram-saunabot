@@ -9,4 +9,4 @@ export const requireEnv = (key: string, secret = false) => {
   console.log(`${key}: "${secret ? `*`.repeat(value.length) : value}"`);
 
   return value;
-}
+};

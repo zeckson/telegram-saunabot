@@ -1,4 +1,4 @@
-import { bot } from "./src/bot.ts";
+import { bot } from './src/bot.ts';
 
 await bot.init();
 bot.start();
