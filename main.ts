@@ -1,6 +1,6 @@
-import { bot } from './src/bot.ts';
+import { bot } from './src/bot.ts'
 
-await bot.init();
-bot.start();
+await bot.init()
+bot.start()
 
-console.log(`Bot has been started: https://t.me/${bot.botInfo.username}`);
+console.log(`Bot has been started: https://t.me/${bot.botInfo.username}`)

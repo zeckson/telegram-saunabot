@@ -3,6 +3,7 @@
     "dev": "deno run --allow-net --allow-read --allow-env --watch main.ts"
   },
   "fmt": {
-    "singleQuote": true
+    "singleQuote": true,
+    "semiColons": false
   }
 }
