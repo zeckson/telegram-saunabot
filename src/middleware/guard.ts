@@ -21,19 +21,24 @@ const isAllowed = (
   }
 }
 
+const isNotEmpty = (strings: TemplateStringsArray, value: any) =>
+  value ? `${strings[0]}${value}` : ``
+
 export const isInChat = (groupId: string | number) => {
   return async (ctx: GroupContext, next: NextFunction) => {
-    const userID = ctx.from?.id
-
     if (ctx.user) {
-      console.debug(`User already loaded: ${ctx.user.id}`)
+      console.debug(`User already loaded: ${ctx.user.fullName}`)
       return next()
     }
 
-    if (!userID) {
+    const from = ctx.from
+    if (!from) {
       console.warn(`Unknown userId`, ctx)
       return ctx.reply('User is not in the group.')
     }
+
+    const userID = from.id
+
     try {
       // Check if the user is a member of the group
       const chatMember = await ctx.api.getChatMember(groupId, userID)
@@ -50,6 +55,8 @@ export const isInChat = (groupId: string | number) => {
 
       ctx.user = {
         id: userID,
+        username: from.username,
+        fullName: `[${userID}${isNotEmpty`@${from.username}`}] ${from.first_name}${isNotEmpty` ${from.last_name}`}`,
         isAdmin: status == `administrator` || status == `creator`
       }
       // Continue handling
