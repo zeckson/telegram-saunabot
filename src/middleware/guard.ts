@@ -21,16 +21,11 @@ const isAllowed = (
   }
 }
 
-const isNotEmpty = (strings: TemplateStringsArray, value: any) =>
+const isNotEmpty = (strings: TemplateStringsArray, value: unknown) =>
   value ? `${strings[0]}${value}` : ``
 
 export const isInChat = (groupId: string | number) => {
   return async (ctx: GroupContext, next: NextFunction) => {
-    if (ctx.user) {
-      console.debug(`User already loaded: ${ctx.user.fullName}`)
-      return next()
-    }
-
     const from = ctx.from
     if (!from) {
       console.warn(`Unknown userId`, ctx)
