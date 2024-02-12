@@ -1,4 +1,4 @@
-export const requireEnv = (key: string, secret = false) => {
+export const requireEnv = (key: string, secret = false): string => {
   const value = Deno.env.get(key)?.trim() ?? ``
 
   if (value.length == 0) {

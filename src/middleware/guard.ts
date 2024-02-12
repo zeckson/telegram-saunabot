@@ -1,4 +1,5 @@
-import { Context, NextFunction } from '../deps.ts'
+import { GroupContext } from "../context.ts"
+import { NextFunction } from '../deps.ts'
 
 const isAllowed = (
   status:
@@ -21,8 +22,13 @@ const isAllowed = (
 }
 
 export const isInChat = (groupId: string | number) => {
-  return async (ctx: Context, next: NextFunction) => {
+  return async (ctx: GroupContext, next: NextFunction) => {
     const userID = ctx.from?.id
+
+    if (ctx.user) {
+      console.debug(`User already loaded: ${ctx.user.id}`)
+      return next()
+    }
 
     if (!userID) {
       console.warn(`Unknown userId`, ctx)
@@ -40,6 +46,11 @@ export const isInChat = (groupId: string | number) => {
         // TODO: send user to chat admin or provide link
 
         return ctx.reply(`User is not allowed with status: ${status}`)
+      }
+
+      ctx.user = {
+        id: userID,
+        isAdmin: status == `administrator` || status == `creator`
       }
       // Continue handling
       return next()
