@@ -7,6 +7,8 @@ const DEFAULT_RESPONSE = new Response('Hello World!', {
   headers: { 'content-type': 'text/plain' },
 })
 
+console.dir(Deno.env.toObject())
+
 const projectId = Deno.env.get(`DENO_PROJECT_ID`) || `telegram-saunabot`
 const deploymentId = Deno.env.get(`DENO_DEPLOYMENT_ID`)
 const deployUrl = deploymentId
