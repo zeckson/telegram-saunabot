@@ -5,7 +5,7 @@ import { isInChat } from './middleware/guard.ts'
 import { log } from './middleware/log.ts'
 
 const TELEGRAM_TOKEN = requireEnv(`TELEGRAM_TOKEN`, true)
-const SAUNA_CHAT_ID_NAME = requireEnv(`SAUNA_CHAT_ID`)
+const SAUNA_CHAT_ID_NAME = parseInt(requireEnv(`SAUNA_CHAT_ID`), 10)
 
 type BotContext = GroupContext & I18nFlavor;
 // Create bot object
