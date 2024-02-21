@@ -1,4 +1,4 @@
-import { bot } from './src/bot.ts'
+import { bot, printBotInfo } from './src/bot.ts'
 import { webhookCallback } from './src/deps.ts'
 
 const handleUpdate = webhookCallback(bot, 'std/http')
@@ -46,4 +46,4 @@ await bot.api.setWebhook(`${deployUrl}/${bot.token}`)
 
 await bot.init()
 
-console.log(`Bot has been started: https://t.me/${bot.botInfo.username}`)
+printBotInfo()

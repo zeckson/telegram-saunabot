@@ -54,3 +54,8 @@ bot.on(
 )
 
 export { bot }
+export const printBotInfo = () => {
+  console.log(`Bot has been started: 
+  https://t.me/${bot.botInfo.username}
+  tg://resolve?domain=${bot.botInfo.username}&start=test`)
+}
