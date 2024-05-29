@@ -1,19 +1,19 @@
 import { GroupContext } from "./context.ts"
 import { Bot, I18n, I18nFlavor } from './deps.ts'
 import { requireEnv } from './env-util.ts'
-import { isInChat } from './middleware/guard.ts'
+import { isInChannelPredicate } from './middleware/guard.ts'
 import { log } from './middleware/log.ts'
 
 const TELEGRAM_TOKEN = requireEnv(`TELEGRAM_TOKEN`, true)
-const SAUNA_CHAT_ID_NAME = parseInt(requireEnv(`SAUNA_CHAT_ID`), 10)
+const CHANNEL_ID = parseInt(requireEnv(`SAUNA_CHAT_ID`), 10)
 
 type BotContext = GroupContext & I18nFlavor;
 // Create bot object
 const bot = new Bot<BotContext>(TELEGRAM_TOKEN)
 
 bot.use(log)
-const isInSaunaChat = isInChat(SAUNA_CHAT_ID_NAME)
-bot.use(isInSaunaChat)
+const checkInChannel = isInChannelPredicate(CHANNEL_ID)
+bot.use(checkInChannel)
 
 // For TypeScript and auto-completion support,
 // extend the context with I18n's flavor:
@@ -52,6 +52,10 @@ bot.on(
             reply_to_message_id: ctx.editedMessage.message_id,
         }),
 )
+
+bot.on(`my_chat_member`, (ctx) => {
+  console.dir(ctx.myChatMember);
+});
 
 export { bot }
 export const printBotInfo = () => {
