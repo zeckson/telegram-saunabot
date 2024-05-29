@@ -1,6 +1,7 @@
 import { User } from "https://deno.land/x/grammy_types@v3.4.6/manage.ts"
 import { GroupContext } from "../context.ts"
 import { NextFunction } from '../deps.ts'
+import { UserStatus } from "../type/user-status.ts"
 
 const TG_SERVICE_ACCOUNT_ID = 777000
 const _TG_SERVICE_ACCOUNT: User = Object.freeze({
@@ -8,21 +9,6 @@ const _TG_SERVICE_ACCOUNT: User = Object.freeze({
   "is_bot": false,
   "first_name": "Telegram"
 }) // Special tgService account which reposts messages from channel to group
-
-type UserStatus = 'member' | 'creator' | 'administrator' | 'restricted' | 'left' | 'kicked' | 'service_bot'
-
-const isAllowed = (status: UserStatus) => {
-  switch (status) {
-    case 'member':
-    case 'administrator':
-    case 'creator':
-    case 'restricted':
-    case 'service_bot':
-      return true
-    default:
-      return false
-  }
-}
 
 const isNotEmpty = (strings: TemplateStringsArray, value: unknown) =>
   value ? `${strings[0]}${value}` : ``
@@ -38,7 +24,8 @@ const setUserContext = (ctx: GroupContext, userID: number, from: User, status: U
     id: userID,
     username: from.username,
     fullName: `[${userID}${isNotEmpty`@${from.username}`}] ${from.first_name}${isNotEmpty` ${from.last_name}`}`,
-    isAdmin: status == `administrator` || status == `creator`
+    isAdmin: status == `administrator` || status == `creator`,
+    status
   }
 }
 
@@ -75,13 +62,9 @@ export const isInChannelPredicate = (groupIdOrChannelId: string | number) => {
     try {
       // Check if the user is a member of the group
       const status = await getStatus(ctx, groupIdOrChannelId, userID)
-      const allowed = isAllowed(status)
 
       console.debug(`User[${userID}] with status: ${status}`)
 
-      if (!allowed) {
-        return report(`User is not allowed with status: ${status}`, ctx)
-      }
 
       setUserContext(ctx, userID, from, status)
       // Continue handling

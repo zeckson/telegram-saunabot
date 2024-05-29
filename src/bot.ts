@@ -3,6 +3,7 @@ import { Bot, I18n, I18nFlavor } from './deps.ts'
 import { requireEnv } from './env-util.ts'
 import { isInChannelPredicate } from './middleware/guard.ts'
 import { log } from './middleware/log.ts'
+import { isAllowed } from "./predicate/is-allowed.ts"
 
 const TELEGRAM_TOKEN = requireEnv(`TELEGRAM_TOKEN`, true)
 const CHANNEL_ID = parseInt(requireEnv(`SAUNA_CHAT_ID`), 10)
@@ -40,6 +41,21 @@ bot.use(i18n);
 // Listen for messages
 bot.command(`start`, (ctx: BotContext) => {
     return ctx.reply(ctx.t(`greeting`))
+})
+
+bot.on(`msg`, (ctx) => {
+  if (!isAllowed(ctx.user.status)) {
+    const originalMessage = ctx.msg.message_id
+    return ctx.reply(`Для того чтобы оставлять комментари подпишитесь на канал!`, {
+      reply_to_message_id: originalMessage,
+    }).then((msg) => {
+      setTimeout(() => {
+        ctx.deleteMessages([originalMessage, msg.message_id]).catch(() => {
+          console.log(`Не удалось удалить!`)
+        })
+      }, 60 * 1000)
+    })
+  }
 })
 
 bot.on(`message:text`, (ctx) => ctx.reply(`That is text and not a photo!`))
