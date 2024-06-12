@@ -17,8 +17,8 @@ type UserLike = {
 }
 
 export const getUsername = (from?: UserLike) => {
-  const fromId = from?.id ? `@${from.id}` : `unknown`
-  const fromUsername = from?.username ?? `unknown`
+  const fromId = from?.id ?? `unknown`
+  const fromUsername = from?.username ? `@${from.username}` : `unknown`
 
   return `${fromUsername}[${fromId}]`
 }
