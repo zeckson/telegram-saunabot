@@ -7,11 +7,12 @@ const logUpdate = (ctx: Context) => {
 
   console.log(`Got update[${updateId}] from ${getUsername(ctx.from)} with types: ${updateTypes.join(`,`)}`)
 
-  if (ctx.msg) {
-    console.log(`Message update:`)
-    console.log(`======`)
-    console.dir(ctx.msg)
-    console.log(`======`)
+  const message = ctx.msg
+  if (message) {
+    const separator = `====== message[${message.message_id}] =======`
+    console.log(separator)
+    console.dir(message)
+    console.log(separator)
   }
 }
 
