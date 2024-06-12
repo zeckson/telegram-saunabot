@@ -16,9 +16,9 @@ bot.use(log)
 bot.on(`chat_join_request`, async (ctx) => {
   const chat = ctx.chat;
   const from = ctx.from;
-  await bot.api.sendMessage(ADMIN_ID, `Новая заявка на добавление от ${getUsername(from)} в чат ${chat.id}
-  Проверить пользователя можно по сыылке:
-  https://t.me/lolsbotcatcherbot?start=${from.id}`)
+  await bot.api.sendMessage(ADMIN_ID, `Новая заявка на добавление от ${getUsername(from)} в чат "${chat.title}"
+Проверить пользователя можно по сыылке:
+https://t.me/lolsbotcatcherbot?start=${from.id}`)
 })
 
 bot.on(`my_chat_member`, (ctx) => {
