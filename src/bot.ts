@@ -1,73 +1,25 @@
-import { GroupContext } from "./context.ts"
-import { Bot, I18n, I18nFlavor } from './deps.ts'
+import { UserContext } from './context.ts'
+import { Bot, I18nFlavor } from './deps.ts'
 import { requireEnv } from './env-util.ts'
-import { isInChannelPredicate } from './middleware/guard.ts'
 import { log } from './middleware/log.ts'
-import { isAllowed } from "./predicate/is-allowed.ts"
+import { getUsername } from "./util/username.ts"
 
 const TELEGRAM_TOKEN = requireEnv(`TELEGRAM_TOKEN`, true)
-const CHANNEL_ID = parseInt(requireEnv(`SAUNA_CHAT_ID`), 10)
+const ADMIN_ID = parseInt(requireEnv(`ADMIN_ID`), 10)
 
-type BotContext = GroupContext & I18nFlavor;
+type BotContext = UserContext & I18nFlavor;
 // Create bot object
 const bot = new Bot<BotContext>(TELEGRAM_TOKEN)
 
 bot.use(log)
-const checkInChannel = isInChannelPredicate(CHANNEL_ID)
-bot.use(checkInChannel)
 
-// For TypeScript and auto-completion support,
-// extend the context with I18n's flavor:
-
-// Create an `I18n` instance.
-// Continue reading to find out how to configure the instance.
-const i18n = new I18n<BotContext>({
-    defaultLocale: `ru`,
-    localeNegotiator: () => `ru`, // Default everything to ru
-    globalTranslationContext(ctx) {
-        return {
-            username: ctx.user.fullName,
-        };
-    },
-});
-
-// Translation files loaded this way works in Deno Deploy, too.
-await i18n.loadLocalesDir("locales");
-
-// Finally, register the i18n instance in the bot,
-// so the messages get translated on their way!
-bot.use(i18n);
-
-// Listen for messages
-bot.command(`start`, (ctx: BotContext) => {
-    return ctx.reply(ctx.t(`greeting`))
+bot.on(`chat_join_request`, async (ctx) => {
+  const chat = ctx.chat;
+  const from = ctx.from;
+  await bot.api.sendMessage(ADMIN_ID, `Новая заявка на добавление от ${getUsername(from)} в чат ${chat.id}
+  Проверить пользователя можно по сыылке:
+  https://t.me/lolsbotcatcherbot?start=${from.id}`)
 })
-
-bot.on(`msg`, (ctx) => {
-  if (!isAllowed(ctx.user.status)) {
-    const originalMessage = ctx.msg.message_id
-    return ctx.reply(`Для того чтобы оставлять комментари подпишитесь на канал!`, {
-      reply_to_message_id: originalMessage,
-    }).then((msg) => {
-      setTimeout(() => {
-        ctx.deleteMessages([originalMessage, msg.message_id]).catch(() => {
-          console.log(`Не удалось удалить!`)
-        })
-      }, 60 * 1000)
-    })
-  }
-})
-
-bot.on(`message:text`, (ctx) => ctx.reply(`That is text and not a photo!`))
-bot.on(`message:photo`, (ctx) => ctx.reply(`Nice photo! Is that you?`))
-
-bot.on(
-    `edited_message`,
-    (ctx) =>
-        ctx.reply(`Ha! Gotcha! You just edited this!`, {
-            reply_to_message_id: ctx.editedMessage.message_id,
-        }),
-)
 
 bot.on(`my_chat_member`, (ctx) => {
   console.dir(ctx.myChatMember);

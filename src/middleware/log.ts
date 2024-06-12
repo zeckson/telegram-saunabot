@@ -1,9 +1,9 @@
 import { Context, NextFunction } from '../deps.ts'
+import { getUsername } from "../util/username.ts"
 
 export const log = async (ctx: Context, next: NextFunction) => {
-  const from = ctx.from || { username: `unknown`, id: `unknown` }
   const messageId = `(id:${ctx.msg?.message_id})`
-  console.log(`Got message ${messageId} from: @${from.username}[${from.id}]`)
+  console.log(`Got message ${messageId} from: ${getUsername(ctx.from)}`)
   // take time before
   const before = Date.now() // milliseconds
 
