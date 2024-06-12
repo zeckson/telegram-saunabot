@@ -1,6 +1,6 @@
 import { UserContext } from './context.ts'
 import { Bot, I18nFlavor, InlineKeyboard } from './deps.ts'
-import { requireEnv } from './env-util.ts'
+import { requireEnv } from './util/env-util.ts'
 import { log } from './middleware/log.ts'
 import { getUsername } from "./util/username.ts"
 
