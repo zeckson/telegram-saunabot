@@ -4,6 +4,8 @@ import { NextFunction } from '../deps.ts'
 import { UserStatus } from "../type/user-status.ts"
 
 const TG_SERVICE_ACCOUNT_ID = 777000
+
+// noinspection JSUnusedLocalSymbols
 const _TG_SERVICE_ACCOUNT: User = Object.freeze({
   "id": TG_SERVICE_ACCOUNT_ID,
   "is_bot": false,
@@ -24,7 +26,6 @@ const setUserContext = (ctx: GroupContext, userID: number, from: User, status: U
     id: userID,
     username: from.username,
     fullName: `[${userID}${isNotEmpty`@${from.username}`}] ${from.first_name}${isNotEmpty` ${from.last_name}`}`,
-    isAdmin: status == `administrator` || status == `creator`,
     status
   }
 }
