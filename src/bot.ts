@@ -2,10 +2,11 @@ import { UserContext } from './context.ts'
 import { Bot, I18nFlavor, InlineKeyboard } from './deps.ts'
 import { requireEnv } from './util/environment.ts'
 import { log } from './middleware/log.ts'
+import { int } from "./util/system.ts"
 import { getUsername } from "./util/username.ts"
 
 const TELEGRAM_TOKEN = requireEnv(`TELEGRAM_TOKEN`, true)
-const ADMIN_ID = parseInt(requireEnv(`ADMIN_ID`), 10)
+const ADMIN_ID = int(requireEnv(`ADMIN_ID`))
 
 type BotContext = UserContext & I18nFlavor;
 // Create bot object
@@ -30,18 +31,18 @@ https://t.me/lolsbotcatcherbot?start=${from.id}`, {
   })
 })
 
-const handleQuery = async (ctx: BotContext) => {
+const handleQuery = (ctx: BotContext) => {
   const data = ctx.callbackQuery?.data ?? ``
   const [action, chatId, userId] = data.split(`:`)
 
   let result = `Неизвестная команда`
   switch (action) {
     case `approve`:
-      bot.api.approveChatJoinRequest(chatId, parseInt(userId, 10)).catch((e) => console.error(`Approve failed: ${e}`))
+      bot.api.approveChatJoinRequest(chatId, int(userId)).catch((e) => console.error(`Approve failed: ${e}`))
       result = `Добавлен в группу`
       break
     case `reject`:
-      bot.api.declineChatJoinRequest(chatId, parseInt(userId, 10)).catch((e) => console.error(`Decline failed: ${e}`))
+      bot.api.declineChatJoinRequest(chatId, int(userId)).catch((e) => console.error(`Decline failed: ${e}`))
       result = `Отклонён`
       break
     default:
