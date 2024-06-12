@@ -18,7 +18,7 @@ bot.on(`chat_join_request`, async (ctx) => {
   const from = ctx.from;
   await bot.api.sendMessage(ADMIN_ID, `Новая заявка на добавление от ${getUsername(from)} в чат "${chat.title}"
 Проверить пользователя можно по сыылке:
-https://t.me/lolsbotcatcherbot?start=${from.id}`)
+https://t.me/lolsbotcatcherbot?start=${from.id}`, { link_preview_options: { is_disabled: true } })
 })
 
 bot.on(`my_chat_member`, (ctx) => {
