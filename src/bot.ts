@@ -1,7 +1,7 @@
 import { UserContext } from './context.ts'
 import { Bot, I18nFlavor, InlineKeyboard } from './deps.ts'
-import { requireEnv } from './util/environment.ts'
 import { log } from './middleware/log.ts'
+import { requireEnv } from './util/environment.ts'
 import { int } from "./util/system.ts"
 import { getUsername } from "./util/username.ts"
 
@@ -14,13 +14,16 @@ const bot = new Bot<BotContext>(TELEGRAM_TOKEN)
 
 bot.use(log)
 
+const APPROVE_ACTION = `approve`
+const DECLINE_ACTION = `reject`
+
 bot.on(`chat_join_request`, async (ctx) => {
   const chat = ctx.chat;
   const from = ctx.from;
 
   const keyboard = [[
-    InlineKeyboard.text(`Подтвердить`, `approve:${chat.id}:${from.id}`),
-    InlineKeyboard.text(`Отклонить`, `reject:${chat.id}:${from.id}`)
+    InlineKeyboard.text(`Подтвердить`, `${APPROVE_ACTION}:${chat.id}:${from.id}`),
+    InlineKeyboard.text(`Отклонить`, `${DECLINE_ACTION}:${chat.id}:${from.id}`)
   ]]
 
   await bot.api.sendMessage(ADMIN_ID, `Новая заявка на добавление от ${getUsername(from)} в чат "${chat.title}"
@@ -37,11 +40,11 @@ const handleQuery = (ctx: BotContext) => {
 
   let result = `Неизвестная команда`
   switch (action) {
-    case `approve`:
+    case APPROVE_ACTION:
       bot.api.approveChatJoinRequest(chatId, int(userId)).catch((e) => console.error(`Approve failed: ${e}`))
       result = `Добавлен в группу`
       break
-    case `reject`:
+    case DECLINE_ACTION:
       bot.api.declineChatJoinRequest(chatId, int(userId)).catch((e) => console.error(`Decline failed: ${e}`))
       result = `Отклонён`
       break
