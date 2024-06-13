@@ -1,7 +1,6 @@
-import { UserContext } from "../context.ts"
-import { Bot, Context, I18n, I18nFlavor } from '../deps.ts'
+import { Bot, I18n } from '../deps.ts'
+import { BotContext } from "../type/context.ts"
 
-type BotContext = Context & UserContext & I18nFlavor
 export const setupTranslate = async (bot: Bot<BotContext>) => {
   // For TypeScript and auto-completion support,
   // extend the context with I18n's flavor:

@@ -1,6 +1,6 @@
-import { UserContext } from './context.ts'
-import { API_CONSTANTS, Bot, I18nFlavor, InlineKeyboard } from './deps.ts'
+import { API_CONSTANTS, Bot, InlineKeyboard } from './deps.ts'
 import { log } from './middleware/log.ts'
+import { BotContext } from './type/context.ts'
 import { requireEnv } from './util/environment.ts'
 import { int } from "./util/system.ts"
 import { getUsername } from "./util/username.ts"
@@ -8,7 +8,6 @@ import { getUsername } from "./util/username.ts"
 const TELEGRAM_TOKEN = requireEnv(`TELEGRAM_TOKEN`, true)
 const ADMIN_ID = int(requireEnv(`ADMIN_ID`))
 
-type BotContext = UserContext & I18nFlavor;
 // Create bot object
 const bot = new Bot<BotContext>(TELEGRAM_TOKEN)
 
