@@ -1,4 +1,4 @@
-import { Bot, Context, I18nFlavor } from '../deps.ts'
+import { Context, I18nFlavor } from '../deps.ts'
 import { UserStatus } from './user-status.ts'
 
 export interface UserContext extends Context {
