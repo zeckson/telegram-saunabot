@@ -1,7 +1,7 @@
-import { bot, printBotInfo } from './src/bot.ts'
+import { bot, DEFAULT_CONFIG, onAfterInit } from './src/bot.ts'
 import { webhookCallback } from './src/deps.ts'
 
-const handleUpdate : (...args: Request[]) => Promise<Response> = webhookCallback(bot, 'std/http')
+const handleUpdate: (...args: Request[]) => Promise<Response> = webhookCallback(bot, 'std/http')
 
 
 const projectId = Deno.env.get(`DENO_PROJECT_ID`) || `telegram-saunabot`
@@ -43,8 +43,8 @@ Deno.serve(async (req) => {
 console.log(`Deno deploy url: ${deployUrl}`)
 
 // 5. Set webhook only for production
-await bot.api.setWebhook(`${deployUrl}/${bot.token}`)
+await bot.api.setWebhook(`${deployUrl}/${bot.token}`, DEFAULT_CONFIG)
 
 await bot.init()
 
-printBotInfo()
+onAfterInit()

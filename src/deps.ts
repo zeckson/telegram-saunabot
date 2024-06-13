@@ -2,7 +2,8 @@ export {
   Bot,
   Context,
   webhookCallback,
-  InlineKeyboard
+  InlineKeyboard,
+  API_CONSTANTS
 } from 'https://deno.land/x/grammy@v1.24.1/mod.ts'
 export type { NextFunction } from 'https://deno.land/x/grammy@v1.24.1/mod.ts'
 export { I18n } from "https://deno.land/x/grammy_i18n@v1.0.2/mod.ts";

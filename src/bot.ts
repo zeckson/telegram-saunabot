@@ -1,5 +1,5 @@
 import { UserContext } from './context.ts'
-import { Bot, I18nFlavor, InlineKeyboard } from './deps.ts'
+import { API_CONSTANTS, Bot, I18nFlavor, InlineKeyboard } from './deps.ts'
 import { log } from './middleware/log.ts'
 import { requireEnv } from './util/environment.ts'
 import { int } from "./util/system.ts"
@@ -68,8 +68,10 @@ bot.on(`my_chat_member`, (ctx) => {
 });
 
 export { bot }
-export const printBotInfo = () => {
+export const onAfterInit = () => {
   console.log(`Bot has been started: 
   https://t.me/${bot.botInfo.username}
   tg://resolve?domain=${bot.botInfo.username}&start=test`)
 }
+
+export const DEFAULT_CONFIG = { allowed_updates: API_CONSTANTS.ALL_UPDATE_TYPES }
