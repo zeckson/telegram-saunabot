@@ -12,12 +12,14 @@ Sauna Telegram Bot
 # Update dependencies
 
 ### Write updated dependencies to lock file
+
 ```shell
 # Create/update the lock file "deno.lock".
 deno cache --lock=deno.lock --lock-write src/deps.ts
 ```
 
 ### Update dependencies and cache
+
 ```shell
 # Download the project's dependencies into the machine's cache, integrity
 # checking each resource.

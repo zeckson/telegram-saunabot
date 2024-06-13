@@ -1,11 +1,15 @@
 import { Context, NextFunction } from '../deps.ts'
-import { getUsername } from "../util/username.ts"
+import { getUsername } from '../util/username.ts'
 
 const logUpdate = (ctx: Context) => {
   const updateId = ctx.update.update_id
   const updateTypes = Object.keys(ctx.update).filter((it) => it !== `update_id`)
 
-  console.log(`Got update[${updateId}] from ${getUsername(ctx.from)} with types: ${updateTypes.join(`,`)}`)
+  console.log(
+    `Got update[${updateId}] from ${getUsername(ctx.from)} with types: ${
+      updateTypes.join(`,`)
+    }`,
+  )
 
   const message = ctx.msg
   if (message) {
@@ -30,7 +34,10 @@ export const log = async (ctx: Context, next: NextFunction) => {
   } finally {
     // take time after
     // log difference
-    console.log(`Response time update[${ctx.update.update_id}]: ${Date.now() - before} ms`)
+    console.log(
+      `Response time update[${ctx.update.update_id}]: ${
+        Date.now() - before
+      } ms`,
+    )
   }
-
 }

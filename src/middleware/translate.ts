@@ -1,5 +1,5 @@
 import { Bot, I18n } from '../deps.ts'
-import { BotContext } from "../type/context.ts"
+import { BotContext } from '../type/context.ts'
 
 export const setupTranslate = async (bot: Bot<BotContext>) => {
   // For TypeScript and auto-completion support,
@@ -13,16 +13,16 @@ export const setupTranslate = async (bot: Bot<BotContext>) => {
     globalTranslationContext(ctx) {
       return {
         username: ctx.user.fullName,
-      };
+      }
     },
-  });
+  })
 
   // Translation files loaded this way works in Deno Deploy, too.
-  await i18n.loadLocalesDir("locales");
+  await i18n.loadLocalesDir('locales')
 
   // Finally, register the i18n instance in the bot,
   // so the messages get translated on their way!
-  bot.use(i18n);
+  bot.use(i18n)
 
   // Listen for messages
   bot.command(`start`, (ctx: BotContext) => {

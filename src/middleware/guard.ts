@@ -1,15 +1,15 @@
-import { User } from "https://deno.land/x/grammy_types@v3.4.6/manage.ts"
-import { UserContext } from "../context.ts"
+import { User } from 'https://deno.land/x/grammy_types@v3.4.6/manage.ts'
+import { UserContext } from '../context.ts'
 import { NextFunction } from '../deps.ts'
-import { UserStatus } from "../type/user-status.ts"
+import { UserStatus } from '../type/user-status.ts'
 
 const TG_SERVICE_ACCOUNT_ID = 777000
 
 // noinspection JSUnusedLocalSymbols
 const _TG_SERVICE_ACCOUNT: User = Object.freeze({
-  "id": TG_SERVICE_ACCOUNT_ID,
-  "is_bot": false,
-  "first_name": "Telegram"
+  'id': TG_SERVICE_ACCOUNT_ID,
+  'is_bot': false,
+  'first_name': 'Telegram',
 }) // Special tgService account which reposts messages from channel to group
 
 const isNotEmpty = (strings: TemplateStringsArray, value: unknown) =>
@@ -21,17 +21,26 @@ const report = (message: string, ctx: UserContext) => {
   return ctx.reply(message)
 }
 
-const setUserContext = (ctx: UserContext, userID: number, from: User, status: UserStatus) => {
+const setUserContext = (
+  ctx: UserContext,
+  userID: number,
+  from: User,
+  status: UserStatus,
+) => {
   ctx.user = {
     id: userID,
     username: from.username,
-    fullName: `[${userID}${isNotEmpty`@${from.username}`}] ${from.first_name}${isNotEmpty` ${from.last_name}`}`,
-    status
+    fullName:
+      `[${userID}${isNotEmpty`@${from.username}`}] ${from.first_name}${isNotEmpty` ${from.last_name}`}`,
+    status,
   }
 }
 
-
-const getStatus = async (ctx: UserContext, groupIdOrChannelId: string | number, userID: number) => {
+const getStatus = async (
+  ctx: UserContext,
+  groupIdOrChannelId: string | number,
+  userID: number,
+) => {
   if (userID === TG_SERVICE_ACCOUNT_ID) {
     // Ignore service messages
     return 'service_bot'
@@ -43,9 +52,8 @@ const getStatus = async (ctx: UserContext, groupIdOrChannelId: string | number, 
 }
 
 const isIgnored = (ctx: UserContext) => {
-  return !!(ctx.update.channel_post || ctx.update.edited_channel_post);
+  return !!(ctx.update.channel_post || ctx.update.edited_channel_post)
 }
-
 
 export const isInChannelPredicate = (groupIdOrChannelId: string | number) => {
   return async (ctx: UserContext, next: NextFunction) => {
@@ -66,7 +74,6 @@ export const isInChannelPredicate = (groupIdOrChannelId: string | number) => {
 
       console.debug(`User[${userID}] with status: ${status}`)
 
-
       setUserContext(ctx, userID, from, status)
       // Continue handling
       return next()
@@ -77,4 +84,3 @@ export const isInChannelPredicate = (groupIdOrChannelId: string | number) => {
     }
   }
 }
-

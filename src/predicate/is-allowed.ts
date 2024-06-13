@@ -1,6 +1,8 @@
-import { UserStatus } from "../type/user-status.ts"
+import { UserStatus } from '../type/user-status.ts'
 
-export const isAllowed: (status: UserStatus) => (boolean) = (status: UserStatus) => {
+export const isAllowed: (status: UserStatus) => boolean = (
+  status: UserStatus,
+) => {
   switch (status) {
     case 'member':
     case 'administrator':
