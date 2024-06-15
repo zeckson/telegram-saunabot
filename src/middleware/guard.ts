@@ -1,7 +1,8 @@
-import { User } from 'https://deno.land/x/grammy_types@v3.4.6/manage.ts'
-import { UserContext } from '../context.ts'
+import { User } from '../deps.ts'
+import { UserContext } from '../type/context.ts'
 import { NextFunction } from '../deps.ts'
 import { UserStatus } from '../type/user-status.ts'
+import { getFullName } from "../util/username.ts"
 
 const TG_SERVICE_ACCOUNT_ID = 777000
 
@@ -11,9 +12,6 @@ const _TG_SERVICE_ACCOUNT: User = Object.freeze({
   'is_bot': false,
   'first_name': 'Telegram',
 }) // Special tgService account which reposts messages from channel to group
-
-const isNotEmpty = (strings: TemplateStringsArray, value: unknown) =>
-  value ? `${strings[0]}${value}` : ``
 
 const report = (message: string, ctx: UserContext) => {
   // TODO: send user to chat admin or provide link
@@ -30,8 +28,7 @@ const setUserContext = (
   ctx.user = {
     id: userID,
     username: from.username,
-    fullName:
-      `[${userID}${isNotEmpty`@${from.username}`}] ${from.first_name}${isNotEmpty` ${from.last_name}`}`,
+    fullName: getFullName(from),
     status,
   }
 }

@@ -55,7 +55,8 @@ const handleQuery = (ctx: BotContext) => {
 }
 
 export const register = (bot: Bot<BotContext>) => {
-  bot.on(`chat_join_request`, handleChatJoinRequest)
+  // noinspection TypeScriptValidateTypes
+  bot.on(`chat_join_request`, handleChatJoinRequest as (u: unknown) => unknown)
 
   // TODO: Prevent insecure access from unknown account
   bot.on(`callback_query:data`, async (ctx) => {

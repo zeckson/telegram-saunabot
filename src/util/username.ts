@@ -23,3 +23,12 @@ export const getUsername = (from?: UserLike) => {
 
   return `${fromUsername}[${from.id}]`
 }
+
+export const isNotEmpty = (strings: TemplateStringsArray, value: unknown) =>
+  value ? `${strings[0]}${value}` : ``
+
+export const getFullName = (from?: UserLike) => {
+  if (!from) return `Unknown user`
+
+  return `[${from.id}${isNotEmpty`@${from.username}`}] ${from.first_name}${isNotEmpty` ${from.last_name}`}`
+}

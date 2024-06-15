@@ -1,15 +1,14 @@
 import { API_CONSTANTS, Bot } from './deps.ts'
-import { register } from './handler/chat-join-request.ts'
-import { log } from './middleware/log.ts'
+import { registerHandlers } from "./handler/index.ts"
+import { registerMiddleware } from "./middleware/index.ts"
 import { BotContext } from './type/context.ts'
 import { Config } from './util/config.ts'
 
 // Create bot object
 const bot = new Bot<BotContext>(Config.TELEGRAM_TOKEN)
 
-bot.use(log)
-
-register(bot)
+await registerMiddleware(bot)
+registerHandlers(bot)
 
 bot.on(`my_chat_member`, (ctx) => {
   console.dir(ctx.myChatMember)
