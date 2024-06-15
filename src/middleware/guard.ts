@@ -2,7 +2,7 @@ import { User } from '../deps.ts'
 import { UserContext } from '../type/context.ts'
 import { NextFunction } from '../deps.ts'
 import { UserStatus } from '../type/user-status.ts'
-import { getFullName } from "../util/username.ts"
+import { getFullName } from '../util/username.ts'
 
 const TG_SERVICE_ACCOUNT_ID = 777000
 

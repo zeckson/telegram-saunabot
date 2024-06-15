@@ -1,6 +1,6 @@
 import { Bot, I18n } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
-import { getFullName } from "../util/username.ts"
+import { getFullName } from '../util/username.ts'
 
 // For TypeScript and auto-completion support,
 // extend the context with I18n's flavor:

@@ -1,6 +1,6 @@
 import { API_CONSTANTS, Bot } from './deps.ts'
-import { registerHandlers } from "./handler/index.ts"
-import { registerMiddleware } from "./middleware/index.ts"
+import { registerHandlers } from './handler/index.ts'
+import { registerMiddleware } from './middleware/index.ts'
 import { BotContext } from './type/context.ts'
 import { Config } from './util/config.ts'
 
