@@ -30,3 +30,9 @@ deno cache --reload --lock=deno.lock src/deps.ts
 
 Application is deployed on
 [Deno Dash](https://dash.deno.com/projects/telegram-saunabot)
+
+# Links
+
+- [Telegram Bot API](https://core.telegram.org/bots/api)
+- [Lols bot antispam database](https://lols.bot/?a=<id>)
+
