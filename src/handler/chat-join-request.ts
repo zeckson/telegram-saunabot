@@ -36,9 +36,10 @@ const handleChatJoinRequest = async (ctx: BotContext & ChatJoinRequest) => {
     ),
   ]]
 
+  const safeChatTitle = escapeSpecial(chat.title)
   const vars = {
     userLink: `[${getFullName(from)}](tg://user?id=${from.id})`,
-    chatLink: `[${escapeSpecial(chat.title)}](tg://resolve?domain=${chat.username})`,
+    chatLink: chat.username ? `[${safeChatTitle}](tg://resolve?domain=${chat.username})` : safeChatTitle,
     verifyLink: `[ссылке](https://t.me/lolsbotcatcherbot?start=${from.id})`,
   }
 
@@ -90,7 +91,7 @@ export const register = (bot: Bot<BotContext>) => {
 
     await ctx.answerCallbackQuery(result)
 
-    await ctx.editMessageReplyMarkup({reply_markup: undefined})
+    await ctx.editMessageReplyMarkup({ reply_markup: undefined })
   })
 }
 
