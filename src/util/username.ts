@@ -1,3 +1,5 @@
+import { isNotEmpty } from './string.ts'
+
 type UserLike = {
   id: number
   /** True, if this user is a bot */
@@ -23,9 +25,6 @@ export const getUsername = (from?: UserLike) => {
 
   return `${fromUsername}[${from.id}]`
 }
-
-export const isNotEmpty = (strings: TemplateStringsArray, value: unknown) =>
-  value ? `${strings[0]}${value}` : ``
 
 export const getFullName = (from?: UserLike) => {
   if (!from) return `Unknown user`

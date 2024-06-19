@@ -2,22 +2,9 @@ import { ChatJoinRequest } from 'https://deno.land/x/grammy_types@v3.4.6/manage.
 import { Bot, InlineKeyboard } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { Config } from '../util/config.ts'
+import { escapeSpecial } from "../util/string.ts"
 import { int } from '../util/system.ts'
 import { getFullName } from "../util/username.ts"
-
-const escapeSpecial = (value: string): string => {
-  const result = []
-  for (const it of value) {
-    switch (it) {
-      case `#`:
-        result.push(`\\`)
-      // fall through
-      default:
-        result.push(it)
-    }
-  }
-  return result.join(``)
-}
 
 const APPROVE_ACTION = `approve`
 const DECLINE_ACTION = `reject`
