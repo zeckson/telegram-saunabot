@@ -1,4 +1,5 @@
-import { Bot } from '../deps.ts'
+import { notifyJoinRequest } from "../action/notify-admin.ts"
+import { Bot, ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { escapeSpecial } from '../util/string.ts'
 import { getFullName } from '../util/username.ts'
@@ -27,4 +28,11 @@ export const register = (bot: Bot<BotContext>) => {
       },
     )
   })
+  bot.command(`notify`, (ctx: BotContext) =>
+    notifyJoinRequest(Object.assign(ctx, {
+      bio: "",
+      date: 0,
+      invite_link: undefined,
+      user_chat_id: ctx.chat!.id
+    }) as BotContext & ChatJoinRequest))
 }

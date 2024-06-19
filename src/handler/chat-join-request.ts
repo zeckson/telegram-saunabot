@@ -1,51 +1,11 @@
-import { ChatJoinRequest } from 'https://deno.land/x/grammy_types@v3.4.6/manage.ts'
-import { Bot, InlineKeyboard } from '../deps.ts'
+import { JoinRequestAction, notifyJoinRequest } from "../action/notify-admin.ts"
+import { Bot } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
-import { Config } from '../util/config.ts'
-import { escapeSpecial } from '../util/string.ts'
 import { int } from '../util/system.ts'
-import { getFullName } from '../util/username.ts'
 
-const APPROVE_ACTION = `approve`
-const DECLINE_ACTION = `reject`
-const handleChatJoinRequest = async (ctx: BotContext & ChatJoinRequest) => {
-  const chat = ctx.chat
-  const from = ctx.from
+const APPROVE_ACTION = JoinRequestAction.APPROVE
+const DECLINE_ACTION = JoinRequestAction.DECLINE
 
-  const keyboard = [[
-    InlineKeyboard.text(
-      ctx.t(`chat-join-request_approve`),
-      `${APPROVE_ACTION}:${chat.id}:${from.id}`,
-    ),
-    InlineKeyboard.text(
-      ctx.t(`chat-join-request_decline`),
-      `${DECLINE_ACTION}:${chat.id}:${from.id}`,
-    ),
-  ]]
-
-  const safeChatTitle = escapeSpecial(chat.title)
-  const vars = {
-    userLink: `[${getFullName(from)}](tg://user?id=${from.id})`,
-    chatLink: chat.username
-      ? `[${safeChatTitle}](tg://resolve?domain=${chat.username})`
-      : safeChatTitle,
-    verifyLink: `[ссылке](https://t.me/lolsbotcatcherbot?start=${from.id})`,
-  }
-
-  // NB!: grammyjs breaks message inserting invalid chars inside interpolation "{ $variable }"
-  // NB!: grammyjs automatically formats numbers which breaks links to ids
-  const message = ctx.t(`chat-join-request_admin-notify-text`, vars)
-
-  await ctx.api.sendMessage(
-    Config.ADMIN_ID,
-    message,
-    {
-      link_preview_options: { is_disabled: true },
-      reply_markup: new InlineKeyboard(keyboard),
-      parse_mode: `MarkdownV2`,
-    },
-  )
-}
 const handleQuery = (ctx: BotContext) => {
   const data = ctx.callbackQuery?.data ?? ``
   const [action, chatId, userId] = data.split(`:`)
@@ -72,7 +32,7 @@ const handleQuery = (ctx: BotContext) => {
 
 export const register = (bot: Bot<BotContext>) => {
   // noinspection TypeScriptValidateTypes
-  bot.on(`chat_join_request`, handleChatJoinRequest as (u: unknown) => unknown)
+  bot.on(`chat_join_request`, notifyJoinRequest as (u: unknown) => unknown)
 
   // TODO: Prevent insecure access from unknown account
   bot.on(`callback_query:data`, async (ctx) => {

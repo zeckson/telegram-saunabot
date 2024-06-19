@@ -30,7 +30,7 @@ export const log = async (ctx: Context, next: NextFunction) => {
   try {
     await next() // make sure to `await`!
   } catch (e) {
-    console.error(`Got error: ${e}`)
+    console.error(`Got error: ${e}`, e)
   } finally {
     // take time after
     // log difference
