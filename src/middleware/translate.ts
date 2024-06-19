@@ -16,7 +16,7 @@ const i18n = new I18n<BotContext>({
       /** @deprecated use fullName **/
       username: fullName,
       fullName,
-      ...ctx.from
+      ...ctx.from,
     }
   },
 })

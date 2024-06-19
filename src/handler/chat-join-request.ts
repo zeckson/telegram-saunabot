@@ -2,9 +2,9 @@ import { ChatJoinRequest } from 'https://deno.land/x/grammy_types@v3.4.6/manage.
 import { Bot, InlineKeyboard } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { Config } from '../util/config.ts'
-import { escapeSpecial } from "../util/string.ts"
+import { escapeSpecial } from '../util/string.ts'
 import { int } from '../util/system.ts'
-import { getFullName } from "../util/username.ts"
+import { getFullName } from '../util/username.ts'
 
 const APPROVE_ACTION = `approve`
 const DECLINE_ACTION = `reject`
@@ -26,7 +26,9 @@ const handleChatJoinRequest = async (ctx: BotContext & ChatJoinRequest) => {
   const safeChatTitle = escapeSpecial(chat.title)
   const vars = {
     userLink: `[${getFullName(from)}](tg://user?id=${from.id})`,
-    chatLink: chat.username ? `[${safeChatTitle}](tg://resolve?domain=${chat.username})` : safeChatTitle,
+    chatLink: chat.username
+      ? `[${safeChatTitle}](tg://resolve?domain=${chat.username})`
+      : safeChatTitle,
     verifyLink: `[ссылке](https://t.me/lolsbotcatcherbot?start=${from.id})`,
   }
 
@@ -40,7 +42,7 @@ const handleChatJoinRequest = async (ctx: BotContext & ChatJoinRequest) => {
     {
       link_preview_options: { is_disabled: true },
       reply_markup: new InlineKeyboard(keyboard),
-      parse_mode: `MarkdownV2`
+      parse_mode: `MarkdownV2`,
     },
   )
 }
@@ -81,5 +83,3 @@ export const register = (bot: Bot<BotContext>) => {
     await ctx.editMessageReplyMarkup({ reply_markup: undefined })
   })
 }
-
-
