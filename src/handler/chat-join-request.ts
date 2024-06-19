@@ -90,7 +90,7 @@ export const register = (bot: Bot<BotContext>) => {
 
     await ctx.answerCallbackQuery(result)
 
-    await ctx.deleteMessage()
+    await ctx.editMessageReplyMarkup({reply_markup: undefined})
   })
 }
 
