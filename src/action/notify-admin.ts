@@ -9,7 +9,7 @@ export const enum JoinRequestAction {
   DECLINE = `decline`
 }
 
-export const notifyJoinRequest = async (ctx: BotContext & ChatJoinRequest) => {
+export const notifyJoinRequest = (ctx: BotContext & ChatJoinRequest) => {
   const chat = ctx.chat
   const from = ctx.from
 
@@ -38,8 +38,10 @@ export const notifyJoinRequest = async (ctx: BotContext & ChatJoinRequest) => {
   // NB!: grammyjs automatically formats numbers which breaks links to ids
   const message = ctx.t(`chat-join-request_admin-notify-text`, vars)
 
-  await ctx.api.sendMessage(
-    Config.ADMIN_ID,
+  const responses = []
+
+  const send = (id: number) => ctx.api.sendMessage(
+    id,
     message,
     {
       link_preview_options: { is_disabled: true },
@@ -47,5 +49,11 @@ export const notifyJoinRequest = async (ctx: BotContext & ChatJoinRequest) => {
       parse_mode: `MarkdownV2`,
     }
   )
+
+  for (const id of Config.ADMIN_IDS) {
+    responses.push(send(id))
+  }
+
+  return Promise.all(responses)
 }
 
