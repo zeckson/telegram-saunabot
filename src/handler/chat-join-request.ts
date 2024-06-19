@@ -3,6 +3,21 @@ import { Bot, InlineKeyboard } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { Config } from '../util/config.ts'
 import { int } from '../util/system.ts'
+import { getFullName } from "../util/username.ts"
+
+const escapeSpecial = (value: string): string => {
+  const result = []
+  for (const it of value) {
+    switch (it) {
+      case `#`:
+        result.push(`\\`)
+      // fall through
+      default:
+        result.push(it)
+    }
+  }
+  return result.join(``)
+}
 
 const APPROVE_ACTION = `approve`
 const DECLINE_ACTION = `reject`
@@ -21,15 +36,23 @@ const handleChatJoinRequest = async (ctx: BotContext & ChatJoinRequest) => {
     ),
   ]]
 
+  const vars = {
+    userLink: `[${getFullName(from)}](tg://user?id=${from.id})`,
+    chatLink: `[${escapeSpecial(chat.title)}](tg://resolve?domain=${chat.username})`,
+    verifyLink: `[ссылке](https://t.me/lolsbotcatcherbot?start=${from.id})`,
+  }
+
+  // NB!: grammyjs breaks message inserting invalid chars inside interpolation "{ $variable }"
+  // NB!: grammyjs automatically formats numbers which breaks links to ids
+  const message = ctx.t(`chat-join-request_admin-notify-text`, vars)
+
   await ctx.api.sendMessage(
     Config.ADMIN_ID,
-    ctx.t(`chat-join-request_admin-notify-text`, {
-      chat: chat.title,
-      verifyLink: `https://t.me/lolsbotcatcherbot?start=${from.id}`,
-    }),
+    message,
     {
       link_preview_options: { is_disabled: true },
       reply_markup: new InlineKeyboard(keyboard),
+      parse_mode: `MarkdownV2`
     },
   )
 }
@@ -70,3 +93,5 @@ export const register = (bot: Bot<BotContext>) => {
     await ctx.deleteMessage()
   })
 }
+
+

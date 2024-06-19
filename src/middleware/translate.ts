@@ -11,8 +11,12 @@ const i18n = new I18n<BotContext>({
   defaultLocale: `ru`,
   localeNegotiator: () => `ru`, // Default everything to ru
   globalTranslationContext(ctx: BotContext) {
+    const fullName = getFullName(ctx.from)
     return {
-      username: getFullName(ctx.from),
+      /** @deprecated use fullName **/
+      username: fullName,
+      fullName,
+      ...ctx.from
     }
   },
 })
