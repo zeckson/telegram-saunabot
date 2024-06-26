@@ -38,9 +38,7 @@ export const notifyJoinRequest = (ctx: BotContext & ChatJoinRequest) => {
   // NB!: grammyjs automatically formats numbers which breaks links to ids
   const message = ctx.t(`chat-join-request_admin-notify-text`, vars)
 
-  const responses = []
-
-  const send = (id: number) => ctx.api.sendMessage(
+  return notifyAdmins((id: number) => ctx.api.sendMessage(
     id,
     message,
     {
@@ -48,10 +46,14 @@ export const notifyJoinRequest = (ctx: BotContext & ChatJoinRequest) => {
       reply_markup: new InlineKeyboard(keyboard),
       parse_mode: `MarkdownV2`,
     }
-  )
+  ));
+}
+
+export const notifyAdmins = (action: (id: number) => Promise<unknown>) => {
+  const responses = []
 
   for (const id of Config.ADMIN_IDS) {
-    responses.push(send(id))
+    responses.push(action(id))
   }
 
   return Promise.all(responses)

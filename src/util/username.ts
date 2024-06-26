@@ -29,5 +29,8 @@ export const getUsername = (from?: UserLike) => {
 export const getFullName = (from?: UserLike) => {
   if (!from) return `Unknown user`
 
-  return `[${from.id}${isNotEmpty`@${from.username}`}] ${from.first_name}${isNotEmpty` ${from.last_name}`}`
+  const identity = `[${from.id}${isNotEmpty`@${from.username}`}]`
+  const fullName = `${from.first_name}${isNotEmpty` ${from.last_name}`}`
+  const isBot = from.is_bot ? `(bot)` : ``
+  return `${identity} ${fullName} ${isBot}`
 }
