@@ -4,7 +4,7 @@ commands_greeting-test = Привет { $username }!
 # Chat join request admin notification module
 
 chat-join-request_admin-notify-text =
-  Заявка #{$id}
+  Заявка \#{$id}
   Запрос на добавление пользователя {$userLink} в чат {$chatLink}
   Проверить пользователя можно по {$verifyLink}
 chat-join-request_approve = Подтвердить

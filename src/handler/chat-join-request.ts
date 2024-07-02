@@ -10,7 +10,7 @@ export const enum JoinRequestAction {
   DECLINE = `decline`
 }
 
-const notifyJoinRequest = (ctx: BotContext & ChatJoinRequest) => {
+export const notifyJoinRequest = (ctx: BotContext & ChatJoinRequest) => {
   const chat = ctx.chat
   const from = ctx.from
   const updateId = ctx.update.update_id
@@ -29,7 +29,7 @@ const notifyJoinRequest = (ctx: BotContext & ChatJoinRequest) => {
   const title = chat.title ?? chat.type
   const safeChatTitle = escapeSpecial(title)
   const vars = {
-    id: updateId,
+    id: String(updateId),
     userLink: getUserLink(from),
     chatLink: chat.username
       ? `[${safeChatTitle}](tg://resolve?domain=${chat.username})`

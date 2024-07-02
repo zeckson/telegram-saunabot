@@ -1,4 +1,4 @@
-import { notifyJoinRequest } from "../action/notify-admin.ts"
+import { notifyJoinRequest } from "../handler/chat-join-request.ts"
 import { Bot, ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { escapeSpecial } from '../util/string.ts'
