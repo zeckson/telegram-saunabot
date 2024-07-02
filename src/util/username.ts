@@ -1,4 +1,4 @@
-import { isNotEmpty } from './string.ts'
+import { isNotEmpty, link } from './string.ts'
 
 type UserLike = {
   id: number
@@ -34,3 +34,6 @@ export const getFullName = (from?: UserLike) => {
   const isBot = from.is_bot ? `(bot)` : ``
   return `${identity} ${fullName} ${isBot}`
 }
+
+export const getUserLink = (from?: UserLike) =>
+  !from ? `Unknown user` : link(getFullName(from), `tg://user?id=${from.id}`)

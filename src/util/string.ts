@@ -14,3 +14,5 @@ export const escapeSpecial = (value: string): string => {
   }
   return result.join(``)
 }
+
+export const link = (name: string, url: string) => `[${name}](${url})`
