@@ -1,14 +1,17 @@
 import { notifyAdmins } from "../action/notify-admin.ts"
 import { Bot, ChatJoinRequest, InlineKeyboard } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
-import { escapeSpecial } from "../util/string.ts"
+import { escapeSpecial, link, tgIdLink } from "../util/string.ts"
 import { int } from '../util/system.ts'
 import { getUserLink } from "../util/username.ts"
 
 export const enum JoinRequestAction {
   APPROVE = `approve`,
-  DECLINE = `decline`
+  DECLINE = `decline`,
 }
+
+const notifyAll = (ctx: BotContext, message: string, other?: object) =>
+  notifyAdmins((id: number) => ctx.api.sendMessage(id, message, other))
 
 export const notifyJoinRequest = (ctx: BotContext & ChatJoinRequest) => {
   const chat = ctx.chat
@@ -41,16 +44,40 @@ export const notifyJoinRequest = (ctx: BotContext & ChatJoinRequest) => {
   // NB!: grammyjs automatically formats numbers which breaks links to ids
   const message = ctx.t(`chat-join-request_admin-notify-text`, vars)
 
-  return notifyAdmins((id: number) => ctx.api.sendMessage(
-    id,
-    message,
-    {
-      link_preview_options: { is_disabled: true },
-      reply_markup: new InlineKeyboard(keyboard),
-      parse_mode: `MarkdownV2`,
-    }
-  ));
+  return notifyAll(ctx, message, {
+    link_preview_options: { is_disabled: true },
+    reply_markup: new InlineKeyboard(keyboard),
+    parse_mode: `MarkdownV2`,
+  })
 }
+
+const approve = (ctx: BotContext, updateId: string) => () =>
+  notifyAll(
+    ctx,
+    ctx.t(`chat-join-request_admin-approve-text`, {
+      id: updateId,
+      adminLink: link(`админ`, tgIdLink(ctx.chat!.id)),
+    }),
+  )
+
+const reject = (ctx: BotContext, updateId: string) => () =>
+  notifyAll(
+    ctx,
+    ctx.t(`chat-join-request_admin-reject-text`, {
+      id: updateId,
+      adminLink: link(`админ`, tgIdLink(ctx.chat!.id)),
+    }),
+  )
+
+const error = (ctx: BotContext, updateId: string) => (e: Error) =>
+  notifyAll(
+    ctx,
+    ctx.t(`chat-join-request_admin-error-text`, {
+      id: updateId,
+      adminLink: link(`админ`, tgIdLink(ctx.chat!.id)),
+      errorText: e.message,
+    })
+  )
 
 const handleQuery = (ctx: BotContext) => {
   const data = ctx.callbackQuery?.data ?? ``
@@ -59,15 +86,13 @@ const handleQuery = (ctx: BotContext) => {
   let result = ctx.t(`chat-join-request_unknown-command`)
   switch (action) {
     case JoinRequestAction.APPROVE:
-      ctx.api.approveChatJoinRequest(chatId, int(userId)).catch((e) =>
-        console.error(`Approve failed: ${e}`)
-      )
+      ctx.api.approveChatJoinRequest(chatId, int(userId))
+        .then(approve(ctx, updateId)).catch(error(ctx, updateId))
       result = ctx.t(`chat-join-request_added-to-group`)
       break
     case JoinRequestAction.DECLINE:
-      ctx.api.declineChatJoinRequest(chatId, int(userId)).catch((e) =>
-        console.error(`Decline failed: ${e}`)
-      )
+      ctx.api.declineChatJoinRequest(chatId, int(userId))
+        .then(reject(ctx, updateId)).catch(error(ctx, updateId))
       result = ctx.t(`chat-join-request_declined-to-group`)
       break
     default:

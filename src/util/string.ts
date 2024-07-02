@@ -16,3 +16,5 @@ export const escapeSpecial = (value: string): string => {
 }
 
 export const link = (name: string, url: string) => `[${name}](${url})`
+
+export const tgIdLink = (id: number | string) => `tg://user?id=${id}`
