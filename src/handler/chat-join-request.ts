@@ -69,15 +69,17 @@ const reject = (ctx: BotContext, updateId: string) => () =>
     }),
   )
 
-const error = (ctx: BotContext, updateId: string) => (e: Error) =>
-  notifyAll(
+const error = (ctx: BotContext, updateId: string) => (e: Error) => {
+  console.error(`Got error: `, e)
+  return notifyAll(
     ctx,
     ctx.t(`chat-join-request_admin-error-text`, {
       id: updateId,
       adminLink: link(`админ`, tgIdLink(ctx.chat!.id)),
       errorText: e.message,
     })
-  )
+  ).catch((err) => console.error(`Failed to notify: `, err))
+}
 
 const handleQuery = (ctx: BotContext) => {
   const data = ctx.callbackQuery?.data ?? ``
