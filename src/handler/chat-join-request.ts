@@ -51,7 +51,7 @@ export const notifyJoinRequest = (ctx: BotContext & ChatJoinRequest) => {
   })
 }
 
-const approve = (ctx: BotContext, updateId: string) => () =>
+const approved = (ctx: BotContext, updateId: string) => () =>
   notifyAll(
     ctx,
     ctx.t(`chat-join-request_admin-approve-text`, {
@@ -60,7 +60,7 @@ const approve = (ctx: BotContext, updateId: string) => () =>
     }),
   )
 
-const reject = (ctx: BotContext, updateId: string) => () =>
+const rejected = (ctx: BotContext, updateId: string) => () =>
   notifyAll(
     ctx,
     ctx.t(`chat-join-request_admin-reject-text`, {
@@ -69,7 +69,7 @@ const reject = (ctx: BotContext, updateId: string) => () =>
     }),
   )
 
-const error = (ctx: BotContext, updateId: string) => (e: Error) => {
+const errored = (ctx: BotContext, updateId: string) => (e: Error) => {
   console.error(`Got error: `, e)
   return notifyAll(
     ctx,
@@ -89,12 +89,12 @@ const handleQuery = (ctx: BotContext) => {
   switch (action) {
     case JoinRequestAction.APPROVE:
       ctx.api.approveChatJoinRequest(chatId, int(userId))
-        .then(approve(ctx, updateId)).catch(error(ctx, updateId))
+        .then(approved(ctx, updateId)).catch(errored(ctx, updateId))
       result = ctx.t(`chat-join-request_added-to-group`)
       break
     case JoinRequestAction.DECLINE:
       ctx.api.declineChatJoinRequest(chatId, int(userId))
-        .then(reject(ctx, updateId)).catch(error(ctx, updateId))
+        .then(rejected(ctx, updateId)).catch(errored(ctx, updateId))
       result = ctx.t(`chat-join-request_declined-to-group`)
       break
     default:
