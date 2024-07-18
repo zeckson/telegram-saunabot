@@ -8,6 +8,6 @@ export type TranslateFlavor<C extends Context> = C & I18nFlavor & {
   replyT(
     key: string,
     params: TranslationVariables,
-    args: Tail<Parameters<C['reply']>>,
-  ): void
+    ...args: Tail<Parameters<C['reply']>>
+  ): ReturnType<C["reply"]>
 }
