@@ -1,19 +1,9 @@
-import { TranslationVariables } from "https://deno.land/x/grammy_i18n@v1.0.2/types.ts"
-import { Bot, Context, I18n, I18nFlavor, NextFunction } from '../deps.ts'
+import { Bot, I18n, NextFunction } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { getFullName } from '../util/username.ts'
 
 // For TypeScript and auto-completion support,
 // extend the context with I18n's flavor:
-
-type Tail<T extends Array<unknown>> = T extends
-  [head: infer E1, ...tail: infer E2] ? E2
-  : [];
-
-export type TranslateFlavor<C extends Context> = C & I18nFlavor & {
-  replyT(key: string, params: TranslationVariables, args: Tail<Parameters<C["reply"]>>): void;
-};
-
 
 // Create an `I18n` instance.
 // Continue reading to find out how to configure the instance.
@@ -39,20 +29,20 @@ export const registerTranslate = async (bot: Bot<BotContext>) => {
   // so the messages get translated on their way!
   bot.use(i18n)
 
-  bot.use(async <C extends Context>(
-    ctx: TranslateFlavor<C>,
+  bot.use(async (
+    ctx: BotContext,
     next: NextFunction,
   ) => {
     ctx.replyT = (key, params, args) => {
-      const parseMode = `MarkdownV2`;
-      const [payload, ...rest] = args;
+      const parseMode = `MarkdownV2`
+      const [payload, ...rest] = args
       return ctx.reply(
         ctx.t(key, params),
         { ...payload, parse_mode: parseMode },
         ...rest,
-      );
-    };
+      )
+    }
 
-    await next();
+    await next()
   })
 }
