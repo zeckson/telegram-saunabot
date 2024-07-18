@@ -15,6 +15,8 @@ export const escapeSpecial = (value: string): string => {
   return result.join(``)
 }
 
+export const hash = (id: number | string) => `\\#${id}`
+
 export const link = (name: string, url: string) => `[${name}](${url})`
 
 export const tgIdLink = (id: number | string) => `tg://user?id=${id}`

@@ -5,7 +5,7 @@ commands_greeting-test = Привет { $username }!
 
 ## Request text
 chat-join-request_admin-notify-text =
-  Заявка \#{$id}
+  Заявка {$id}
   Запрос на добавление пользователя {$userLink} в чат {$chatLink}
   Проверить пользователя можно по {$verifyLink}
 
@@ -14,10 +14,10 @@ chat-join-request_approve = Подтвердить
 chat-join-request_decline = Отклонить
 
 ## Notification all admins text
-chat-join-request_admin-approve-text = Заявка #{$id} принята {$adminLink}
-chat-join-request_admin-reject-text = Заявка #{$id} отклонена {$adminLink}
+chat-join-request_admin-approve-text = Заявка {$id} принята {$adminLink}
+chat-join-request_admin-reject-text = Заявка {$id} отклонена {$adminLink}
 chat-join-request_admin-error-text =
-  Не удалось принять/отклонить заявку #{$id}
+  Не удалось принять/отклонить заявку {$id}
   Запрос от {$adminLink}. Текст ошибки:
   {$errorText}
 ## Action executed callbacks

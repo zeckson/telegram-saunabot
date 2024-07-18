@@ -1,7 +1,8 @@
+
+import { Bot, ChatJoinRequest, mentionUser } from '../deps.ts'
 import { notifyJoinRequest } from "../handler/chat-join-request.ts"
-import { Bot, ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
-import { escapeSpecial } from '../util/string.ts'
+import { escapeSpecial, hash, link, tgIdLink } from '../util/string.ts'
 import { getFullName } from '../util/username.ts'
 
 export const register = (bot: Bot<BotContext>) => {
@@ -28,11 +29,30 @@ export const register = (bot: Bot<BotContext>) => {
       },
     )
   })
-  bot.command(`notify`, (ctx: BotContext) =>
-    notifyJoinRequest(Object.assign(ctx, {
-      bio: "",
-      date: 0,
-      invite_link: undefined,
-      user_chat_id: ctx.chat!.id
-    }) as BotContext & ChatJoinRequest))
+  bot.command(
+    `notify`,
+    (ctx: BotContext) =>
+      notifyJoinRequest(
+        Object.assign(ctx, {
+          bio: '',
+          date: 0,
+          invite_link: undefined,
+          user_chat_id: ctx.chat!.id,
+        }) as BotContext & ChatJoinRequest,
+      ),
+  )
+
+  bot.command('demo', async (ctx) => {
+    await ctx.reply('*This* is _the_ default `formatting`')
+    await ctx.replyWithHTML(
+      '<b>This</b> is <i>withHTML</i> <code>formatting</code>',
+    )
+    await ctx.replyWithMarkdown('*This* is _withMarkdown_ `formatting`')
+    await ctx.replyWithMarkdownV1('*This* is _withMarkdownV1_ `formatting`')
+    await ctx.replyWithMarkdownV2('*This* is _withMarkdownV2_ `formatting`')
+    await ctx.replyWithMarkdownV2(ctx.t(`chat-join-request_admin-reject-text`, {
+      id: hash(10002345),
+      adminLink: link(`admin`, tgIdLink(1232155)),
+    }))
+  })
 }

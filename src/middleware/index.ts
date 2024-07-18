@@ -1,4 +1,4 @@
-import { Bot, hydrateReply } from '../deps.ts'
+import { Bot, hydrateReply, parseMode } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { log } from './log.ts'
 import { registerTranslate } from './translate.ts'
