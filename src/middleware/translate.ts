@@ -33,7 +33,7 @@ export const registerTranslate = async (bot: Bot<BotContext>) => {
     ctx: BotContext,
     next: NextFunction,
   ) => {
-    ctx.replyT = (key, params, args) => {
+    ctx.replyT = (key, params, ...args) => {
       const parseMode = `MarkdownV2`
       const [payload, ...rest] = args
       return ctx.reply(
