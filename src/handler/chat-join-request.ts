@@ -56,7 +56,7 @@ const approved = (ctx: BotContext, updateId: string) => () =>
     ctx,
     ctx.t(`chat-join-request_admin-approve-text`, {
       id: updateId,
-      adminLink: link(`админ`, tgIdLink(ctx.chat!.id)),
+      adminLink: link(`админ`, tgIdLink(ctx.from!.id)),
     }),
   )
 
@@ -65,7 +65,7 @@ const rejected = (ctx: BotContext, updateId: string) => () =>
     ctx,
     ctx.t(`chat-join-request_admin-reject-text`, {
       id: updateId,
-      adminLink: link(`админ`, tgIdLink(ctx.chat!.id)),
+      adminLink: link(`админ`, tgIdLink(ctx.from!.id)),
     }),
   )
 
@@ -75,7 +75,7 @@ const errored = (ctx: BotContext, updateId: string) => (e: Error) => {
     ctx,
     ctx.t(`chat-join-request_admin-error-text`, {
       id: updateId,
-      adminLink: link(`админ`, tgIdLink(ctx.chat!.id)),
+      adminLink: link(`админ`, tgIdLink(ctx.from!.id)),
       errorText: e.message,
     })
   ).catch((err) => console.error(`Failed to notify: `, err))
