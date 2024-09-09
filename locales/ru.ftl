@@ -18,7 +18,7 @@ chat-join-request_admin-approve-text = Заявка {$id} принята {$admin
 chat-join-request_admin-reject-text = Заявка {$id} отклонена {$adminLink}
 chat-join-request_admin-error-text =
   Не удалось принять/отклонить заявку {$id}
-  Запрос от {$adminLink}. Текст ошибки:
+  Запрос от {$adminLink}\. Текст ошибки:
   {$errorText}
 ## Action executed callbacks
 chat-join-request_unknown-command = Неизвестная команда

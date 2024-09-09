@@ -11,7 +11,7 @@ export const enum JoinRequestAction {
 }
 
 const notifyAll = (ctx: BotContext, message: string, other?: object) =>
-  notifyAdmins((id: number) => ctx.api.sendMessage(id, message, other))
+  notifyAdmins((id: number) => ctx.api.sendMessage(id, message, {...other, parse_mode: "MarkdownV2"}))
 
 export const notifyJoinRequest = (ctx: BotContext & ChatJoinRequest) => {
   const chat = ctx.chat
@@ -47,7 +47,6 @@ export const notifyJoinRequest = (ctx: BotContext & ChatJoinRequest) => {
   return notifyAll(ctx, message, {
     link_preview_options: { is_disabled: true },
     reply_markup: new InlineKeyboard(keyboard),
-    parse_mode: `MarkdownV2`,
   })
 }
 
