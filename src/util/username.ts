@@ -1,4 +1,5 @@
-import { isNotEmpty, link } from './string.ts'
+import { emojis } from "./emoji.ts"
+import { escapeSpecial, isNotEmpty, link } from './string.ts'
 
 type UserLike = {
   id: number
@@ -29,10 +30,14 @@ export const getUsername = (from?: UserLike) => {
 export const getFullName = (from?: UserLike) => {
   if (!from) return `Unknown user`
 
-  const identity = `[${from.id}${isNotEmpty`@${from.username}`}]`
-  const fullName = `${from.first_name}${isNotEmpty` ${from.last_name}`}`
-  const isBot = from.is_bot ? `:robot:` : ``
-  return `${identity} ${fullName} ${isBot}`
+  const identity = []
+
+  identity.push(escapeSpecial(`[${from.id}${isNotEmpty`@${from.username}`}]`))
+  identity.push(escapeSpecial(`${from.first_name}${isNotEmpty` ${from.last_name}`}`))
+  from.is_bot ? identity.push(emojis.robot) : ``
+  from.is_premium ? identity.push(emojis.premium) : ``
+
+  return identity.join(` `)
 }
 
 export const getUserLink = (from?: UserLike) =>

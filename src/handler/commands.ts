@@ -1,4 +1,5 @@
 import { Bot, ChatJoinRequest } from '../deps.ts'
+import { emojis } from "../util/emoji.ts"
 import { notifyJoinRequest } from "./chat-join-request.ts"
 import { BotContext } from '../type/context.ts'
 import { escapeSpecial, hash, link, tgIdLink } from '../util/string.ts'
@@ -42,7 +43,7 @@ export const register = (bot: Bot<BotContext>) => {
   )
 
   bot.command('demo', async (ctx) => {
-    await ctx.reply('*This* is _the_ default `formatting`')
+    await ctx.reply(`*This* is _the_ default \`formatting\` ${emojis.robot}`, {parse_mode: 'MarkdownV2'})
     await ctx.replyT(`chat-join-request_admin-reject-text`, {
       id: hash(10002345),
       adminLink: link(`admin`, tgIdLink(1232155)),
