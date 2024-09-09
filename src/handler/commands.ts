@@ -1,6 +1,5 @@
-
-import { Bot, ChatJoinRequest, mentionUser } from '../deps.ts'
-import { notifyJoinRequest } from "../handler/chat-join-request.ts"
+import { Bot, ChatJoinRequest } from '../deps.ts'
+import { notifyJoinRequest } from "./chat-join-request.ts"
 import { BotContext } from '../type/context.ts'
 import { escapeSpecial, hash, link, tgIdLink } from '../util/string.ts'
 import { getFullName } from '../util/username.ts'

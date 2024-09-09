@@ -75,7 +75,7 @@ const errored = (ctx: BotContext, updateId: string) => (e: Error) => {
     ctx.t(`chat-join-request_admin-error-text`, {
       id: updateId,
       adminLink: link(`админ`, tgIdLink(ctx.from!.id)),
-      errorText: e.message,
+      errorText: escapeSpecial(e.message),
     })
   ).catch((err) => console.error(`Failed to notify: `, err))
 }

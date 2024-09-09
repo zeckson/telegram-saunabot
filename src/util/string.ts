@@ -6,6 +6,23 @@ export const escapeSpecial = (value: string): string => {
   for (const it of value) {
     switch (it) {
       case `#`:
+      case `!`:
+      case `(`:
+      case `)`:
+      case `_`:
+      case `*`:
+      case `[`:
+      case `]`:
+      case `~`:
+      case `\``:
+      case `>`:
+      case `+`:
+      case `-`:
+      case `=`:
+      case `|`:
+      case `}`:
+      case `{`:
+      case `.`:
         result.push(`\\`)
       // fall through
       default:

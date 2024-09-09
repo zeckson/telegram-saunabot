@@ -31,7 +31,7 @@ export const getFullName = (from?: UserLike) => {
 
   const identity = `[${from.id}${isNotEmpty`@${from.username}`}]`
   const fullName = `${from.first_name}${isNotEmpty` ${from.last_name}`}`
-  const isBot = from.is_bot ? `(bot)` : ``
+  const isBot = from.is_bot ? `:robot:` : ``
   return `${identity} ${fullName} ${isBot}`
 }
 
