@@ -24,3 +24,8 @@ chat-join-request_admin-error-text =
 chat-join-request_unknown-command = Неизвестная команда
 chat-join-request_added-to-group = Добавлен в группу
 chat-join-request_declined-to-group = Отклонён
+
+chat-join-verify-message = Здравствуйте!
+Вы подали заявку на вступление в чат {$chatLink}.
+Чтобы убедиться, что это действительно ваш аккаунт расшарьте пожалуйста ваши контактные данные.
+Заранее спасибо!
