@@ -5,17 +5,15 @@ import {
 import { Bot } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 
-export const notifyJoinRequest = notifyAdminsOnJoinRequest
-
-const handleQuery = handleJoinAction
+const onJoinRequest = notifyAdminsOnJoinRequest
 
 export const register = (bot: Bot<BotContext>) => {
   // noinspection TypeScriptValidateTypes
-  bot.on(`chat_join_request`, notifyJoinRequest as (u: unknown) => unknown)
+  bot.on(`chat_join_request`, onJoinRequest as (u: unknown) => unknown)
 
   // TODO: Prevent insecure access from unknown account
   bot.on(`callback_query:data`, async (ctx) => {
-    const result = handleQuery(ctx)
+    const result = handleJoinAction(ctx)
 
     await ctx.answerCallbackQuery(result)
 
