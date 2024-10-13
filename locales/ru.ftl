@@ -1,5 +1,5 @@
 # $username - (global) user fullName if available
-commands_greeting-test = Привет { $username }!
+commands_greeting-test = Привет {$username}!
 
 # Chat join request admin notification module
 
@@ -25,7 +25,9 @@ chat-join-request_unknown-command = Неизвестная команда
 chat-join-request_added-to-group = Добавлен в группу
 chat-join-request_declined-to-group = Отклонён
 
-chat-join-verify-message = Здравствуйте!
+## User actions
+chat-join-verify-message = Здравствуйте, {$username}!
 Вы подали заявку на вступление в чат {$chatLink}.
 Чтобы убедиться, что это действительно ваш аккаунт расшарьте пожалуйста ваши контактные данные.
 Заранее спасибо!
+chat-join-phone-contact = Номер телефона

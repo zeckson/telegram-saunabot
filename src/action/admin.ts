@@ -2,7 +2,7 @@ import { ChatJoinRequest, InlineKeyboard } from '../deps.ts'
 import { BotContext } from "../type/context.ts"
 import { escapeSpecial, link, tgIdLink } from "../util/string.ts"
 import { int } from "../util/system.ts"
-import { getUserLink } from "../util/username.ts"
+import { getChatLink, getUserLink } from "../util/username.ts"
 import { notifyAdmins } from "./notify-admin.ts"
 
 const enum JoinRequestAction {
@@ -29,14 +29,10 @@ export const notifyAdminsOnJoinRequest = (ctx: BotContext & ChatJoinRequest) => 
     ),
   ]]
 
-  const title = chat.title ?? chat.type
-  const safeChatTitle = escapeSpecial(title)
   const vars = {
     id: String(updateId),
     userLink: getUserLink(from),
-    chatLink: chat.username
-      ? `[${safeChatTitle}](tg://resolve?domain=${chat.username})`
-      : safeChatTitle,
+    chatLink: getChatLink(chat),
     verifyLink: `[ссылке](https://t.me/lolsbotcatcherbot?start=${from.id})`,
   }
 

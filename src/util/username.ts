@@ -1,3 +1,4 @@
+import { Chat } from '../deps.ts'
 import { emojis } from "./emoji.ts"
 import { escapeSpecial, isNotEmpty, link } from './string.ts'
 
@@ -42,3 +43,11 @@ export const getFullName = (from?: UserLike) => {
 
 export const getUserLink = (from?: UserLike) =>
   !from ? `Unknown user` : link(getFullName(from), `tg://user?id=${from.id}`)
+
+export const getChatLink = (chat: Chat) => {
+  const title = chat.title ?? chat.type
+  const safeChatTitle = escapeSpecial(title)
+  return chat.username
+    ? link(safeChatTitle, `tg://resolve?domain=${chat.username}`)
+    : safeChatTitle
+}
