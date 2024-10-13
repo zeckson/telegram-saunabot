@@ -1,4 +1,5 @@
 import { notifyAdminsOnJoinRequest } from "../action/admin.ts"
+import { requestUserContact } from "../action/user.ts"
 import { Bot, ChatJoinRequest } from '../deps.ts'
 import { emojis } from "../util/emoji.ts"
 import { BotContext } from '../type/context.ts'
@@ -33,6 +34,18 @@ export const register = (bot: Bot<BotContext>) => {
     `notify`,
     (ctx: BotContext) =>
       notifyAdminsOnJoinRequest(
+        Object.assign(ctx, {
+          bio: '',
+          date: 0,
+          invite_link: undefined,
+          user_chat_id: ctx.chat!.id,
+        }) as BotContext & ChatJoinRequest,
+      ),
+  )
+  bot.command(
+    `phone`,
+    (ctx: BotContext) =>
+      requestUserContact(
         Object.assign(ctx, {
           bio: '',
           date: 0,
