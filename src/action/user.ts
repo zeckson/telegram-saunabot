@@ -12,6 +12,7 @@ export const requestUserContact = (
     chatLink: getChatLink(chat),
   })
   return ctx.api.sendMessage(from.id, message, {
+    parse_mode: `MarkdownV2`,
     reply_markup: { keyboard: [[Keyboard.requestContact(ctx.t(`chat-join-phone-contact`))]] },
   })
 }
