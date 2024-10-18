@@ -2,10 +2,20 @@ import {
   handleJoinAction,
   notifyAdminsOnJoinRequest,
 } from "../action/admin.ts"
-import { Bot } from '../deps.ts'
+import { requestUserContact } from "../action/user.ts"
+import { Bot, ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 
-const onJoinRequest = notifyAdminsOnJoinRequest
+const onJoinRequest = async (ctx: BotContext & ChatJoinRequest) => {
+  try {
+    await requestUserContact(ctx)
+  } catch (e) {
+    // TODO: make different message on success request and not
+    console.error(e)
+  }
+
+  return notifyAdminsOnJoinRequest(ctx)
+}
 
 export const register = (bot: Bot<BotContext>) => {
   // noinspection TypeScriptValidateTypes
