@@ -16,3 +16,10 @@ export const requestUserContact = (
     reply_markup: { keyboard: [[Keyboard.requestContact(ctx.t(`chat-join-phone-contact`))]] },
   })
 }
+
+export const userContactResponse = (ctx: BotContext) => {
+  const contact = ctx.message?.contact
+  if (!contact) return undefined
+
+  return contact.phone_number
+}
