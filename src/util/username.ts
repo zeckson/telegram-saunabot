@@ -1,7 +1,10 @@
 import { Chat } from '../deps.ts'
 import { emojis } from "./emoji.ts"
 import { text, chatLink, userLink } from "./markdown.ts"
-import { isNotEmpty } from './string.ts'
+
+const isNotEmpty = (strings: TemplateStringsArray, value: unknown) =>
+  value ? `${strings[0]}${value}` : ``
+
 
 type UserLike = {
   id: number
