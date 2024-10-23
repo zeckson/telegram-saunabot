@@ -38,8 +38,8 @@ export const register = (bot: Bot<BotContext>) => {
   });
   bot.command("md2link", (ctx) => {
     // `item` will be "apple pie" if a user sends "/md2 apple pie".
-    const [name, url] = ctx.match;
-    return ctx.reply(`[${escapeText(name)}](${escapeLink(url)}`, {parse_mode: `MarkdownV2`})
+    const [name, url] = ctx.match.split(` `);
+    return ctx.reply(`[${escapeText(name)}](${escapeLink(url)})`, {parse_mode: `MarkdownV2`})
   });
   bot.command(
     `notify`,
