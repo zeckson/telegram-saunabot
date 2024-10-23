@@ -34,6 +34,7 @@ Application is deployed on
 # Links
 
 - [Telegram Bot API](https://core.telegram.org/bots/api)
+- [Telegram MarkdownV2 Rules](https://core.telegram.org/bots/api#markdownv2-style)
 - [Telegram Deep Linking](https://core.telegram.org/api/links#public-username-links)
 - [Lols bot antispam database](https://lols.bot/?a=<id>)
 - [Grammy Guide](https://grammy.dev/guide/)
