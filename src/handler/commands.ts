@@ -3,8 +3,8 @@ import { requestUserContact } from "../action/user.ts"
 import { Bot, ChatJoinRequest } from '../deps.ts'
 import { emojis } from "../util/emoji.ts"
 import { BotContext } from '../type/context.ts'
-import { escapeLink, escapeText } from "../util/markdown.ts"
-import { escapeSpecial, hash, link, tgIdLink } from '../util/string.ts'
+import { escapeLink, escapeText, text } from "../util/markdown.ts"
+import { hash, link, tgIdLink } from '../util/string.ts'
 import { getFullName } from '../util/username.ts'
 
 export const register = (bot: Bot<BotContext>) => {
@@ -34,12 +34,12 @@ export const register = (bot: Bot<BotContext>) => {
   bot.command("md2", (ctx) => {
     // `item` will be "apple pie" if a user sends "/md2 apple pie".
     const item = ctx.match;
-    return ctx.reply(escapeText(item), {parse_mode: `MarkdownV2`})
+    return ctx.reply(text(item), {parse_mode: `MarkdownV2`})
   });
   bot.command("md2link", (ctx) => {
     // `item` will be "apple pie" if a user sends "/md2 apple pie".
     const [name, url] = ctx.match.split(` `);
-    return ctx.reply(`[${escapeText(name)}](${escapeLink(url)})`, {parse_mode: `MarkdownV2`})
+    return ctx.reply(link(name, url), {parse_mode: `MarkdownV2`})
   });
   bot.command(
     `notify`,

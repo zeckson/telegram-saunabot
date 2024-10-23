@@ -11,7 +11,7 @@ for (const it of LINK_ESCAPE_SEQUENCE) {
   linkTable[it.charCodeAt(0)] = true
 }
 
-export const escapeText = (value: string): string => {
+const escapeText = (value: string): string => {
   const result = []
   for (const it of value) {
     if (commonTable[it.charCodeAt(0)]) {
@@ -22,7 +22,7 @@ export const escapeText = (value: string): string => {
   return result.join(``)
 }
 
-export const escapeLink = (value: string): string => {
+const escapeLink = (value: string): string => {
   const result = []
   for (const it of value) {
     if (linkTable[it.charCodeAt(0)]) {
@@ -33,7 +33,8 @@ export const escapeLink = (value: string): string => {
   return result.join(``)
 }
 
-export const text = (value: string) => escapeText(value)
+export const text = (value: string | number) =>
+  escapeText((typeof value === `number`) ? String(value) : value)
 
 export const link = (name: string, url: string) =>
   `[${escapeText(name)}](${escapeLink(url)})`
@@ -41,4 +42,4 @@ export const link = (name: string, url: string) =>
 export const userLink = (name: string, id: string | number) =>
   link(name, `tg://user?id=${id}`)
 
-export const hash = (value: string | number) => `\\#${escapeText(value)}`
+export const hash = (value: string | number) => `\\#${text(value)}`

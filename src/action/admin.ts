@@ -1,7 +1,7 @@
 import { ChatJoinRequest, InlineKeyboard } from '../deps.ts'
 import { BotContext } from "../type/context.ts"
 import { text } from "../util/markdown.ts"
-import { escapeSpecial, link, tgIdLink } from "../util/string.ts"
+import { link, tgIdLink } from "../util/string.ts"
 import { int } from "../util/system.ts"
 import { getChatLink, getUserLink } from "../util/username.ts"
 import { notifyAdmins } from "./notify-admin.ts"

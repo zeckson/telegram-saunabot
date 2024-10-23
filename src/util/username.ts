@@ -1,6 +1,7 @@
 import { Chat } from '../deps.ts'
 import { emojis } from "./emoji.ts"
-import { escapeSpecial, isNotEmpty, link } from './string.ts'
+import { text } from "./markdown.ts"
+import { isNotEmpty, link } from './string.ts'
 
 type UserLike = {
   id: number
@@ -33,8 +34,8 @@ export const getFullName = (from?: UserLike) => {
 
   const identity = []
 
-  identity.push(escapeSpecial(`[${from.id}${isNotEmpty`@${from.username}`}]`))
-  identity.push(escapeSpecial(`${from.first_name}${isNotEmpty` ${from.last_name}`}`))
+  identity.push(text(`[${from.id}${isNotEmpty`@${from.username}`}]`))
+  identity.push(text(`${from.first_name}${isNotEmpty` ${from.last_name}`}`))
   from.is_bot ? identity.push(emojis.robot) : ``
   from.is_premium ? identity.push(emojis.premium) : ``
 
@@ -46,7 +47,7 @@ export const getUserLink = (from?: UserLike) =>
 
 export const getChatLink = (chat: Chat) => {
   const title = chat.title ?? chat.type
-  const safeChatTitle = escapeSpecial(title)
+  const safeChatTitle = text(title)
   return chat.username
     ? link(safeChatTitle, `tg://resolve?domain=${chat.username}`)
     : safeChatTitle
