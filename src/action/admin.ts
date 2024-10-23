@@ -1,5 +1,6 @@
 import { ChatJoinRequest, InlineKeyboard } from '../deps.ts'
 import { BotContext } from "../type/context.ts"
+import { text } from "../util/markdown.ts"
 import { escapeSpecial, link, tgIdLink } from "../util/string.ts"
 import { int } from "../util/system.ts"
 import { getChatLink, getUserLink } from "../util/username.ts"
@@ -89,7 +90,7 @@ const notifyErrored = (ctx: BotContext, updateId: string) => (e: Error) => {
     ctx.t(`chat-join-request_admin-error-text`, {
       id: updateId,
       adminLink: link(`админ`, tgIdLink(ctx.from!.id)),
-      errorText: escapeSpecial(e.message),
+      errorText: text(e.message),
     })
   ).catch((err) => console.error(`Failed to notify: `, err))
 }

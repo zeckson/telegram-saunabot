@@ -16,7 +16,7 @@ export const register = (bot: Bot<BotContext>) => {
     const from = ctx.from!
     const chat = ctx.chat!
 
-    const safeChatTitle = escapeSpecial(chat.title || chat.type)
+    const safeChatTitle = text(chat.title || chat.type)
     return ctx.reply(
       ctx.t(`chat-join-request_admin-notify-text`, {
         userLink: `[${getFullName(from)}](tg://user?id=${from.id})`,

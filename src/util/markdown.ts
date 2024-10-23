@@ -1,5 +1,5 @@
-const COMMON_ESCAPE_SEQUENCE= `_*[]()~\`>#+-=|{}.!`
-const LINK_ESCAPE_SEQUENCE= `\\)_`
+const COMMON_ESCAPE_SEQUENCE = `_*[]()~\`>#+-=|{}.!`
+const LINK_ESCAPE_SEQUENCE = `\\)_`
 
 const commonTable: boolean[] = []
 const linkTable: boolean[] = []
@@ -32,3 +32,13 @@ export const escapeLink = (value: string): string => {
   }
   return result.join(``)
 }
+
+export const text = (value: string) => escapeText(value)
+
+export const link = (name: string, url: string) =>
+  `[${escapeText(name)}](${escapeLink(url)})`
+
+export const userLink = (name: string, id: string | number) =>
+  link(name, `tg://user?id=${id}`)
+
+export const hash = (value: string | number) => `\\#${escapeText(value)}`
