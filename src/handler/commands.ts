@@ -67,10 +67,10 @@ export const register = (bot: Bot<BotContext>) => {
   )
 
   bot.command('demo', async (ctx) => {
-    await ctx.reply(`*This* is _the_ default \`formatting\` ${emojis.robot}`, {parse_mode: 'MarkdownV2'})
-    await ctx.replyT(`chat-join-request_admin-reject-text`, {
+    await ctx.replyT(`chat-join-request_admin-approve-text`, {
       id: hash(10002345),
       adminLink: userLink(`admin`, 1232155),
     })
+    await ctx.reply(`*This* is _the_ default \`formatting\` ${emojis.robot}`, {parse_mode: 'MarkdownV2'})
   })
 }
