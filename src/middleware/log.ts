@@ -1,12 +1,12 @@
-import { Context, NextFunction } from '../deps.ts'
-import { getUsername } from '../util/username.ts'
+import { NextFunction } from '../deps.ts'
+import { UserContext } from '../type/user.type.ts'
 
-const logUpdate = (ctx: Context) => {
+const logUpdate = (ctx: UserContext) => {
   const updateId = ctx.update.update_id
   const updateTypes = Object.keys(ctx.update).filter((it) => it !== `update_id`)
 
   console.log(
-    `Got update[${updateId}] from ${getUsername(ctx.from)} with types: ${
+    `Got update[${updateId}] from ${ctx.user.identity} with types: ${
       updateTypes.join(`,`)
     }`,
   )
@@ -20,7 +20,7 @@ const logUpdate = (ctx: Context) => {
   }
 }
 
-export const log = async (ctx: Context, next: NextFunction) => {
+export const log = async (ctx: UserContext, next: NextFunction) => {
   // take time before
   const before = Date.now() // milliseconds
 

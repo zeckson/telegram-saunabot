@@ -1,9 +1,9 @@
 import { ChatJoinRequest, InlineKeyboard } from '../deps.ts'
-import { BotContext } from "../type/context.ts"
-import { hash, text, userLink } from "../util/markdown.ts"
-import { int } from "../util/system.ts"
-import { getChatLink, getUserLink } from "../util/username.ts"
-import { notifyAdmins } from "./notify-admin.ts"
+import { BotContext } from '../type/context.ts'
+import { hash, text, userLink } from '../util/markdown.ts'
+import { int } from '../util/system.ts'
+import { getChatLink } from '../util/link.ts'
+import { notifyAdmins } from './notify-admin.ts'
 
 const enum JoinRequestAction {
   APPROVE = `approve`,
@@ -11,13 +11,15 @@ const enum JoinRequestAction {
 }
 
 const notifyAllAdmins = (ctx: BotContext, message: string, other?: object) =>
-  notifyAdmins((id: number) => ctx.api.sendMessage(id, message, {...other, parse_mode: "MarkdownV2"}))
+  notifyAdmins((id: number) =>
+    ctx.api.sendMessage(id, message, { ...other, parse_mode: 'MarkdownV2' })
+  )
 
 export const notifyAdminsOnPhoneNumber = (ctx: BotContext, phone: string) => {
-  const from = ctx.from!
+  const from = ctx.user
 
   const vars = {
-    userLink: getUserLink(from),
+    userLink: userLink(from.identity, from.id),
     phone,
     verifyLink: `[ссылке](https://t.me/lolsbotcatcherbot?start=${from.id})`,
   }
@@ -31,9 +33,11 @@ export const notifyAdminsOnPhoneNumber = (ctx: BotContext, phone: string) => {
   })
 }
 
-export const notifyAdminsOnJoinRequest = (ctx: BotContext & ChatJoinRequest) => {
+export const notifyAdminsOnJoinRequest = (
+  ctx: BotContext & ChatJoinRequest,
+) => {
   const chat = ctx.chat
-  const from = ctx.from
+  const from = ctx.user
   const updateId = ctx.update.update_id
 
   const keyboard = [[
@@ -49,7 +53,7 @@ export const notifyAdminsOnJoinRequest = (ctx: BotContext & ChatJoinRequest) => 
 
   const vars = {
     id: hash(updateId),
-    userLink: getUserLink(from),
+    userLink: userLink(from.identity, from.id),
     chatLink: getChatLink(chat),
     verifyLink: `[ссылке](https://t.me/lolsbotcatcherbot?start=${from.id})`,
   }
@@ -90,7 +94,7 @@ const notifyErrored = (ctx: BotContext, updateId: string) => (e: Error) => {
       id: updateId,
       adminLink: userLink(`админ`, ctx.from!.id),
       errorText: text(e.message),
-    })
+    }),
   ).catch((err) => console.error(`Failed to notify: `, err))
 }
 
@@ -115,4 +119,3 @@ export const handleJoinAction = (ctx: BotContext) => {
   }
   return result
 }
-

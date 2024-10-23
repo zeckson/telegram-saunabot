@@ -1,8 +1,6 @@
-import { User } from '../deps.ts'
-import { UserContext } from '../type/context.ts'
-import { NextFunction } from '../deps.ts'
+import { NextFunction, User } from '../deps.ts'
 import { UserStatus } from '../type/user-status.ts'
-import { getFullName } from '../util/username.ts'
+import { UserContext } from '../type/user.type.ts'
 
 const TG_SERVICE_ACCOUNT_ID = 777000
 
@@ -25,12 +23,14 @@ const setUserContext = (
   from: User,
   status: UserStatus,
 ) => {
-  ctx.user = {
+  const _user = {
     id: userID,
     username: from.username,
-    fullName: getFullName(from),
+    fullName: ctx.user.identity,
     status,
   }
+  // TODO: fix user access context
+  // ctx.user = user
 }
 
 const getStatus = async (

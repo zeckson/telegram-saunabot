@@ -1,8 +1,5 @@
 import { Bot, I18n, NextFunction } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
-import { text } from "../util/markdown.ts"
-import { getFullName } from '../util/username.ts'
-
 // For TypeScript and auto-completion support,
 // extend the context with I18n's flavor:
 
@@ -11,14 +8,8 @@ import { getFullName } from '../util/username.ts'
 const i18n = new I18n<BotContext>({
   defaultLocale: `ru`,
   localeNegotiator: () => `ru`, // Default everything to ru
-  globalTranslationContext(ctx: BotContext) {
-    const fullName = text(getFullName(ctx.from))
-    return {
-      /** @deprecated use fullName **/
-      username: fullName,
-      fullName,
-      ...ctx.from,
-    }
+  globalTranslationContext(_ctx: BotContext) {
+    return {}
   },
 })
 
