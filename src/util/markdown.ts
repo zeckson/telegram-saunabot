@@ -37,9 +37,12 @@ export const text = (value: string | number) =>
   escapeText((typeof value === `number`) ? String(value) : value)
 
 export const link = (name: string, url: string) =>
-  `[${escapeText(name)}](${escapeLink(url)})`
+  `[${text(name)}](${escapeLink(url)})`
 
 export const userLink = (name: string, id: string | number) =>
   link(name, `tg://user?id=${id}`)
+
+export const chatLink = (name: string, chatUsername: string) =>
+  link(name, `tg://resolve?domain=${chatUsername}`)
 
 export const hash = (value: string | number) => `\\#${text(value)}`
