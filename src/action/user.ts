@@ -1,5 +1,6 @@
 import { Chat, ChatJoinRequest, Keyboard, User } from '../deps.ts'
 import { BotContext } from "../type/context.ts"
+import { text } from "../util/markdown.ts"
 import { getChatLink } from "../util/username.ts"
 
 export const requestUserContact = (
@@ -8,7 +9,9 @@ export const requestUserContact = (
   const from: User = ctx.from
   const chat: Chat = ctx.chat
 
+  // BC! Avoid using context -- it's not sage
   const message = ctx.t(`chat-join-verify-message`, {
+    username: text(from.username),
     chatLink: getChatLink(chat),
   })
   return ctx.api.sendMessage(from.id, message, {

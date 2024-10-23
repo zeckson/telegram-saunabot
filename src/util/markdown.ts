@@ -33,8 +33,10 @@ const escapeLink = (value: string): string => {
   return result.join(``)
 }
 
-export const text = (value: string | number) =>
-  escapeText((typeof value === `number`) ? String(value) : value)
+export const text = (value?: string | number): string => {
+  if (!value) return ``
+  return escapeText((typeof value === `number`) ? String(value) : value)
+}
 
 export const link = (name: string, url: string) =>
   `[${text(name)}](${escapeLink(url)})`

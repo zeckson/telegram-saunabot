@@ -37,8 +37,8 @@ export const getFullName = (from?: UserLike) => {
 
   const identity = []
 
-  identity.push(text(`[${from.id}${isNotEmpty`@${from.username}`}]`))
-  identity.push(text(`${from.first_name}${isNotEmpty` ${from.last_name}`}`))
+  identity.push(`[${from.id}${isNotEmpty`@${from.username}`}]`)
+  identity.push(`${from.first_name}${isNotEmpty` ${from.last_name}`}`)
   from.is_bot ? identity.push(emojis.robot) : ``
   from.is_premium ? identity.push(emojis.premium) : ``
 

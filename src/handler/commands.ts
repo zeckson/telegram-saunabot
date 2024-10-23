@@ -3,7 +3,7 @@ import { requestUserContact } from "../action/user.ts"
 import { Bot, ChatJoinRequest } from '../deps.ts'
 import { emojis } from "../util/emoji.ts"
 import { BotContext } from '../type/context.ts'
-import { text, hash, link, userLink } from "../util/markdown.ts"
+import { text, hash, link, userLink, chatLink } from "../util/markdown.ts"
 import { getFullName } from '../util/username.ts'
 
 export const register = (bot: Bot<BotContext>) => {
@@ -19,11 +19,11 @@ export const register = (bot: Bot<BotContext>) => {
     return ctx.reply(
       ctx.t(`chat-join-request_admin-notify-text`, {
         id: hash(ctx.update.update_id),
-        userLink: `[${getFullName(from)}](tg://user?id=${from.id})`,
+        userLink: userLink(getFullName(from), from.id),
         chatLink: chat.username
-          ? `[${safeChatTitle}](tg://resolve?domain=${chat.username})`
+          ? chatLink(safeChatTitle, chat.username)
           : safeChatTitle,
-        verifyLink: `[ссылке](https://t.me/lolsbotcatcherbot?start=${from.id})`,
+        verifyLink: link(`ссылке`, `https://t.me/lolsbotcatcherbot?start=${from.id}`),
       }),
       {
         link_preview_options: { is_disabled: true },
