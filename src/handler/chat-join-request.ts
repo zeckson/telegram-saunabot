@@ -1,8 +1,9 @@
 import {
   handleJoinAction,
   notifyAdminsOnJoinRequest,
+  notifyAdminsOnPhoneNumber
 } from "../action/admin.ts"
-import { requestUserContact } from "../action/user.ts"
+import { requestUserContact, userContactResponse } from "../action/user.ts"
 import { Bot, ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 
@@ -17,9 +18,18 @@ const onJoinRequest = async (ctx: BotContext & ChatJoinRequest) => {
   return notifyAdminsOnJoinRequest(ctx)
 }
 
+const onPhoneNumber = (ctx: BotContext) => {
+  const phone = userContactResponse(ctx)
+
+  if (phone) {
+    return notifyAdminsOnPhoneNumber(ctx, phone)
+  }
+}
+
 export const register = (bot: Bot<BotContext>) => {
   // noinspection TypeScriptValidateTypes
   bot.on(`chat_join_request`, onJoinRequest as (u: unknown) => unknown)
+  bot.on(`message:contact`, onPhoneNumber)
 
   // TODO: Prevent insecure access from unknown account
   bot.on(`callback_query:data`, async (ctx) => {

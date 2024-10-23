@@ -13,6 +13,24 @@ const enum JoinRequestAction {
 const notifyAllAdmins = (ctx: BotContext, message: string, other?: object) =>
   notifyAdmins((id: number) => ctx.api.sendMessage(id, message, {...other, parse_mode: "MarkdownV2"}))
 
+export const notifyAdminsOnPhoneNumber = (ctx: BotContext, phone: string) => {
+  const from = ctx.from!
+
+  const vars = {
+    userLink: getUserLink(from),
+    phone,
+    verifyLink: `[ссылке](https://t.me/lolsbotcatcherbot?start=${from.id})`,
+  }
+
+  // NB!: grammyjs breaks message inserting invalid chars inside interpolation "{ $variable }"
+  // NB!: grammyjs automatically formats numbers which breaks links to ids
+  const message = ctx.t(`chat-join-phone-contact_admin-text`, vars)
+
+  return notifyAllAdmins(ctx, message, {
+    link_preview_options: { is_disabled: true },
+  })
+}
+
 export const notifyAdminsOnJoinRequest = (ctx: BotContext & ChatJoinRequest) => {
   const chat = ctx.chat
   const from = ctx.from
