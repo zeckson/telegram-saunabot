@@ -1,7 +1,6 @@
 import { ChatJoinRequest, InlineKeyboard } from '../deps.ts'
 import { BotContext } from "../type/context.ts"
-import { text } from "../util/markdown.ts"
-import { link, tgIdLink } from "../util/string.ts"
+import { hash, text, userLink } from "../util/markdown.ts"
 import { int } from "../util/system.ts"
 import { getChatLink, getUserLink } from "../util/username.ts"
 import { notifyAdmins } from "./notify-admin.ts"
@@ -49,7 +48,7 @@ export const notifyAdminsOnJoinRequest = (ctx: BotContext & ChatJoinRequest) => 
   ]]
 
   const vars = {
-    id: String(updateId),
+    id: hash(updateId),
     userLink: getUserLink(from),
     chatLink: getChatLink(chat),
     verifyLink: `[ссылке](https://t.me/lolsbotcatcherbot?start=${from.id})`,
@@ -70,7 +69,7 @@ const notifyApproved = (ctx: BotContext, updateId: string) => () =>
     ctx,
     ctx.t(`chat-join-request_admin-approve-text`, {
       id: updateId,
-      adminLink: link(`админ`, tgIdLink(ctx.from!.id)),
+      adminLink: userLink(`админ`, ctx.from!.id),
     }),
   )
 
@@ -79,7 +78,7 @@ const notifyRejected = (ctx: BotContext, updateId: string) => () =>
     ctx,
     ctx.t(`chat-join-request_admin-reject-text`, {
       id: updateId,
-      adminLink: link(`админ`, tgIdLink(ctx.from!.id)),
+      adminLink: userLink(`админ`, ctx.from!.id),
     }),
   )
 
@@ -89,7 +88,7 @@ const notifyErrored = (ctx: BotContext, updateId: string) => (e: Error) => {
     ctx,
     ctx.t(`chat-join-request_admin-error-text`, {
       id: updateId,
-      adminLink: link(`админ`, tgIdLink(ctx.from!.id)),
+      adminLink: userLink(`админ`, ctx.from!.id),
       errorText: text(e.message),
     })
   ).catch((err) => console.error(`Failed to notify: `, err))

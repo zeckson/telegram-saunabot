@@ -3,8 +3,7 @@ import { requestUserContact } from "../action/user.ts"
 import { Bot, ChatJoinRequest } from '../deps.ts'
 import { emojis } from "../util/emoji.ts"
 import { BotContext } from '../type/context.ts'
-import { escapeLink, escapeText, text } from "../util/markdown.ts"
-import { hash, link, tgIdLink } from '../util/string.ts'
+import { text, hash, link, userLink } from "../util/markdown.ts"
 import { getFullName } from '../util/username.ts'
 
 export const register = (bot: Bot<BotContext>) => {
@@ -19,6 +18,7 @@ export const register = (bot: Bot<BotContext>) => {
     const safeChatTitle = text(chat.title || chat.type)
     return ctx.reply(
       ctx.t(`chat-join-request_admin-notify-text`, {
+        id: hash(ctx.update.update_id),
         userLink: `[${getFullName(from)}](tg://user?id=${from.id})`,
         chatLink: chat.username
           ? `[${safeChatTitle}](tg://resolve?domain=${chat.username})`
@@ -70,7 +70,7 @@ export const register = (bot: Bot<BotContext>) => {
     await ctx.reply(`*This* is _the_ default \`formatting\` ${emojis.robot}`, {parse_mode: 'MarkdownV2'})
     await ctx.replyT(`chat-join-request_admin-reject-text`, {
       id: hash(10002345),
-      adminLink: link(`admin`, tgIdLink(1232155)),
+      adminLink: userLink(`admin`, 1232155),
     })
   })
 }
