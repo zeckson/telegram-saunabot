@@ -29,7 +29,7 @@ chat-join-verify-message = Здравствуйте, {$fullName}\!
   Вы подали заявку на вступление в чат {$chatLink}\.
   Чтобы убедиться, что это действительно ваш аккаунт расшарьте пожалуйста ваши контактные данные\.
   Заранее спасибо\!
-chat-join-phone-contact = Номер телефона
+chat-join-phone-contact = Отправить контакт
 chat-join-phone-contact_admin-text =
   Пользователь {$userLink} прислал свои контактные данные:
   `{$phone}`
