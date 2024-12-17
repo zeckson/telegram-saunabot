@@ -1,8 +1,8 @@
 import { ChatJoinRequest, InlineKeyboard } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
+import { getChatLink } from '../util/link.ts'
 import { hash, text, userLink } from '../util/markdown.ts'
 import { int } from '../util/system.ts'
-import { getChatLink } from '../util/link.ts'
 import { notifyAdmins } from './notify-admin.ts'
 
 const enum JoinRequestAction {
@@ -98,24 +98,44 @@ const notifyErrored = (ctx: BotContext, updateId: string) => (e: Error) => {
   ).catch((err) => console.error(`Failed to notify: `, err))
 }
 
-export const handleJoinAction = (ctx: BotContext) => {
-  const data = ctx.callbackQuery?.data ?? ``
-  const [action, chatId, userId, updateId] = data.split(`:`)
-
-  let result = ctx.t(`chat-join-request_unknown-command`)
+const handleJoinRequest = (
+  ctx: BotContext,
+  action: JoinRequestAction,
+  chatId: number | string,
+  userId: number,
+  updateId: string
+): void => {
   switch (action) {
     case JoinRequestAction.APPROVE:
-      ctx.api.approveChatJoinRequest(chatId, int(userId))
+      ctx.api.approveChatJoinRequest(chatId, userId)
         .then(notifyApproved(ctx, updateId)).catch(notifyErrored(ctx, updateId))
-      result = ctx.t(`chat-join-request_added-to-group`)
       break
     case JoinRequestAction.DECLINE:
-      ctx.api.declineChatJoinRequest(chatId, int(userId))
+      ctx.api.declineChatJoinRequest(chatId, userId)
         .then(notifyRejected(ctx, updateId)).catch(notifyErrored(ctx, updateId))
-      result = ctx.t(`chat-join-request_declined-to-group`)
       break
     default:
       console.error(`Unknown action: ${action}`)
   }
-  return result
+}
+
+export const declineUserJoinRequest = async (ctx: BotContext & ChatJoinRequest, reason: string) => {
+
+}
+
+export const handleJoinAction = (ctx: BotContext) => {
+  const data = ctx.callbackQuery?.data ?? ``
+  const [actionValue, chatId, userId, updateId] = data.split(`:`)
+  const action = actionValue as JoinRequestAction
+
+  handleJoinRequest(ctx, action, chatId, int(userId), updateId)
+
+  switch (action) {
+    case JoinRequestAction.APPROVE:
+      return  ctx.t(`chat-join-request_added-to-group`)
+    case JoinRequestAction.DECLINE:
+      return  ctx.t(`chat-join-request_declined-to-group`)
+    default:
+      return ctx.t(`chat-join-request_unknown-command`)
+  }
 }
