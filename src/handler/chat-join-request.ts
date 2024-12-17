@@ -1,9 +1,10 @@
 import {
   handleJoinAction,
   notifyAdminsOnJoinRequest,
-  notifyAdminsOnPhoneNumber
-} from "../action/admin.ts"
-import { requestUserContact, userContactResponse } from "../action/user.ts"
+  notifyAdminsOnPhoneNumber,
+} from '../action/admin.ts'
+import { checkUserIsBanned } from "../action/ban.ts"
+import { requestUserContact, userContactResponse } from '../action/user.ts'
 import { Bot, ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 
@@ -13,6 +14,11 @@ const onJoinRequest = async (ctx: BotContext & ChatJoinRequest) => {
   } catch (e) {
     // TODO: make different message on success request and not
     console.error(e)
+  }
+
+  const banned = await checkUserIsBanned(ctx)
+  if (banned) {
+    return
   }
 
   return notifyAdminsOnJoinRequest(ctx)
