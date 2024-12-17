@@ -103,7 +103,7 @@ const handleJoinRequest = (
   action: JoinRequestAction,
   chatId: number | string,
   userId: number,
-  updateId: string
+  updateId: string,
 ): void => {
   switch (action) {
     case JoinRequestAction.APPROVE:
@@ -119,11 +119,25 @@ const handleJoinRequest = (
   }
 }
 
-export const declineUserJoinRequest = async (ctx: BotContext & ChatJoinRequest, reason: string) => {
+export const declineUserJoinRequest = (
+  ctx: BotContext & ChatJoinRequest,
+  text: string,
+) => {
+  handleJoinRequest(
+    ctx,
+    JoinRequestAction.DECLINE,
+    ctx.chat.id,
+    ctx.user.id,
+    String(ctx.update.update_id),
+  )
 
+  return notifyAllAdmins(ctx, text, {
+    link_preview_options: { is_disabled: true },
+    disable_notification: true
+  })
 }
 
-export const handleJoinAction = (ctx: BotContext) => {
+export const handleJoinAction = (ctx: BotContext): string => {
   const data = ctx.callbackQuery?.data ?? ``
   const [actionValue, chatId, userId, updateId] = data.split(`:`)
   const action = actionValue as JoinRequestAction
@@ -132,9 +146,9 @@ export const handleJoinAction = (ctx: BotContext) => {
 
   switch (action) {
     case JoinRequestAction.APPROVE:
-      return  ctx.t(`chat-join-request_added-to-group`)
+      return ctx.t(`chat-join-request_added-to-group`)
     case JoinRequestAction.DECLINE:
-      return  ctx.t(`chat-join-request_declined-to-group`)
+      return ctx.t(`chat-join-request_declined-to-group`)
     default:
       return ctx.t(`chat-join-request_unknown-command`)
   }
