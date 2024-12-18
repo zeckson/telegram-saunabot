@@ -90,17 +90,21 @@ export const register = (bot: Bot<BotContext>) => {
 
   bot.command('status', async (ctx) => {
     const params = ctx.message?.text?.split(' ').slice(1)
-    const userId = params ? int(params[0]) : ctx.user.id
+    const param_user_id = params?.[0] ? int(params[0]) : undefined
+    const userId = param_user_id ?? ctx.user.id
     const info = await getBanInfo(userId)
+    Object.assign(ctx, {user: { identity: param_user_id ? 'Пользователь' : ctx.user.identity, id: userId }})
     await ctx.replyFmt(
-      getUserBanStatus({ identity: 'Пользователь', id: userId } as User, info),
+      getUserBanStatus(ctx, info),
     )
   })
 
   bot.command('reject', async (ctx) => {
     const params = ctx.message?.text?.split(' ').slice(1)
-    const userId = params ? int(params[0]) : ctx.user.id
+    const param_user_id = params?.[0] ? int(params[0]) : undefined
+    const userId = param_user_id ?? ctx.user.id
     const info = await getBanInfo(userId)
-    await declineUserJoinRequest(ctx as BotContext & ChatJoinRequest, getUserBanStatus({ identity: 'Пользователь', id: userId } as User, info))
+    Object.assign(ctx, {user: { identity: param_user_id ? 'Пользователь' : ctx.user.identity, id: userId }})
+    await declineUserJoinRequest(ctx as BotContext & ChatJoinRequest, getUserBanStatus(ctx, info))
   })
 }

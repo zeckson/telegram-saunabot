@@ -1,6 +1,5 @@
-import { bold, ChatJoinRequest, fmt, FormattedString, link, mentionUser } from '../deps.ts'
+import { bold, ChatJoinRequest, fmt, FormattedString, link, mentionUser, } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
-import { User } from '../type/user.type.ts'
 import { fetchJson } from '../util/fetch.ts'
 import { declineUserJoinRequest } from './admin.ts'
 
@@ -45,12 +44,13 @@ export const getBanInfo = async (
 }
 
 export const getUserBanStatus = (
-  { identity, id }: User,
+  ctx: BotContext,
   banInfo: BanResult,
 ): FormattedString =>
   fmt([
+    [`Заявка #`, ctx.update.update_id],
     `Пользователь: `,
-    mentionUser(identity, id),
+    mentionUser(ctx.user.identity, ctx.user.id),
     bold(banInfo.length > 0 ? ` забанен:` : ` не забанен.`),
     ...banInfo.map((it) =>
       fmt`\n- в базе данных ${it.name}: ${link(`детали`, it.url)}`
@@ -62,7 +62,7 @@ export const checkUserIsBanned = async (
 ): Promise<boolean> => {
   const info = await getBanInfo(ctx.user.id)
   if (info.length > 0) {
-    await declineUserJoinRequest(ctx, getUserBanStatus(ctx.user, info))
+    await declineUserJoinRequest(ctx, getUserBanStatus(ctx, info))
     return true
   }
   return false
