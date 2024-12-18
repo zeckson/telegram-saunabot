@@ -1,4 +1,4 @@
-import { bold, ChatJoinRequest, fmt, FormattedString, link, mentionUser, } from '../deps.ts'
+import { bold, Chat, ChatJoinRequest, fmt, FormattedString, link, mentionUser, } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { fetchJson } from '../util/fetch.ts'
 import { declineUserJoinRequest } from './admin.ts'
@@ -43,19 +43,32 @@ export const getBanInfo = async (
   return result
 }
 
+const getChatLink = (chat: Chat) => {
+  const title = chat.title ?? chat.type
+  return chat.username
+    ? link(title, `tg://resolve?domain=${chat.username}`)
+    : title
+}
+
 export const getUserBanStatus = (
-  ctx: BotContext,
+  ctx: BotContext & ChatJoinRequest,
   banInfo: BanResult,
 ): FormattedString =>
-  fmt([
-    [`Заявка #`, ctx.update.update_id],
-    `Пользователь: `,
-    mentionUser(ctx.user.identity, ctx.user.id),
-    bold(banInfo.length > 0 ? ` забанен:` : ` не забанен.`),
-    ...banInfo.map((it) =>
-      fmt`\n- в базе данных ${it.name}: ${link(`детали`, it.url)}`
-    ),
-  ])
+  fmt`Заявка #${ctx.update.update_id} ${banInfo.length > 0 ? bold(`🚫 Заблокирована!`) : ``}
+Запрос на добавление пользователя ${
+    mentionUser(ctx.user.identity, ctx.user.id)
+  } в чат ${getChatLink(ctx.chat)}
+Проверить пользователя можно по ${
+    link(`ссылке`, `https://t.me/lolsbotcatcherbot?start=${ctx.user.id}`)
+  }
+Пользователь: ${bold(banInfo.length > 0 ? ` забанен:` : ` не забанен.`)}
+    ${
+    fmt([
+      ...banInfo.map((it) =>
+        fmt`- в базе данных ${it.name}: ${link(`детали`, it.url)}\n`
+      ),
+    ])
+  }`
 
 export const checkUserIsBanned = async (
   ctx: BotContext & ChatJoinRequest,
