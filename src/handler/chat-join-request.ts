@@ -24,8 +24,8 @@ const onJoinRequest = async (ctx: BotContext & ChatJoinRequest) => {
   return notifyAdminsOnJoinRequest(ctx)
 }
 
-const onPhoneNumber = (ctx: BotContext) => {
-  const phone = userContactResponse(ctx)
+const onPhoneNumber = async (ctx: BotContext) => {
+  const phone = await userContactResponse(ctx)
 
   if (phone) {
     return notifyAdminsOnPhoneNumber(ctx, phone)
