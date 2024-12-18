@@ -1,4 +1,4 @@
-import { bold, FormattedString, link, mentionUser } from "https://deno.land/x/grammy_parse_mode@1.10.0/format.ts"
+import { bold, FormattedString, link, mentionUser } from "../deps.ts"
 import { ChatJoinRequest, fmt } from "../deps.ts"
 import { BotContext } from '../type/context.ts'
 import { User } from "../type/user.type.ts"

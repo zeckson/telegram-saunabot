@@ -1,10 +1,10 @@
-import { Chat, ChatJoinRequest, Keyboard, User } from '../deps.ts'
+import { Chat, ChatJoinRequest, Keyboard } from '../deps.ts'
 import { BotContext } from "../type/context.ts"
-import { text } from "../util/markdown.ts"
 import { getChatLink } from "../util/link.ts"
+import { text } from "../util/markdown.ts"
 
 export const requestUserContact = (
-  ctx: BotContext & ChatJoinRequest
+  ctx: BotContext & ChatJoinRequest,
 ) => {
   const from = ctx.user
   const chat: Chat = ctx.chat
@@ -16,7 +16,9 @@ export const requestUserContact = (
   })
   return ctx.api.sendMessage(from.id, message, {
     parse_mode: `MarkdownV2`,
-    reply_markup: { keyboard: [[Keyboard.requestContact(ctx.t(`chat-join-phone-contact`))]] },
+    reply_markup: {
+      keyboard: [[Keyboard.requestContact(ctx.t(`chat-join-phone-contact`))]],
+    },
   })
 }
 

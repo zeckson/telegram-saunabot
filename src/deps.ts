@@ -21,11 +21,16 @@ export type {
 } from 'https://deno.land/x/grammy_i18n@v1.0.2/mod.ts'
 
 export {
+  bold,
+  fmt,
   hydrateReply,
+  link,
   mentionUser,
   parseMode,
-  fmt
 } from 'https://deno.land/x/grammy_parse_mode@1.10.0/mod.ts'
-export type { ParseModeFlavor, FormattedString } from 'https://deno.land/x/grammy_parse_mode@1.10.0/mod.ts'
+export type {
+  FormattedString,
+  ParseModeFlavor,
+} from 'https://deno.land/x/grammy_parse_mode@1.10.0/mod.ts'
 
 import 'https://deno.land/std@0.214.0/dotenv/load.ts'
