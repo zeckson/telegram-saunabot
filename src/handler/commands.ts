@@ -3,7 +3,6 @@ import { getBanInfo, getUserBanStatus } from "../action/ban.ts"
 import { requestUserContact } from "../action/user.ts"
 import { Bot, ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
-import { User } from "../type/user.type.ts"
 import { emojis } from "../util/emoji.ts"
 import { chatLink, hash, link, text, userLink } from "../util/markdown.ts"
 import { int } from "../util/system.ts"
@@ -93,9 +92,14 @@ export const register = (bot: Bot<BotContext>) => {
     const param_user_id = params?.[0] ? int(params[0]) : undefined
     const userId = param_user_id ?? ctx.user.id
     const info = await getBanInfo(userId)
-    Object.assign(ctx, {user: { identity: param_user_id ? 'Пользователь' : ctx.user.identity, id: userId }})
+    Object.assign(ctx, {
+      user: {
+        identity: param_user_id ? 'Пользователь' : ctx.user.identity,
+        id: userId,
+      },
+    })
     await ctx.replyFmt(
-      getUserBanStatus(ctx, info),
+      getUserBanStatus(ctx as BotContext & ChatJoinRequest, info),
     )
   })
 
@@ -104,7 +108,15 @@ export const register = (bot: Bot<BotContext>) => {
     const param_user_id = params?.[0] ? int(params[0]) : undefined
     const userId = param_user_id ?? ctx.user.id
     const info = await getBanInfo(userId)
-    Object.assign(ctx, {user: { identity: param_user_id ? 'Пользователь' : ctx.user.identity, id: userId }})
-    await declineUserJoinRequest(ctx as BotContext & ChatJoinRequest, getUserBanStatus(ctx, info))
+    Object.assign(ctx, {
+      user: {
+        identity: param_user_id ? 'Пользователь' : ctx.user.identity,
+        id: userId,
+      },
+    })
+    await declineUserJoinRequest(
+      ctx as BotContext & ChatJoinRequest,
+      getUserBanStatus(ctx as BotContext & ChatJoinRequest, info),
+    )
   })
 }
