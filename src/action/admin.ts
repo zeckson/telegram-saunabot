@@ -1,7 +1,7 @@
 import { ChatJoinRequest, FormattedString, InlineKeyboard } from "../deps.ts"
+import { Messages } from "../messages.ts"
 import { BotContext } from '../type/context.ts'
-import { getChatLink } from '../util/link.ts'
-import { hash, text, userLink } from '../util/markdown.ts'
+import { text, userLink } from '../util/markdown.ts'
 import { int } from '../util/system.ts'
 import { notifyAdmins } from './notify-admin.ts'
 
@@ -22,7 +22,9 @@ const notifyAllAdmins = (
   } else {
     params = { parse_mode: 'MarkdownV2', ...other }
   }
-  return notifyAdmins((id: number) => ctx.api.sendMessage(id, message as string, params))
+  return notifyAdmins((id: number) =>
+    ctx.api.sendMessage(id, message as string, params)
+  )
 }
 
 export const notifyAdminsOnPhoneNumber = (ctx: BotContext, phone: string) => {
@@ -61,18 +63,7 @@ export const notifyAdminsOnJoinRequest = (
     ),
   ]]
 
-  const vars = {
-    id: hash(updateId),
-    userLink: userLink(from.identity, from.id),
-    chatLink: getChatLink(chat),
-    verifyLink: `[ссылке](https://t.me/lolsbotcatcherbot?start=${from.id})`,
-  }
-
-  // NB!: grammyjs breaks message inserting invalid chars inside interpolation "{ $variable }"
-  // NB!: grammyjs automatically formats numbers which breaks links to ids
-  const message = ctx.t(`chat-join-request_admin-notify-text`, vars)
-
-  return notifyAllAdmins(ctx, message, {
+  return notifyAllAdmins(ctx, Messages.onJoinRequest(ctx), {
     link_preview_options: { is_disabled: true },
     reply_markup: new InlineKeyboard(keyboard),
   })
