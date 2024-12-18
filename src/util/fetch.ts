@@ -16,6 +16,7 @@ export const fetchJson = async <T>(
     return await response.json() // Parse and return JSON response
   } catch (error) {
     if (error.name === 'AbortError') {
+      console.error(`Request to ${url}: has timed out [${timeout}]`)
       throw new Error('Request timed out')
     }
     throw error
