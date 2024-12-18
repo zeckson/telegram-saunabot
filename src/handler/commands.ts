@@ -1,4 +1,4 @@
-import { notifyAdminsOnJoinRequest } from "../action/admin.ts"
+import { declineUserJoinRequest, notifyAdminsOnJoinRequest } from "../action/admin.ts"
 import { getBanInfo, getUserBanStatus } from "../action/ban.ts"
 import { requestUserContact } from "../action/user.ts"
 import { Bot, ChatJoinRequest } from '../deps.ts'
@@ -95,5 +95,12 @@ export const register = (bot: Bot<BotContext>) => {
     await ctx.replyFmt(
       getUserBanStatus({ identity: 'Пользователь', id: userId } as User, info),
     )
+  })
+
+  bot.command('reject', async (ctx) => {
+    const params = ctx.message?.text?.split(' ').slice(1)
+    const userId = params ? int(params[0]) : ctx.user.id
+    const info = await getBanInfo(userId)
+    await declineUserJoinRequest(ctx as BotContext & ChatJoinRequest, getUserBanStatus({ identity: 'Пользователь', id: userId } as User, info))
   })
 }

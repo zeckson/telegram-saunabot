@@ -62,7 +62,7 @@ export const checkUserIsBanned = async (
 ): Promise<boolean> => {
   const info = await getBanInfo(ctx.user.id)
   if (info.length > 0) {
-    await declineUserJoinRequest(ctx, getUserBanStatus(ctx.user, info)) // TODO: fix message
+    await declineUserJoinRequest(ctx, getUserBanStatus(ctx.user, info))
     return true
   }
   return false

@@ -27,9 +27,9 @@ export {
   link,
   mentionUser,
   parseMode,
+  FormattedString,
 } from 'https://deno.land/x/grammy_parse_mode@1.10.0/mod.ts'
 export type {
-  FormattedString,
   ParseModeFlavor,
 } from 'https://deno.land/x/grammy_parse_mode@1.10.0/mod.ts'
 

@@ -1,5 +1,4 @@
-import { FormattedString } from "../deps.ts"
-import { ChatJoinRequest, InlineKeyboard } from '../deps.ts'
+import { ChatJoinRequest, FormattedString, InlineKeyboard } from "../deps.ts"
 import { BotContext } from '../type/context.ts'
 import { getChatLink } from '../util/link.ts'
 import { hash, text, userLink } from '../util/markdown.ts'
@@ -11,10 +10,20 @@ const enum JoinRequestAction {
   DECLINE = `decline`,
 }
 
-const notifyAllAdmins = (ctx: BotContext, message: string, other?: object) =>
-  notifyAdmins((id: number) =>
-    ctx.api.sendMessage(id, message, { parse_mode: 'MarkdownV2', ...other })
-  )
+const notifyAllAdmins = (
+  ctx: BotContext,
+  message: string | FormattedString,
+  other?: object,
+) => {
+  let params: object = {}
+  if (message instanceof FormattedString) {
+    params = { entities: message.entities, ...other }
+    message = message.toString()
+  } else {
+    params = { parse_mode: 'MarkdownV2', ...other }
+  }
+  return notifyAdmins((id: number) => ctx.api.sendMessage(id, message as string, params))
+}
 
 export const notifyAdminsOnPhoneNumber = (ctx: BotContext, phone: string) => {
   const from = ctx.user
@@ -132,7 +141,7 @@ export const declineUserJoinRequest = (
     String(ctx.update.update_id),
   )
 
-  return notifyAllAdmins(ctx, text.toString(), {
+  return notifyAllAdmins(ctx, text, {
     link_preview_options: { is_disabled: true },
     disable_notification: true,
     entities: text.entities,
