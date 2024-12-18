@@ -24,7 +24,8 @@ export {
   hydrateReply,
   mentionUser,
   parseMode,
+  fmt
 } from 'https://deno.land/x/grammy_parse_mode@1.10.0/mod.ts'
-export type { ParseModeFlavor } from 'https://deno.land/x/grammy_parse_mode@1.10.0/mod.ts'
+export type { ParseModeFlavor, FormattedString } from 'https://deno.land/x/grammy_parse_mode@1.10.0/mod.ts'
 
 import 'https://deno.land/std@0.214.0/dotenv/load.ts'

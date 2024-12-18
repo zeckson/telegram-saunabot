@@ -1,13 +1,18 @@
 import { notifyAdminsOnJoinRequest } from "../action/admin.ts"
+import { getBanInfo, getUserBanStatus } from "../action/ban.ts"
 import { requestUserContact } from "../action/user.ts"
 import { Bot, ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
+import { User } from "../type/user.type.ts"
 import { emojis } from "../util/emoji.ts"
 import { chatLink, hash, link, text, userLink } from "../util/markdown.ts"
+import { int } from "../util/system.ts"
 
 export const register = (bot: Bot<BotContext>) => {
   bot.command(`start`, (ctx: BotContext) => {
-    return ctx.reply(ctx.t(`commands_greeting-test`, {fullName: ctx.user.fullName}))
+    return ctx.reply(
+      ctx.t(`commands_greeting-test`, { fullName: ctx.user.fullName }),
+    )
   })
 
   bot.command(`test`, (ctx: BotContext) => {
@@ -81,5 +86,14 @@ export const register = (bot: Bot<BotContext>) => {
     await ctx.reply(`*This* is _the_ default \`formatting\` ${emojis.robot}`, {
       parse_mode: 'MarkdownV2',
     })
+  })
+
+  bot.command('status', async (ctx) => {
+    const params = ctx.message?.text?.split(' ').slice(1)
+    const userId = params ? int(params[0]) : ctx.user.id
+    const info = await getBanInfo(userId)
+    await ctx.replyFmt(
+      getUserBanStatus({ identity: 'Пользователь', id: userId } as User, info),
+    )
   })
 }

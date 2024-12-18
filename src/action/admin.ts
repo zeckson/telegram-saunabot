@@ -1,3 +1,4 @@
+import { FormattedString } from "../deps.ts"
 import { ChatJoinRequest, InlineKeyboard } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { getChatLink } from '../util/link.ts'
@@ -12,7 +13,7 @@ const enum JoinRequestAction {
 
 const notifyAllAdmins = (ctx: BotContext, message: string, other?: object) =>
   notifyAdmins((id: number) =>
-    ctx.api.sendMessage(id, message, { ...other, parse_mode: 'MarkdownV2' })
+    ctx.api.sendMessage(id, message, { parse_mode: 'MarkdownV2', ...other })
   )
 
 export const notifyAdminsOnPhoneNumber = (ctx: BotContext, phone: string) => {
@@ -121,7 +122,7 @@ const handleJoinRequest = (
 
 export const declineUserJoinRequest = (
   ctx: BotContext & ChatJoinRequest,
-  text: string,
+  text: FormattedString,
 ) => {
   handleJoinRequest(
     ctx,
@@ -131,9 +132,10 @@ export const declineUserJoinRequest = (
     String(ctx.update.update_id),
   )
 
-  return notifyAllAdmins(ctx, text, {
+  return notifyAllAdmins(ctx, text.toString(), {
     link_preview_options: { is_disabled: true },
-    disable_notification: true
+    disable_notification: true,
+    entities: text.entities,
   })
 }
 
