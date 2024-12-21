@@ -1,6 +1,3 @@
-import { ChatJoinRequest, FormattedString, } from '../deps.ts'
-import { Messages } from "../messages.ts"
-import { BotContext } from '../type/context.ts'
 import { fetchJson } from '../util/fetch.ts'
 
 type DataType = { banned: boolean; ok: boolean; result: [object] | undefined }
@@ -42,8 +39,3 @@ export const getBanInfo = async (
 
   return result
 }
-
-export const getUserBanStatus = (
-  ctx: BotContext & ChatJoinRequest,
-  banInfo: BanResult,
-): FormattedString => Messages.onJoinRequest(ctx, banInfo)

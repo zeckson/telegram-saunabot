@@ -1,11 +1,12 @@
-import { declineUserJoinRequest, notifyAdminsOnJoinRequest } from "../action/admin.ts"
-import { getBanInfo, getUserBanStatus } from "../action/ban.ts"
-import { requestUserContact } from "../action/user.ts"
+import { Messages } from '../action/admin.messages.ts'
+import { declineUserJoinRequest, notifyAdminsOnJoinRequest, } from '../action/admin.ts'
+import { getBanInfo } from '../action/ban.ts'
+import { requestUserContact } from '../action/user.ts'
 import { Bot, ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
-import { emojis } from "../util/emoji.ts"
-import { chatLink, hash, link, text, userLink } from "../util/markdown.ts"
-import { int } from "../util/system.ts"
+import { emojis } from '../util/emoji.ts'
+import { chatLink, hash, link, text, userLink } from '../util/markdown.ts'
+import { int } from '../util/system.ts'
 
 export const register = (bot: Bot<BotContext>) => {
   bot.command(`start`, (ctx: BotContext) => {
@@ -99,7 +100,7 @@ export const register = (bot: Bot<BotContext>) => {
       },
     })
     await ctx.replyFmt(
-      getUserBanStatus(ctx as BotContext & ChatJoinRequest, info),
+      Messages.onJoinRequest(ctx as BotContext & ChatJoinRequest, info),
     )
   })
 
@@ -116,7 +117,7 @@ export const register = (bot: Bot<BotContext>) => {
     })
     await declineUserJoinRequest(
       ctx as BotContext & ChatJoinRequest,
-      getUserBanStatus(ctx as BotContext & ChatJoinRequest, info),
+      Messages.onJoinRequest(ctx as BotContext & ChatJoinRequest, info),
     )
   })
 }
