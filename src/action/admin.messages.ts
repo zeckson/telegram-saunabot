@@ -12,6 +12,8 @@ enum Status {
   NOT_BANNED = `в базах не упоминается`,
 }
 
+const hashtag = (value: string | number) => `#${value}`
+
 export class Messages {
   static chatJoinAction(action: JoinRequestAction): string {
     switch (action) {
@@ -24,15 +26,15 @@ export class Messages {
     }
   }
   static notifyError(ctx: BotContext, id: string, e: GrammyError): string | FormattedString {
-    return fmt`Не удалось принять/отклонить заявку ${id}
+    return fmt`Не удалось принять/отклонить заявку ${hashtag(id)}
 Запрос от ${mentionUser(ctx.user.identity, ctx.user.id)}. Текст ошибки:
   ${e.message}`
   }
   static notifyJoinRejected(ctx: BotContext, id: string): FormattedString {
-    return fmt`Заявка #${id} отклонена ${mentionUser(ctx.user.identity, ctx.user.id)}`
+    return fmt`Заявка ${hashtag(id)} отклонена ${mentionUser(ctx.user.identity, ctx.user.id)}`
   }
   static notifyJoinApproved(ctx: BotContext, id: string): FormattedString {
-    return fmt`Заявка #${id} принята ${mentionUser(ctx.user.identity, ctx.user.id)}`
+    return fmt`Заявка #${hashtag(id)} принята ${mentionUser(ctx.user.identity, ctx.user.id)}`
   }
   static approveButtonText = `👍 Подтвердить`
   static declineButtonText = `👎 Отклонить`
@@ -70,7 +72,7 @@ ${blockquote(phone)}
 
     const user = ctx.user
     const chat = ctx.chat
-    return fmt`Заявка #${ctx.update.update_id} ${
+    return fmt`Заявка ${hashtag(ctx.update.update_id)} ${
       status == Status.BANNED ? bold(`🚫 Заблокирована!`) : ``
     }
 Запрос на добавление пользователя ${
