@@ -6,7 +6,7 @@ import { Bot, ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { User } from '../type/user.type.ts'
 import { emojis } from '../util/emoji.ts'
-import { hash, link, text, userLink } from '../util/markdown.ts'
+import { link, text } from '../util/markdown.ts'
 import { int } from '../util/system.ts'
 
 const asJoinRequest = (
@@ -26,9 +26,7 @@ const getUser = (ctx: BotContext): User | undefined => {
 }
 export const register = (bot: Bot<BotContext>) => {
   bot.command(`start`, (ctx: BotContext) => {
-    return ctx.reply(
-      ctx.t(`commands_greeting-test`, { fullName: ctx.user.fullName }),
-    )
+    return ctx.replyFmt(`Привет, ${ctx.user.identity}!`)
   })
 
   bot.command(`test`, (ctx: BotContext) => {
@@ -92,7 +90,9 @@ export const register = (bot: Bot<BotContext>) => {
   })
 
   bot.command('reject', async (ctx: BotContext) => {
-    const context = asJoinRequest(ctx, getUser(ctx)) as BotContext & ChatJoinRequest
+    const context = asJoinRequest(ctx, getUser(ctx)) as
+      & BotContext
+      & ChatJoinRequest
     await declineUserJoinRequest(
       context,
       Messages.onJoinRequest(context, await getBanInfo(ctx.user.id)),
