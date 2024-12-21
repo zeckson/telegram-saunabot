@@ -1,4 +1,5 @@
-import { blockquote, bold, } from 'https://deno.land/x/grammy_parse_mode@1.10.0/format.ts'
+import { GrammyError } from "../deps.ts"
+import { blockquote, bold, } from '../deps.ts'
 import { ChatJoinRequest, fmt, FormattedString, link, mentionUser, } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { getFormattedChatLink } from "../util/link.ts"
@@ -11,6 +12,17 @@ enum Status {
 }
 
 export class Messages {
+  static notifyError(ctx: BotContext, id: string, e: GrammyError): string | FormattedString {
+    return fmt`Не удалось принять/отклонить заявку ${id}
+Запрос от ${mentionUser(ctx.user.identity, ctx.user.id)}. Текст ошибки:
+  ${e.message}`
+  }
+  static notifyJoinRejected(ctx: BotContext, id: string): FormattedString {
+    return fmt`Заявка #${id} отклонена ${mentionUser(ctx.user.identity, ctx.user.id)}`
+  }
+  static notifyJoinApproved(ctx: BotContext, id: string): FormattedString {
+    return fmt`Заявка #${id} принята ${mentionUser(ctx.user.identity, ctx.user.id)}`
+  }
   static approveButtonText = `👍 Подтвердить`
   static declineButtonText = `👎 Отклонить`
   static chatJoinContactReceivedAdminNotification(

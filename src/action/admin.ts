@@ -1,6 +1,5 @@
-import { ChatJoinRequest, FormattedString, InlineKeyboard } from '../deps.ts'
+import { ChatJoinRequest, FormattedString, GrammyError, InlineKeyboard } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
-import { text, userLink } from '../util/markdown.ts'
 import { int } from '../util/system.ts'
 import { Messages } from './admin.messages.ts'
 import { getBanInfo } from './ban.ts'
@@ -24,7 +23,10 @@ const notifyAllAdmins = (
     params = { parse_mode: 'MarkdownV2', ...other }
   }
   return notifyAdmins((id: number) =>
-    ctx.api.sendMessage(id, message as string, params)
+    ctx.api.sendMessage(id, message as string, {
+      link_preview_options: { is_disabled: true },
+      ...params,
+    })
   )
 }
 
@@ -74,32 +76,27 @@ export const notifyAdminsOnJoinRequest = async (
 const notifyApproved = (ctx: BotContext, updateId: string) => () =>
   notifyAllAdmins(
     ctx,
-    ctx.t(`chat-join-request_admin-approve-text`, {
-      id: updateId,
-      adminLink: userLink(`админ`, ctx.from!.id),
-    }),
+    Messages.notifyJoinApproved(ctx, updateId),
   )
 
 const notifyRejected = (ctx: BotContext, updateId: string) => () =>
   notifyAllAdmins(
     ctx,
-    ctx.t(`chat-join-request_admin-reject-text`, {
-      id: updateId,
-      adminLink: userLink(`админ`, ctx.from!.id),
-    }),
+    Messages.notifyJoinRejected(ctx, updateId),
   )
 
-const notifyErrored = (ctx: BotContext, updateId: string) => (e: Error) => {
-  console.error(`Got error: `, e)
-  return notifyAllAdmins(
-    ctx,
-    ctx.t(`chat-join-request_admin-error-text`, {
-      id: updateId,
-      adminLink: userLink(`админ`, ctx.from!.id),
-      errorText: text(e.message),
-    }),
-  ).catch((err) => console.error(`Failed to notify: `, err))
-}
+const notifyErrored =
+  (ctx: BotContext, updateId: string) => async (e: GrammyError) => {
+    console.error(`Got error: `, e)
+    try {
+      return await notifyAllAdmins(
+        ctx,
+        Messages.notifyError(ctx, updateId, e),
+      )
+    } catch (err) {
+      return console.error(`Failed to notify: `, err)
+    }
+  }
 
 const handleJoinRequest = (
   ctx: BotContext,

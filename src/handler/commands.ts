@@ -76,10 +76,7 @@ export const register = (bot: Bot<BotContext>) => {
   )
 
   bot.command('demo', async (ctx) => {
-    await ctx.replyT(`chat-join-request_admin-approve-text`, {
-      id: hash(10002345),
-      adminLink: userLink(`admin`, 1232155),
-    })
+    await ctx.replyFmt(Messages.notifyJoinApproved(ctx, `100`))
     await ctx.reply(`*This* is _the_ default \`formatting\` ${emojis.robot}`, {
       parse_mode: 'MarkdownV2',
     })
