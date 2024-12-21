@@ -4,10 +4,26 @@ import { getBanInfo } from '../action/ban.ts'
 import { requestUserContact } from '../action/user.ts'
 import { Bot, ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
+import { User } from '../type/user.type.ts'
 import { emojis } from '../util/emoji.ts'
-import { chatLink, hash, link, text, userLink } from '../util/markdown.ts'
+import { hash, link, text, userLink } from '../util/markdown.ts'
 import { int } from '../util/system.ts'
 
+const asJoinRequest = (
+  ctx: BotContext,
+  withUser?: User,
+): BotContext & ChatJoinRequest => {
+  return Object.assign(ctx, {
+    user: withUser ?? ctx.user,
+  }) as BotContext & ChatJoinRequest
+}
+const getUser = (ctx: BotContext): User | undefined => {
+  const params = ctx.message?.text?.split(' ').slice(1)
+  const param_user_id = params?.[0] ? int(params[0]) : undefined
+  return param_user_id
+    ? { id: param_user_id, identity: `Пользователь` } as User
+    : undefined
+}
 export const register = (bot: Bot<BotContext>) => {
   bot.command(`start`, (ctx: BotContext) => {
     return ctx.reply(
@@ -16,28 +32,9 @@ export const register = (bot: Bot<BotContext>) => {
   })
 
   bot.command(`test`, (ctx: BotContext) => {
-    // Check broken parse_mode with fluent context
-    const from = ctx.from!
-    const chat = ctx.chat!
-
-    const safeChatTitle = text(chat.title || chat.type)
-    return ctx.reply(
-      ctx.t(`chat-join-request_admin-notify-text`, {
-        id: hash(ctx.update.update_id),
-        userLink: userLink(ctx.user.identity, from.id),
-        chatLink: chat.username
-          ? chatLink(safeChatTitle, chat.username)
-          : safeChatTitle,
-        verifyLink: link(
-          `ссылке`,
-          `https://t.me/lolsbotcatcherbot?start=${from.id}`,
-        ),
-      }),
-      {
-        link_preview_options: { is_disabled: true },
-        parse_mode: `MarkdownV2`,
-      },
-    )
+    return ctx.replyFmt(Messages.onJoinRequest(asJoinRequest(ctx), undefined), {
+      link_preview_options: { is_disabled: true },
+    })
   })
 
   bot.command('md2', (ctx) => {
@@ -89,35 +86,19 @@ export const register = (bot: Bot<BotContext>) => {
   })
 
   bot.command('status', async (ctx) => {
-    const params = ctx.message?.text?.split(' ').slice(1)
-    const param_user_id = params?.[0] ? int(params[0]) : undefined
-    const userId = param_user_id ?? ctx.user.id
-    const info = await getBanInfo(userId)
-    Object.assign(ctx, {
-      user: {
-        identity: param_user_id ? 'Пользователь' : ctx.user.identity,
-        id: userId,
-      },
-    })
     await ctx.replyFmt(
-      Messages.onJoinRequest(ctx as BotContext & ChatJoinRequest, info),
+      Messages.onJoinRequest(
+        asJoinRequest(ctx, getUser(ctx)),
+        await getBanInfo(ctx.user.id),
+      ),
     )
   })
 
-  bot.command('reject', async (ctx) => {
-    const params = ctx.message?.text?.split(' ').slice(1)
-    const param_user_id = params?.[0] ? int(params[0]) : undefined
-    const userId = param_user_id ?? ctx.user.id
-    const info = await getBanInfo(userId)
-    Object.assign(ctx, {
-      user: {
-        identity: param_user_id ? 'Пользователь' : ctx.user.identity,
-        id: userId,
-      },
-    })
+  bot.command('reject', async (ctx: BotContext) => {
+    const context = asJoinRequest(ctx, getUser(ctx)) as BotContext & ChatJoinRequest
     await declineUserJoinRequest(
-      ctx as BotContext & ChatJoinRequest,
-      Messages.onJoinRequest(ctx as BotContext & ChatJoinRequest, info),
+      context,
+      Messages.onJoinRequest(context, await getBanInfo(ctx.user.id)),
     )
   })
 }
