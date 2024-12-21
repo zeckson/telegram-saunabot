@@ -1,8 +1,8 @@
 import { ChatJoinRequest, FormattedString, InlineKeyboard } from '../deps.ts'
-import { Messages } from '../messages.ts'
 import { BotContext } from '../type/context.ts'
 import { text, userLink } from '../util/markdown.ts'
 import { int } from '../util/system.ts'
+import { Messages } from './admin.messages.ts'
 import { getBanInfo } from './ban.ts'
 import { notifyAdmins } from './notify-admin.ts'
 
@@ -29,17 +29,7 @@ const notifyAllAdmins = (
 }
 
 export const notifyAdminsOnPhoneNumber = (ctx: BotContext, phone: string) => {
-  const from = ctx.user
-
-  const vars = {
-    userLink: userLink(from.identity, from.id),
-    phone,
-    verifyLink: `[ссылке](https://t.me/lolsbotcatcherbot?start=${from.id})`,
-  }
-
-  // NB!: grammyjs breaks message inserting invalid chars inside interpolation "{ $variable }"
-  // NB!: grammyjs automatically formats numbers which breaks links to ids
-  const message = ctx.t(`chat-join-phone-contact_admin-text`, vars)
+  const message = Messages.chatJoinContactReceivedAdminNotification(ctx, phone)
 
   return notifyAllAdmins(ctx, message, {
     link_preview_options: { is_disabled: true },
