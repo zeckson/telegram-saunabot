@@ -3,6 +3,7 @@ import { blockquote, bold, } from '../deps.ts'
 import { ChatJoinRequest, fmt, FormattedString, link, mentionUser, } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { getFormattedChatLink } from "../util/link.ts"
+import { JoinRequestAction } from "./admin.ts"
 import { BanResult } from "./ban.ts"
 
 enum Status {
@@ -12,6 +13,16 @@ enum Status {
 }
 
 export class Messages {
+  static chatJoinAction(action: JoinRequestAction): string {
+    switch (action) {
+      case JoinRequestAction.APPROVE:
+        return `Добавлен в группу`
+      case JoinRequestAction.DECLINE:
+        return `Отклонён`
+      default:
+        return `Неизвестная команда`
+    }
+  }
   static notifyError(ctx: BotContext, id: string, e: GrammyError): string | FormattedString {
     return fmt`Не удалось принять/отклонить заявку ${id}
 Запрос от ${mentionUser(ctx.user.identity, ctx.user.id)}. Текст ошибки:

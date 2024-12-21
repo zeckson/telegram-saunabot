@@ -5,7 +5,7 @@ import { Messages } from './admin.messages.ts'
 import { getBanInfo } from './ban.ts'
 import { notifyAdmins } from './notify-admin.ts'
 
-const enum JoinRequestAction {
+export const enum JoinRequestAction {
   APPROVE = `approve`,
   DECLINE = `decline`,
 }
@@ -145,12 +145,5 @@ export const handleJoinAction = (ctx: BotContext): string => {
 
   handleJoinRequest(ctx, action, chatId, int(userId), updateId)
 
-  switch (action) {
-    case JoinRequestAction.APPROVE:
-      return ctx.t(`chat-join-request_added-to-group`)
-    case JoinRequestAction.DECLINE:
-      return ctx.t(`chat-join-request_declined-to-group`)
-    default:
-      return ctx.t(`chat-join-request_unknown-command`)
-  }
+  return Messages.chatJoinAction(action)
 }
