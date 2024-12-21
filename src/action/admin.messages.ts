@@ -11,6 +11,8 @@ enum Status {
 }
 
 export class Messages {
+  static approveButtonText = `👍 Подтвердить`
+  static declineButtonText = `👎 Отклонить`
   static chatJoinContactReceivedAdminNotification(
     ctx: BotContext,
     phone: string,

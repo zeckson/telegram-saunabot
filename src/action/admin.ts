@@ -56,11 +56,11 @@ export const notifyAdminsOnJoinRequest = async (
     )
   } else {
     keyboard.add(InlineKeyboard.text(
-      ctx.t(`chat-join-request_approve`),
+      Messages.approveButtonText,
       `${JoinRequestAction.APPROVE}:${chat.id}:${from.id}:${updateId}`,
     ))
     keyboard.add(InlineKeyboard.text(
-      ctx.t(`chat-join-request_decline`),
+      Messages.declineButtonText,
       `${JoinRequestAction.DECLINE}:${chat.id}:${from.id}:${updateId}`,
     ))
   }
