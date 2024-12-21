@@ -28,6 +28,7 @@ export {
   mentionUser,
   parseMode,
   FormattedString,
+  italic,
 } from 'https://deno.land/x/grammy_parse_mode@1.10.0/mod.ts'
 export type {
   ParseModeFlavor,

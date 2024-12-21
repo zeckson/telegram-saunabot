@@ -1,13 +1,7 @@
 import { BanResult } from './action/ban.ts'
-import { bold, Chat, ChatJoinRequest, fmt, FormattedString, link, mentionUser } from './deps.ts'
+import { bold, ChatJoinRequest, fmt, FormattedString, link, mentionUser } from './deps.ts'
 import { BotContext } from './type/context.ts'
-
-const getChatLink = (chat: Chat) => {
-  const title = chat.title ?? chat.type
-  return chat.username
-    ? link(title, `tg://resolve?domain=${chat.username}`)
-    : title
-}
+import { getFormattedChatLink } from "./util/link.ts"
 
 enum Status {
   UNKNOWN = `неизвестно.`,
@@ -38,7 +32,7 @@ export class Messages {
     }
 Запрос на добавление пользователя ${
       mentionUser(user.identity, user.id)
-    } в чат ${getChatLink(chat)}
+    } в чат ${getFormattedChatLink(chat)}
 Проверить пользователя можно по ${
       link(`ссылке`, `https://t.me/lolsbotcatcherbot?start=${user.id}`)
     }
