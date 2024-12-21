@@ -15,12 +15,6 @@ export type {
 } from 'https://deno.land/x/grammy@v1.27.0/types.ts'
 export type { Other } from 'https://deno.land/x/grammy@v1.27.0/core/api.ts'
 
-export { I18n } from 'https://deno.land/x/grammy_i18n@v1.0.2/mod.ts'
-export type {
-  I18nFlavor,
-  TranslationVariables,
-} from 'https://deno.land/x/grammy_i18n@v1.0.2/mod.ts'
-
 export {
   blockquote,
   bold,
