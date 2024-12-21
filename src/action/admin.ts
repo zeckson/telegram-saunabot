@@ -1,8 +1,9 @@
-import { ChatJoinRequest, FormattedString, InlineKeyboard } from "../deps.ts"
-import { Messages } from "../messages.ts"
+import { ChatJoinRequest, FormattedString, InlineKeyboard } from '../deps.ts'
+import { Messages } from '../messages.ts'
 import { BotContext } from '../type/context.ts'
 import { text, userLink } from '../util/markdown.ts'
 import { int } from '../util/system.ts'
+import { getBanInfo } from './ban.ts'
 import { notifyAdmins } from './notify-admin.ts'
 
 const enum JoinRequestAction {
@@ -45,27 +46,38 @@ export const notifyAdminsOnPhoneNumber = (ctx: BotContext, phone: string) => {
   })
 }
 
-export const notifyAdminsOnJoinRequest = (
+export const notifyAdminsOnJoinRequest = async (
   ctx: BotContext & ChatJoinRequest,
 ) => {
   const chat = ctx.chat
   const from = ctx.user
   const updateId = ctx.update.update_id
 
-  const keyboard = [[
-    InlineKeyboard.text(
+  const keyboard = new InlineKeyboard()
+
+  const info = await getBanInfo(ctx.user.id)
+  if (info.length > 0) {
+    handleJoinRequest(
+      ctx,
+      JoinRequestAction.DECLINE,
+      ctx.chat.id,
+      ctx.user.id,
+      String(ctx.update.update_id),
+    )
+  } else {
+    keyboard.add(InlineKeyboard.text(
       ctx.t(`chat-join-request_approve`),
       `${JoinRequestAction.APPROVE}:${chat.id}:${from.id}:${updateId}`,
-    ),
-    InlineKeyboard.text(
+    ))
+    keyboard.add(InlineKeyboard.text(
       ctx.t(`chat-join-request_decline`),
       `${JoinRequestAction.DECLINE}:${chat.id}:${from.id}:${updateId}`,
-    ),
-  ]]
+    ))
+  }
 
-  return notifyAllAdmins(ctx, Messages.onJoinRequest(ctx), {
+  return notifyAllAdmins(ctx, Messages.onJoinRequest(ctx, info), {
     link_preview_options: { is_disabled: true },
-    reply_markup: new InlineKeyboard(keyboard),
+    reply_markup: keyboard,
   })
 }
 

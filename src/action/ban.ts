@@ -1,8 +1,7 @@
-import { bold, Chat, ChatJoinRequest, fmt, FormattedString, link, mentionUser, } from '../deps.ts'
+import { ChatJoinRequest, FormattedString, } from '../deps.ts'
 import { Messages } from "../messages.ts"
 import { BotContext } from '../type/context.ts'
 import { fetchJson } from '../util/fetch.ts'
-import { declineUserJoinRequest } from './admin.ts'
 
 type DataType = { banned: boolean; ok: boolean; result: [object] | undefined }
 
@@ -48,14 +47,3 @@ export const getUserBanStatus = (
   ctx: BotContext & ChatJoinRequest,
   banInfo: BanResult,
 ): FormattedString => Messages.onJoinRequest(ctx, banInfo)
-
-export const checkUserIsBanned = async (
-  ctx: BotContext & ChatJoinRequest,
-): Promise<boolean> => {
-  const info = await getBanInfo(ctx.user.id)
-  if (info.length > 0) {
-    await declineUserJoinRequest(ctx, Messages.onJoinRequest(ctx, info))
-    return true
-  }
-  return false
-}
