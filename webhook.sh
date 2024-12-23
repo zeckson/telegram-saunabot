@@ -19,10 +19,16 @@ then
   exit 1
 fi
 
-DATA="{\"url\": \"$URL\"}"
+DATA="{\"url\": \"$URL/$TOKEN\"}"
+VERBOSE="-v"
 
 echo "Data: $DATA"
 
-curl -v -X "POST" "https://api.telegram.org/bot$TOKEN/setWebhook" \
+curl $VERBOSE -X "POST" "https://api.telegram.org/bot$TOKEN/setWebhook" \
     -d "$DATA" \
+    -H "Content-Type: application/json; charset=utf-8"
+
+echo # Just new line
+
+curl $VERBOSE "https://api.telegram.org/bot$TOKEN/getWebhookInfo" \
     -H "Content-Type: application/json; charset=utf-8"
