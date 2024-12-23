@@ -7,8 +7,9 @@ export const requestUserContact = (
 ) => {
   // BC! Avoid using context -- it's not sage
   const message = Messages.chatJoinVerifyMessage(ctx)
-  return ctx.replyFmt(message, {
+  return ctx.api.sendMessage(ctx.user_chat_id, message.text, {
     link_preview_options: { is_disabled: true },
+    entities: message.entities,
     reply_markup: {
       keyboard: [[
         Keyboard.requestContact(Messages.shareContactButtonName),
