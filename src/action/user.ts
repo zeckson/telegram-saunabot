@@ -7,7 +7,7 @@ export const requestUserContact = (
 ) => {
   // BC! Avoid using context -- it's not sage
   const message = Messages.chatJoinVerifyMessage(ctx)
-  return ctx.api.sendMessage(ctx.user_chat_id, message.text, {
+  return ctx.api.sendMessage(ctx.user_chat_id ?? ctx.from.id, message.text, {
     link_preview_options: { is_disabled: true },
     entities: message.entities,
     reply_markup: {
