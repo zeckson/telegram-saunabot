@@ -105,3 +105,6 @@ dist
 
 # Idea project files
 .idea
+
+# Deno vendor
+vendor
