@@ -11,5 +11,13 @@
     "proseWrap": "preserve",
     "include": ["src/"],
     "exclude": ["src/testdata/", "src/fixtures/**/*.ts"]
+  },
+  "deploy": {
+    "project": "faaae51a-6c29-4c75-a062-87b41ca87f65",
+    "exclude": [
+      "**/node_modules"
+    ],
+    "include": [],
+    "entrypoint": "server.ts"
   }
 }
