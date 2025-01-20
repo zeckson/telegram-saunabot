@@ -4,6 +4,6 @@ import { register as registerChatJoinRequest } from './chat-join-request.ts'
 import { register as registerCommands } from './commands.ts'
 
 export const registerHandlers = (bot: Bot<BotContext>) => {
-  registerChatJoinRequest(bot)
-  registerCommands(bot)
+	registerChatJoinRequest(bot)
+	registerCommands(bot)
 }
