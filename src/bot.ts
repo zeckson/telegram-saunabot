@@ -7,7 +7,7 @@ import { Config } from './util/config.ts'
 // Create bot object
 const bot = new Bot<BotContext>(Config.TELEGRAM_TOKEN)
 
-await registerMiddleware(bot)
+registerMiddleware(bot)
 registerHandlers(bot)
 
 bot.on(`my_chat_member`, (ctx) => {
