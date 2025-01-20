@@ -22,9 +22,9 @@
   },
   "imports": {
     "@std/dotenv": "jsr:@std/dotenv@^0.225.3",
-    "grammy": "https://deno.land/x/grammy@v1.27.0/mod.ts",
+    "grammy": "https://deno.land/x/grammy@v1.34.0/mod.ts",
     "grammy/types": "https://deno.land/x/grammy_types@v3.18.0/mod.ts",
-    "grammy/parse_mode": "https://deno.land/x/grammy_parse_mode@1.10.0/mod.ts"
+    "grammy/parse_mode": "https://deno.land/x/grammy_parse_mode@1.11.1/mod.ts"
   },
   "vendor": true,
   "lock": {
