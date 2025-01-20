@@ -18,7 +18,16 @@ enum Status {
 	NOT_BANNED = `в базах не упоминается`,
 }
 
-const hashtag = (value: string | number) => `#${value}`
+const hashtag = (value: string | number): FormattedString => {
+  value = `#${value}i`
+  return new FormattedString(value, [
+    {
+      type: 'hashtag',
+      offset: 0,
+      length: value.length
+    }
+  ])
+}
 
 export class Messages {
 	static chatJoinAction(action: JoinRequestAction): string {
@@ -46,7 +55,7 @@ export class Messages {
 		}`
 	}
 	static notifyJoinApproved(ctx: BotContext, id: string): FormattedString {
-		return fmt`Заявка #${hashtag(id)} принята ${
+		return fmt`Заявка ${hashtag(id)} принята ${
 			mentionUser(ctx.user.identity, ctx.user.id)
 		}`
 	}
