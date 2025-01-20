@@ -4,12 +4,12 @@ import { log } from './log.ts'
 import { context } from './context.ts'
 
 export const registerMiddleware = (bot: Bot<BotContext>) => {
-  // Install user-context
-  bot.use(context)
+	// Install user-context
+	bot.use(context)
 
-  // Install logger
-  bot.use(log)
+	// Install logger
+	bot.use(log)
 
-  // Install format reply variant to ctx
-  bot.use(hydrateReply)
+	// Install format reply variant to ctx
+	bot.use(hydrateReply)
 }
