@@ -9,21 +9,22 @@ const handleUpdate: (...args: Request[]) => Promise<Response> = webhookCallback(
 const projectId = Deno.env.get(`DENO_PROJECT_ID`) || `telegram-saunabot`
 const deploymentId = Deno.env.get(`DENO_DEPLOYMENT_ID`)
 
-const IS_PRODUCTION = Boolean(Deno.env.get(`DENO_DEPLOYMENT_ID`))
+const IS_PRODUCTION = Boolean(Deno.env.get(`DENO_DEPLOYMENT_ID`)) == false
 
 const deployUrl = deploymentId
   ? `https://${projectId}${deploymentId ? `-${deploymentId}` : ``}.deno.dev`
   : `http://localhost:8000`
 
-const DEFAULT_RESPONSE = new Response(
+const getDefaultResponse = () => new Response(
   `Hello World!
 ${deployUrl}`,
   {
     headers: { 'content-type': 'text/plain' },
   },
 )
+
 Deno.serve(async (req) => {
-  let response = DEFAULT_RESPONSE
+  let response = getDefaultResponse()
 
   const start = Date.now()
   if (req.method == 'POST') {
