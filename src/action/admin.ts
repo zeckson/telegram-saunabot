@@ -15,7 +15,7 @@ export const enum JoinRequestAction {
 	DECLINE = `decline`,
 }
 
-const notifyAllAdmins = (
+export const notifyAllAdmins = (
 	ctx: BotContext,
 	message: string | FormattedString,
 	other?: object,

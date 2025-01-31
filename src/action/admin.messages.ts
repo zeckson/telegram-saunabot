@@ -1,9 +1,10 @@
-import { GrammyError } from '../deps.ts'
-import { blockquote, bold } from '../deps.ts'
 import {
+	blockquote,
+	bold,
 	ChatJoinRequest,
 	fmt,
 	FormattedString,
+	GrammyError,
 	link,
 	mentionUser,
 } from '../deps.ts'
@@ -30,6 +31,16 @@ const hashtag = (value: string | number): FormattedString => {
 }
 
 export class Messages {
+	static requestContactError(
+		ctx: BotContext,
+		e: GrammyError,
+	): FormattedString {
+		const user = ctx.user
+		const id = ctx.update.update_id
+		return fmt`Не удалось отправись запрос пользователю ${hashtag(id)}
+Запрос от ${mentionUser(user.identity, user.id)}. Текст ошибки:
+  ${e.message}`
+	}
 	static chatJoinAction(action: JoinRequestAction): string {
 		switch (action) {
 			case JoinRequestAction.APPROVE:
