@@ -13,13 +13,10 @@ const logUpdate = (ctx: UserContext) => {
 		}`,
 	)
 
-	const message = ctx.msg
-	if (message) {
-		const separator = `====== message[${message.message_id}] =======`
-		console.log(separator)
-		console.dir(message)
-		console.log(separator)
-	}
+  const separator = `====== update[${updateId}] =======`
+  console.log(separator)
+  console.dir(ctx.update)
+  console.log(separator)
 }
 
 export const log = async (ctx: UserContext, next: NextFunction) => {
