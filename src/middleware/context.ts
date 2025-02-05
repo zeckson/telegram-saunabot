@@ -1,5 +1,6 @@
 import { NextFunction } from '../deps.ts'
 import { User, UserContext } from '../type/user.type.ts'
+import { UserStore } from '../store/user-store.ts'
 
 const EMPTY_USER = new User({
 	id: -1,
@@ -7,7 +8,9 @@ const EMPTY_USER = new User({
 	is_bot: false,
 })
 
-export const context = (ctx: UserContext, next: NextFunction) => {
+const store = await UserStore.open()
+
+export const context = async (ctx: UserContext, next: NextFunction) => {
 	const from = ctx.from
 	if (!from) {
 		const updateId = ctx.update.update_id
@@ -19,7 +22,9 @@ export const context = (ctx: UserContext, next: NextFunction) => {
 
 		ctx.user = EMPTY_USER
 	} else {
-		ctx.user = new User(from)
+    const user = from
+    await store.saveOrUpdate(user)
+    ctx.user = new User(user)
 	}
 
 	return next()

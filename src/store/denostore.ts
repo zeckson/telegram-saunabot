@@ -19,8 +19,9 @@ export class DenoStore {
 		return result.ok
 	}
 
-	async load(key: KvKey): Promise<KvEntryMaybe<object>> {
-		return await this.db.get(key)
+	async load<T>(key: KvKey): Promise<T | undefined> {
+    const value = await this.db.get<T>(key)
+    return value.value == null ? undefined : value.value
 	}
 
 	async list(selector: KvListSelector): Promise<KvEntry<object>[]> {
