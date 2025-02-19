@@ -1,4 +1,5 @@
 import { NextFunction } from '../deps.ts'
+import { DenoStore } from "../store/denostore.ts"
 import { User, UserContext } from '../type/user.type.ts'
 import { UserStore } from '../store/user-store.ts'
 
@@ -8,7 +9,8 @@ const EMPTY_USER = new User({
 	is_bot: false,
 })
 
-const store = await UserStore.open()
+const store = await DenoStore.get()
+const userStore = new UserStore(store)
 
 export const context = async (ctx: UserContext, next: NextFunction) => {
 	const from = ctx.from
@@ -23,9 +25,10 @@ export const context = async (ctx: UserContext, next: NextFunction) => {
 		ctx.user = EMPTY_USER
 	} else {
     const user = from
-    await store.saveOrUpdate(user)
+    await userStore.saveOrUpdate(user)
     ctx.user = new User(user)
 	}
+  ctx.store = store
 
 	return next()
 }

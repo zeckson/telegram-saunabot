@@ -32,7 +32,13 @@ export class DenoStore {
 		this.db.close()
 	}
 
-	static async create(): Promise<DenoStore> {
-		return new DenoStore(await openStore())
+  private static instance: DenoStore | null = null
+
+	static async get(): Promise<DenoStore> {
+    if (!DenoStore.instance) {
+      DenoStore.instance = new DenoStore(await openStore())
+    }
+
+		return DenoStore.instance
 	}
 }

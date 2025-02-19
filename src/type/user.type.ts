@@ -1,4 +1,5 @@
 import { Context, User as GrammyUser } from '../deps.ts'
+import { DenoStore } from "../store/denostore.ts"
 import { emojis } from '../util/emoji.ts'
 
 const isNotEmpty = (strings: TemplateStringsArray, value: unknown) =>
@@ -82,4 +83,5 @@ export class User implements UserLike {
 
 export interface UserContext extends Context {
 	user: User
+  store: DenoStore
 }

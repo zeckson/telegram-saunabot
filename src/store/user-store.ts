@@ -13,8 +13,4 @@ export class UserStore {
     return await this.store.load<User>([`user`, id])
   }
 
-  static async open(): Promise<UserStore> {
-    return new UserStore(await DenoStore.create())
-  }
-
 }
