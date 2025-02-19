@@ -1,7 +1,7 @@
 import { Messages } from '../action/admin.messages.ts'
 import {
 	declineUserJoinRequest,
-	notifyAdminsOnJoinRequest,
+	validateJoinRequest,
 } from '../action/admin.ts'
 import { getBanInfo } from '../action/ban.ts'
 import { requestUserContact } from '../action/user.ts'
@@ -56,7 +56,7 @@ export const register = (bot: Bot<BotContext>) => {
 	bot.command(
 		`notify`,
 		(ctx: BotContext) =>
-			notifyAdminsOnJoinRequest(
+			validateJoinRequest(
 				Object.assign(ctx, {
 					bio: '',
 					date: 0,

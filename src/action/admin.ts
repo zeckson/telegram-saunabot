@@ -46,9 +46,9 @@ export const notifyAdminsOnPhoneNumber = (ctx: BotContext, phone: string) => {
 	})
 }
 
-export const notifyAdminsOnJoinRequest = async (
+export const validateJoinRequest = async (
 	ctx: BotContext & ChatJoinRequest,
-) => {
+): Promise<boolean> => {
 	const chat = ctx.chat
 	const from = ctx.user
 	const updateId = ctx.update.update_id
@@ -56,7 +56,8 @@ export const notifyAdminsOnJoinRequest = async (
 	const keyboard = new InlineKeyboard()
 
 	const info = await getBanInfo(ctx.user.id)
-	if (info.length > 0) {
+  const banned = info.length > 0
+  if (banned) {
 		handleJoinRequest(
 			ctx,
 			JoinRequestAction.DECLINE,
@@ -75,10 +76,11 @@ export const notifyAdminsOnJoinRequest = async (
 		))
 	}
 
-	return notifyAllAdmins(ctx, Messages.onJoinRequest(ctx, info), {
+	await notifyAllAdmins(ctx, Messages.onJoinRequest(ctx, info), {
 		link_preview_options: { is_disabled: true },
 		reply_markup: keyboard,
 	})
+  return banned
 }
 
 const notifyApproved = (ctx: BotContext, updateId: string) => () =>
