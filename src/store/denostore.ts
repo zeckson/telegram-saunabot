@@ -14,8 +14,8 @@ export class DenoStore {
 	constructor(private db: Deno.Kv) {
 	}
 
-	async save<T>(key: KvKey, data: T): Promise<boolean> {
-		const result = await this.db.set(key, data)
+	async save<T>(key: KvKey, data: T, options?: { expireIn?: number }): Promise<boolean> {
+		const result = await this.db.set(key, data, options)
 		return result.ok
 	}
 
