@@ -8,6 +8,7 @@ import {
 } from '../action/admin.ts'
 import { requestUserContact, userContactResponse } from '../action/user.ts'
 import { Bot, ChatJoinRequest, GrammyError } from '../deps.ts'
+import { UserStore } from "../store/user-store.ts"
 import { BotContext } from '../type/context.ts'
 
 const sendUserContactRequest = async (ctx: BotContext & ChatJoinRequest) => {
@@ -37,7 +38,9 @@ const onPhoneNumber = async (ctx: BotContext) => {
 	const phone = await userContactResponse(ctx)
 
 	if (phone) {
-		return notifyAdminsOnPhoneNumber(ctx, phone)
+    const userStore = new UserStore(ctx.store)
+    await userStore.savePhone(ctx.user.id, phone)
+    return notifyAdminsOnPhoneNumber(ctx, phone)
 	}
 }
 
