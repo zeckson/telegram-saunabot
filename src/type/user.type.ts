@@ -82,6 +82,7 @@ export class User implements UserLike {
 }
 
 export interface UserContext extends Context {
+  type: string
 	user: User
   store: DenoStore
 }

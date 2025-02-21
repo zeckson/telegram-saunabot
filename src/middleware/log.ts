@@ -3,14 +3,10 @@ import { UserContext } from '../type/user.type.ts'
 
 const logUpdate = (ctx: UserContext) => {
 	const updateId = ctx.update.update_id
-	const updateTypes = Object.keys(ctx.update).filter((it) =>
-		it !== `update_id`
-	)
+	const type = ctx.type
 
 	console.log(
-		`Got update[${updateId}] from ${ctx.user.identity} with types: ${
-			updateTypes.join(`,`)
-		}`,
+		`Got update[${updateId}] from ${ctx.user.identity} with types: ${type}`,
 	)
 
   const separator = `====== update[${updateId}] =======`

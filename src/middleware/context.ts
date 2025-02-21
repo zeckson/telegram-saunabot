@@ -14,12 +14,13 @@ const userStore = new UserStore(store)
 
 export const context = async (ctx: UserContext, next: NextFunction) => {
 	const from = ctx.from
+  const type = Object.keys(ctx.update).find((it) => it !== `update_id`) ?? `unknown`
+
 	if (!from) {
 		const updateId = ctx.update.update_id
-		const types = Object.keys(ctx.update).filter((it) => it !== `update_id`)
 
 		console.error(
-			`Update[${updateId}] no user context. Types: ${types.join(`,`)}`,
+			`Update[${updateId}] no user context. Type: ${type}`,
 		)
 
 		ctx.user = EMPTY_USER
@@ -29,6 +30,7 @@ export const context = async (ctx: UserContext, next: NextFunction) => {
     ctx.user = new User(user)
 	}
   ctx.store = store
+  ctx.type = type
 
 	return next()
 }
