@@ -15,16 +15,10 @@ const sendUserContactRequest = async (ctx: BotContext & ChatJoinRequest) => {
 	try {
 		await requestUserContact(ctx)
 	} catch (e: unknown) {
-		// TODO: make different message on success request and not
-		console.error(e)
-		try {
-			await notifyAllAdmins(
-				ctx,
-				Messages.requestContactError(ctx, e as GrammyError),
-			)
-		} catch (e: unknown) {
-			console.error(e)
-		}
+    await notifyAllAdmins(
+      ctx,
+      Messages.requestContactError(ctx, e as GrammyError),
+    )
 	}
 }
 
