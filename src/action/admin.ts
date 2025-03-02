@@ -1,4 +1,9 @@
-import { ChatJoinRequest, FormattedString, GrammyError, InlineKeyboard, } from '../deps.ts'
+import {
+	ChatJoinRequest,
+	FormattedString,
+	GrammyError,
+	InlineKeyboard,
+} from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { int } from '../util/system.ts'
 import { Messages } from './admin.messages.ts'
@@ -57,7 +62,7 @@ export const validateJoinRequest = async (
 			ctx,
 			JoinRequestAction.DECLINE,
 			ctx.chat.id,
-			ctx.user.id
+			ctx.user.id,
 		)
 	} else {
 		keyboard.add(InlineKeyboard.text(
@@ -89,17 +94,21 @@ const notifyRejected = (ctx: BotContext, userId: number) =>
 		Messages.notifyJoinRejected(ctx, userId),
 	)
 
-const notifyErrored = async (ctx: BotContext, userId: number, e: GrammyError) => {
-		console.error(`Got error: `, e)
-		try {
-			return await notifyAllAdmins(
-				ctx,
-				Messages.notifyError(ctx, userId, e),
-			)
-		} catch (err) {
-			return console.error(`Failed to notify: `, err)
-		}
+const notifyErrored = async (
+	ctx: BotContext,
+	userId: number,
+	e: GrammyError,
+) => {
+	console.error(`Got error: `, e)
+	try {
+		return await notifyAllAdmins(
+			ctx,
+			Messages.notifyError(ctx, userId, e),
+		)
+	} catch (err) {
+		return console.error(`Failed to notify: `, err)
 	}
+}
 
 const handleJoinRequest = async (
 	ctx: BotContext,

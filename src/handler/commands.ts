@@ -1,5 +1,5 @@
 import { Messages } from '../action/admin.messages.ts'
-import { declineUserJoinRequest, validateJoinRequest, } from '../action/admin.ts'
+import { declineUserJoinRequest, validateJoinRequest } from '../action/admin.ts'
 import { getBanInfo } from '../action/ban.ts'
 import { requestUserContact } from '../action/user.ts'
 import { Bot, ChatJoinRequest } from '../deps.ts'

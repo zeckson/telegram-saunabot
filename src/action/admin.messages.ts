@@ -60,12 +60,18 @@ export class Messages {
 Запрос от ${mentionUser(ctx.user.identity, ctx.user.id)}. Текст ошибки:
   ${e.message}`
 	}
-	static notifyJoinRejected(ctx: BotContext, userId: number): FormattedString {
+	static notifyJoinRejected(
+		ctx: BotContext,
+		userId: number,
+	): FormattedString {
 		return fmt`Заявка ${hashtag(userId)} отклонена ${
 			mentionUser(ctx.user.identity, ctx.user.id)
 		}`
 	}
-	static notifyJoinApproved(ctx: BotContext, userId: number): FormattedString {
+	static notifyJoinApproved(
+		ctx: BotContext,
+		userId: number,
+	): FormattedString {
 		return fmt`Заявка ${hashtag(userId)} принята ${
 			mentionUser(ctx.user.identity, ctx.user.id)
 		}`

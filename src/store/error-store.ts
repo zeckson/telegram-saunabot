@@ -9,8 +9,12 @@ export class ErrorStore {
 	}
 
 	async save(ctx: UserContext, error: ApiError): Promise<boolean> {
-		return await this.store.save([`error`, ctx.user.id, ctx.type, ctx.update.update_id], error, {
-			expireIn: THREE_DAYS,
-		})
+		return await this.store.save(
+			[`error`, ctx.user.id, ctx.type, ctx.update.update_id],
+			error,
+			{
+				expireIn: THREE_DAYS,
+			},
+		)
 	}
 }

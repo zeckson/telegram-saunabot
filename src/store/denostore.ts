@@ -14,14 +14,18 @@ export class DenoStore {
 	constructor(private db: Deno.Kv) {
 	}
 
-	async save<T>(key: KvKey, data: T, options?: { expireIn?: number }): Promise<boolean> {
+	async save<T>(
+		key: KvKey,
+		data: T,
+		options?: { expireIn?: number },
+	): Promise<boolean> {
 		const result = await this.db.set(key, data, options)
 		return result.ok
 	}
 
 	async load<T>(key: KvKey): Promise<T | undefined> {
-    const value = await this.db.get<T>(key)
-    return value.value == null ? undefined : value.value
+		const value = await this.db.get<T>(key)
+		return value.value == null ? undefined : value.value
 	}
 
 	async list(selector: KvListSelector): Promise<KvEntry<object>[]> {
@@ -32,12 +36,12 @@ export class DenoStore {
 		this.db.close()
 	}
 
-  private static instance: DenoStore | null = null
+	private static instance: DenoStore | null = null
 
 	static async get(): Promise<DenoStore> {
-    if (!DenoStore.instance) {
-      DenoStore.instance = new DenoStore(await openStore())
-    }
+		if (!DenoStore.instance) {
+			DenoStore.instance = new DenoStore(await openStore())
+		}
 
 		return DenoStore.instance
 	}

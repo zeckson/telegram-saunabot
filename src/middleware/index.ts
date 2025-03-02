@@ -8,8 +8,8 @@ export const registerMiddleware = (bot: Bot<BotContext>) => {
 	// Install user-context
 	bot.use(context)
 
-  // Save errors
-  bot.use(error)
+	// Save errors
+	bot.use(error)
 
 	// Install logger
 	bot.use(log)
