@@ -84,7 +84,8 @@ export class Messages {
 			`https://t.me/lolsbotcatcherbot?start=${from.id}`,
 		)
 
-		return fmt`Пользователь ${userLink} прислал свои контактные данные:
+		return fmt`Заявка ${hashtag(from.id)}
+Пользователь ${userLink} прислал свои контактные данные:
 ${blockquote(phone)}
 Проверить пользователя можно по ${verifyLink}`
 	}
