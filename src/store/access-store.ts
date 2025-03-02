@@ -1,4 +1,4 @@
-import { Chat } from '../deps.ts'
+import { Chat, GrammyError } from '../deps.ts'
 import { User } from '../type/user.type.ts'
 import { DenoStore } from './denostore.ts'
 
@@ -8,19 +8,35 @@ export class AccessStore {
 
 	async request(user: User, chat: Chat): Promise<boolean> {
 		return await this.store.save(
-			[`request`, user.id, `chat`, chat.id],
+			[`access`, `request`, user.id, `chat`, chat.id],
 			chat,
 		)
 	}
 
 	async approve(user: User, chat: Chat): Promise<boolean> {
 		return await this.store.save(
-			[`approve`, user.id, `chat`, chat.id],
+			[`access`, `approve`, user.id, `chat`, chat.id],
 			chat,
 		)
 	}
 
 	async reject(user: User, chat: Chat): Promise<boolean> {
-		return await this.store.save([`reject`, user.id, `chat`, chat.id], chat)
+		return await this.store.save([
+			`access`,
+			`reject`,
+			user.id,
+			`chat`,
+			chat.id,
+		], chat)
+	}
+
+	async error(user: User, chat: Chat, error: GrammyError): Promise<boolean> {
+		return await this.store.save([
+			`access`,
+			`error`,
+			user.id,
+			`chat`,
+			chat.id,
+		], error)
 	}
 }

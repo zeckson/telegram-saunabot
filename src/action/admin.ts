@@ -4,6 +4,7 @@ import {
 	GrammyError,
 	InlineKeyboard,
 } from '../deps.ts'
+import { AccessStore } from '../store/access-store.ts'
 import { BotContext } from '../type/context.ts'
 import { int } from '../util/system.ts'
 import { Messages } from './admin.messages.ts'
@@ -52,6 +53,9 @@ export const validateJoinRequest = async (
 	const chat = ctx.chat
 	const from = ctx.user
 	const updateId = ctx.update.update_id
+
+	const accessStore = new AccessStore(ctx.store)
+	await accessStore.request(from, chat)
 
 	const keyboard = new InlineKeyboard()
 
@@ -113,7 +117,7 @@ const notifyErrored = async (
 const handleJoinRequest = async (
 	ctx: BotContext,
 	action: JoinRequestAction,
-	chatId: number | string,
+	chatId: number,
 	userId: number,
 ): Promise<void> => {
 	try {
@@ -157,7 +161,7 @@ export const handleJoinAction = async (ctx: BotContext): Promise<string> => {
 	const [actionValue, chatId, userId, _updateId] = data.split(`:`)
 	const action = actionValue as JoinRequestAction
 
-	await handleJoinRequest(ctx, action, chatId, int(userId))
+	await handleJoinRequest(ctx, action, int(chatId), int(userId))
 
 	return Messages.chatJoinAction(action)
 }
