@@ -1,5 +1,6 @@
 import { Context, User as GrammyUser } from '../deps.ts'
 import { DenoStore } from "../store/denostore.ts"
+import { Config } from "../util/config.ts"
 import { emojis } from '../util/emoji.ts'
 
 const isNotEmpty = (strings: TemplateStringsArray, value: unknown) =>
@@ -79,6 +80,10 @@ export class User implements UserLike {
 	get nickname() {
 		return this.username ? `@${this.username}` : `<hidden>`
 	}
+
+  get is_admin() {
+    return Config.ADMIN_IDS.includes(this.user.id)
+  }
 }
 
 export interface UserContext extends Context {

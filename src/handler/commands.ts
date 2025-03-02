@@ -107,4 +107,8 @@ export const register = (bot: Bot<BotContext>) => {
 			Messages.onJoinRequest(context, await getBanInfo(ctx.user.id)),
 		)
 	})
+
+	bot.command('error', async (ctx: BotContext) => {
+    await ctx.api.sendMessage(12345, `text`)
+  })
 }

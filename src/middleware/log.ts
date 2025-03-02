@@ -9,10 +9,10 @@ const logUpdate = (ctx: UserContext) => {
 		`Got update[${updateId}] from ${ctx.user.identity} with types: ${type}`,
 	)
 
-  const separator = `====== update[${updateId}] =======`
-  console.log(separator)
-  console.dir(ctx.update)
-  console.log(separator)
+	const separator = `====== update[${updateId}] =======`
+	console.log(separator)
+	console.dir(ctx.update)
+	console.log(separator)
 }
 
 export const log = async (ctx: UserContext, next: NextFunction) => {
@@ -24,8 +24,6 @@ export const log = async (ctx: UserContext, next: NextFunction) => {
 	// invoke downstream middleware
 	try {
 		await next() // make sure to `await`!
-	} catch (e) {
-		console.error(`Got error: ${e}`, e)
 	} finally {
 		// take time after
 		// log difference
