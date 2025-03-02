@@ -1,14 +1,10 @@
 import { Messages } from '../action/admin.messages.ts'
-import {
-	declineUserJoinRequest,
-	validateJoinRequest,
-} from '../action/admin.ts'
+import { declineUserJoinRequest, validateJoinRequest, } from '../action/admin.ts'
 import { getBanInfo } from '../action/ban.ts'
 import { requestUserContact } from '../action/user.ts'
 import { Bot, ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { User } from '../type/user.type.ts'
-import { emojis } from '../util/emoji.ts'
 import { link, text } from '../util/markdown.ts'
 import { int } from '../util/system.ts'
 
@@ -80,13 +76,7 @@ export const register = (bot: Bot<BotContext>) => {
 	)
 
 	bot.command('demo', async (ctx) => {
-		await ctx.replyFmt(Messages.notifyJoinApproved(ctx, `100`))
-		await ctx.reply(
-			`*This* is _the_ default \`formatting\` ${emojis.robot}`,
-			{
-				parse_mode: 'MarkdownV2',
-			},
-		)
+		await ctx.replyFmt(Messages.notifyJoinApproved(ctx, 100))
 	})
 
 	bot.command('status', async (ctx) => {
@@ -109,6 +99,6 @@ export const register = (bot: Bot<BotContext>) => {
 	})
 
 	bot.command('error', async (ctx: BotContext) => {
-    await ctx.api.sendMessage(12345, `text`)
-  })
+		await ctx.api.sendMessage(12345, `text`)
+	})
 }
