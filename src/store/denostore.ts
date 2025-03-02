@@ -1,8 +1,3 @@
-import KvEntry = Deno.KvEntry
-import KvEntryMaybe = Deno.KvEntryMaybe
-import KvKey = Deno.KvKey
-import KvListSelector = Deno.KvListSelector
-
 const DENO_KV_URL = Deno.env.get('DENO_KV_URL')
 
 const openStore = () => {
@@ -15,7 +10,7 @@ export class DenoStore {
 	}
 
 	async save<T>(
-		key: KvKey,
+		key: Deno.KvKey,
 		data: T,
 		options?: { expireIn?: number },
 	): Promise<boolean> {
@@ -23,12 +18,12 @@ export class DenoStore {
 		return result.ok
 	}
 
-	async load<T>(key: KvKey): Promise<T | undefined> {
+	async load<T>(key: Deno.KvKey): Promise<T | undefined> {
 		const value = await this.db.get<T>(key)
 		return value.value == null ? undefined : value.value
 	}
 
-	async list(selector: KvListSelector): Promise<KvEntry<object>[]> {
+	async list(selector: Deno.KvListSelector): Promise<Deno.KvEntry<object>[]> {
 		return await Array.fromAsync(this.db.list(selector))
 	}
 
