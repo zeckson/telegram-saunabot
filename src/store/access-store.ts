@@ -1,4 +1,5 @@
-import { Chat, User } from "../deps.ts"
+import { Chat } from "../deps.ts"
+import { User } from "../type/user.type.ts"
 import { DenoStore } from "./denostore.ts"
 
 export class AccessStore {
