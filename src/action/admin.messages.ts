@@ -53,20 +53,20 @@ export class Messages {
 	}
 	static notifyError(
 		ctx: BotContext,
-		id: string,
+		userId: number,
 		e: GrammyError,
 	): string | FormattedString {
-		return fmt`Не удалось принять/отклонить заявку ${hashtag(id)}
+		return fmt`Не удалось принять/отклонить заявку ${hashtag(userId)}
 Запрос от ${mentionUser(ctx.user.identity, ctx.user.id)}. Текст ошибки:
   ${e.message}`
 	}
-	static notifyJoinRejected(ctx: BotContext, id: string): FormattedString {
-		return fmt`Заявка ${hashtag(id)} отклонена ${
+	static notifyJoinRejected(ctx: BotContext, userId: number): FormattedString {
+		return fmt`Заявка ${hashtag(userId)} отклонена ${
 			mentionUser(ctx.user.identity, ctx.user.id)
 		}`
 	}
-	static notifyJoinApproved(ctx: BotContext, id: string): FormattedString {
-		return fmt`Заявка ${hashtag(id)} принята ${
+	static notifyJoinApproved(ctx: BotContext, userId: number): FormattedString {
+		return fmt`Заявка ${hashtag(userId)} принята ${
 			mentionUser(ctx.user.identity, ctx.user.id)
 		}`
 	}
@@ -106,7 +106,7 @@ ${blockquote(phone)}
 
 		const user = ctx.user
 		const chat = ctx.chat
-		return fmt`Заявка ${hashtag(ctx.update.update_id)} ${
+		return fmt`Заявка ${hashtag(user.id)} ${
 			status == Status.BANNED ? bold(`🚫 Заблокирована!`) : ``
 		}
 Запрос на добавление пользователя ${

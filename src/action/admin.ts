@@ -57,8 +57,7 @@ export const validateJoinRequest = async (
 			ctx,
 			JoinRequestAction.DECLINE,
 			ctx.chat.id,
-			ctx.user.id,
-			String(ctx.update.update_id),
+			ctx.user.id
 		)
 	} else {
 		keyboard.add(InlineKeyboard.text(
@@ -78,24 +77,24 @@ export const validateJoinRequest = async (
 	return banned
 }
 
-const notifyApproved = (ctx: BotContext, updateId: string) =>
+const notifyApproved = (ctx: BotContext, userId: number) =>
 	notifyAllAdmins(
 		ctx,
-		Messages.notifyJoinApproved(ctx, updateId),
+		Messages.notifyJoinApproved(ctx, userId),
 	)
 
-const notifyRejected = (ctx: BotContext, updateId: string) =>
+const notifyRejected = (ctx: BotContext, userId: number) =>
 	notifyAllAdmins(
 		ctx,
-		Messages.notifyJoinRejected(ctx, updateId),
+		Messages.notifyJoinRejected(ctx, userId),
 	)
 
-const notifyErrored = async (ctx: BotContext, updateId: string, e: GrammyError) => {
+const notifyErrored = async (ctx: BotContext, userId: number, e: GrammyError) => {
 		console.error(`Got error: `, e)
 		try {
 			return await notifyAllAdmins(
 				ctx,
-				Messages.notifyError(ctx, updateId, e),
+				Messages.notifyError(ctx, userId, e),
 			)
 		} catch (err) {
 			return console.error(`Failed to notify: `, err)
@@ -107,23 +106,22 @@ const handleJoinRequest = async (
 	action: JoinRequestAction,
 	chatId: number | string,
 	userId: number,
-	updateId: string,
 ): Promise<void> => {
 	try {
 		switch (action) {
 			case JoinRequestAction.APPROVE:
 				await ctx.api.approveChatJoinRequest(chatId, userId)
-				await notifyApproved(ctx, updateId)
+				await notifyApproved(ctx, userId)
 				break
 			case JoinRequestAction.DECLINE:
 				await ctx.api.declineChatJoinRequest(chatId, userId)
-				await notifyRejected(ctx, updateId)
+				await notifyRejected(ctx, userId)
 				break
 			default:
 				console.error(`Unknown action: ${action}`)
 		}
 	} catch (e) {
-		await notifyErrored(ctx, updateId, e as GrammyError)
+		await notifyErrored(ctx, userId, e as GrammyError)
 	}
 }
 
@@ -136,7 +134,6 @@ export const declineUserJoinRequest = async (
 		JoinRequestAction.DECLINE,
 		ctx.chat.id,
 		ctx.user.id,
-		String(ctx.update.update_id),
 	)
 
 	return notifyAllAdmins(ctx, text, {
@@ -148,10 +145,10 @@ export const declineUserJoinRequest = async (
 
 export const handleJoinAction = async (ctx: BotContext): Promise<string> => {
 	const data = ctx.callbackQuery?.data ?? ``
-	const [actionValue, chatId, userId, updateId] = data.split(`:`)
+	const [actionValue, chatId, userId, _updateId] = data.split(`:`)
 	const action = actionValue as JoinRequestAction
 
-	await handleJoinRequest(ctx, action, chatId, int(userId), updateId)
+	await handleJoinRequest(ctx, action, chatId, int(userId))
 
 	return Messages.chatJoinAction(action)
 }
