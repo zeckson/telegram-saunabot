@@ -1,9 +1,4 @@
-import {
-	ChatJoinRequest,
-	FormattedString,
-	GrammyError,
-	InlineKeyboard,
-} from '../deps.ts'
+import { ChatJoinRequest, FormattedString, GrammyError, InlineKeyboard, } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { int } from '../util/system.ts'
 import { Messages } from './admin.messages.ts'
@@ -56,9 +51,9 @@ export const validateJoinRequest = async (
 	const keyboard = new InlineKeyboard()
 
 	const info = await getBanInfo(ctx.user.id)
-  const banned = info.length > 0
-  if (banned) {
-		handleJoinRequest(
+	const banned = info.length > 0
+	if (banned) {
+		await handleJoinRequest(
 			ctx,
 			JoinRequestAction.DECLINE,
 			ctx.chat.id,
@@ -80,23 +75,22 @@ export const validateJoinRequest = async (
 		link_preview_options: { is_disabled: true },
 		reply_markup: keyboard,
 	})
-  return banned
+	return banned
 }
 
-const notifyApproved = (ctx: BotContext, updateId: string) => () =>
+const notifyApproved = (ctx: BotContext, updateId: string) =>
 	notifyAllAdmins(
 		ctx,
 		Messages.notifyJoinApproved(ctx, updateId),
 	)
 
-const notifyRejected = (ctx: BotContext, updateId: string) => () =>
+const notifyRejected = (ctx: BotContext, updateId: string) =>
 	notifyAllAdmins(
 		ctx,
 		Messages.notifyJoinRejected(ctx, updateId),
 	)
 
-const notifyErrored =
-	(ctx: BotContext, updateId: string) => async (e: GrammyError) => {
+const notifyErrored = async (ctx: BotContext, updateId: string, e: GrammyError) => {
 		console.error(`Got error: `, e)
 		try {
 			return await notifyAllAdmins(
@@ -108,36 +102,36 @@ const notifyErrored =
 		}
 	}
 
-const handleJoinRequest = (
+const handleJoinRequest = async (
 	ctx: BotContext,
 	action: JoinRequestAction,
 	chatId: number | string,
 	userId: number,
 	updateId: string,
-): void => {
-	switch (action) {
-		case JoinRequestAction.APPROVE:
-			ctx.api.approveChatJoinRequest(chatId, userId)
-				.then(notifyApproved(ctx, updateId)).catch(
-					notifyErrored(ctx, updateId),
-				)
-			break
-		case JoinRequestAction.DECLINE:
-			ctx.api.declineChatJoinRequest(chatId, userId)
-				.then(notifyRejected(ctx, updateId)).catch(
-					notifyErrored(ctx, updateId),
-				)
-			break
-		default:
-			console.error(`Unknown action: ${action}`)
+): Promise<void> => {
+	try {
+		switch (action) {
+			case JoinRequestAction.APPROVE:
+				await ctx.api.approveChatJoinRequest(chatId, userId)
+				await notifyApproved(ctx, updateId)
+				break
+			case JoinRequestAction.DECLINE:
+				await ctx.api.declineChatJoinRequest(chatId, userId)
+				await notifyRejected(ctx, updateId)
+				break
+			default:
+				console.error(`Unknown action: ${action}`)
+		}
+	} catch (e) {
+		await notifyErrored(ctx, updateId, e as GrammyError)
 	}
 }
 
-export const declineUserJoinRequest = (
+export const declineUserJoinRequest = async (
 	ctx: BotContext & ChatJoinRequest,
 	text: FormattedString,
 ) => {
-	handleJoinRequest(
+	await handleJoinRequest(
 		ctx,
 		JoinRequestAction.DECLINE,
 		ctx.chat.id,
@@ -152,12 +146,12 @@ export const declineUserJoinRequest = (
 	})
 }
 
-export const handleJoinAction = (ctx: BotContext): string => {
+export const handleJoinAction = async (ctx: BotContext): Promise<string> => {
 	const data = ctx.callbackQuery?.data ?? ``
 	const [actionValue, chatId, userId, updateId] = data.split(`:`)
 	const action = actionValue as JoinRequestAction
 
-	handleJoinRequest(ctx, action, chatId, int(userId), updateId)
+	await handleJoinRequest(ctx, action, chatId, int(userId), updateId)
 
 	return Messages.chatJoinAction(action)
 }

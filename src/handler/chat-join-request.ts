@@ -52,7 +52,7 @@ export const register = (bot: Bot<BotContext>) => {
 
 	// TODO: Prevent insecure access from unknown account
 	bot.on(`callback_query:data`, async (ctx) => {
-		const result = handleJoinAction(ctx)
+		const result = await handleJoinAction(ctx)
 
 		await ctx.answerCallbackQuery(result)
 
