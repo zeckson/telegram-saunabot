@@ -1,6 +1,6 @@
-const DENO_KV_URL = Deno.env.get('DENO_KV_URL')
-
 const openStore = () => {
+  const DENO_KV_URL = Deno.env.get('DENO_KV_URL')
+
 	if (DENO_KV_URL) return Deno.openKv(DENO_KV_URL)
 	else return Deno.openKv()
 }
@@ -21,10 +21,6 @@ export class DenoStore {
 	async load<T>(key: Deno.KvKey): Promise<T | undefined> {
 		const value = await this.db.get<T>(key)
 		return value.value == null ? undefined : value.value
-	}
-
-	async list(selector: Deno.KvListSelector): Promise<Deno.KvEntry<object>[]> {
-		return await Array.fromAsync(this.db.list(selector))
 	}
 
 	close() {
