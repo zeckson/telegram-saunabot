@@ -9,6 +9,7 @@ import {
 	mentionUser,
 } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
+import hashtag from "../util/hashtag.ts"
 import { getFormattedChatLink } from '../util/link.ts'
 import { JoinRequestAction } from './admin.ts'
 import { BanResult } from './ban.ts'
@@ -17,17 +18,6 @@ enum Status {
 	UNKNOWN = `неизвестно.`,
 	BANNED = `banned`,
 	NOT_BANNED = `в базах не упоминается`,
-}
-
-const hashtag = (value: string | number): FormattedString => {
-	value = `#${value}i`
-	return new FormattedString(value, [
-		{
-			type: 'hashtag',
-			offset: 0,
-			length: value.length,
-		},
-	])
 }
 
 export class Messages {
@@ -122,7 +112,7 @@ ${blockquote(phone)}
 Проверить пользователя можно по ${
 			link(`ссылке`, `https://t.me/lolsbotcatcherbot?start=${user.id}`)
 		}
-Информация о бане пользовеля: ${bold(status)}
+Информация о бане пользователя: ${bold(status)}
     ${
 			fmt([
 				...(banInfo.map((it) =>
