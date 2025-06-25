@@ -1,13 +1,8 @@
-import { NextFunction } from 'grammy'
+import { Composer, NextFunction } from 'grammy'
 import { Messages } from '../action/admin.messages.ts'
-import {
-	handleJoinAction,
-	notifyAdminsOnPhoneNumber,
-	notifyAllAdmins,
-	validateJoinRequest,
-} from '../action/admin.ts'
+import { handleJoinAction, notifyAdminsOnPhoneNumber, notifyAllAdmins, validateJoinRequest, } from '../action/admin.ts'
 import { requestUserContact, userContactResponse } from '../action/user.ts'
-import { Bot, ChatJoinRequest, GrammyError } from '../deps.ts'
+import { ChatJoinRequest, GrammyError } from '../deps.ts'
 import { isAdminMiddleware } from "../predicate/is-admin.ts"
 import { UserStore } from '../store/user-store.ts'
 import { BotContext } from '../type/context.ts'
@@ -42,20 +37,22 @@ const onPhoneNumber = async (ctx: BotContext) => {
 	}
 }
 
-export const register = (bot: Bot<BotContext>) => {
-	// noinspection TypeScriptValidateTypes
-	bot.on(`chat_join_request`, onJoinRequest as (u: unknown) => unknown)
-	bot.on(
-		`chat_join_request`,
-		sendUserContactRequest as (u: unknown) => unknown,
-	)
-	bot.on(`message:contact`, onPhoneNumber)
+const bot = new Composer<BotContext>()
 
-	bot.on(`callback_query:data`, isAdminMiddleware, async (ctx) => {
-		const result = await handleJoinAction(ctx)
+// noinspection TypeScriptValidateTypes
+bot.on(`chat_join_request`, onJoinRequest as (u: unknown) => unknown)
+bot.on(
+	`chat_join_request`,
+	sendUserContactRequest as (u: unknown) => unknown,
+)
+bot.on(`message:contact`, onPhoneNumber)
 
-		await ctx.answerCallbackQuery(result)
+bot.on(`callback_query:data`, isAdminMiddleware, async (ctx) => {
+	const result = await handleJoinAction(ctx)
 
-		await ctx.editMessageReplyMarkup({ reply_markup: undefined })
-	})
-}
+	await ctx.answerCallbackQuery(result)
+
+	await ctx.editMessageReplyMarkup({ reply_markup: undefined })
+})
+
+export const chatJoinComposer = bot

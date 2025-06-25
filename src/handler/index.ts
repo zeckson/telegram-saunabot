@@ -1,13 +1,12 @@
 import { Bot } from '../deps.ts'
-import { BotContext } from '../type/context.ts'
 import { isAdminMiddleware } from '../predicate/is-admin.ts'
-import { adminCommandComposer } from "./admin-commands-composer.ts"
-import { register as registerChatJoinRequest } from './chat-join-request.ts'
-import { userCommandsComposer } from "./user-command-composer.ts"
+import { BotContext } from '../type/context.ts'
+import { chatJoinComposer, } from './chat-join-composer.ts'
+import { adminCommandComposer } from './admin-commands-composer.ts'
+import { userCommandsComposer } from './user-command-composer.ts'
 
 export const registerHandlers = (bot: Bot<BotContext>) => {
-	registerChatJoinRequest(bot)
-
-  bot.use(userCommandsComposer.middleware())
+	bot.use(chatJoinComposer.middleware())
+	bot.use(userCommandsComposer.middleware())
 	bot.use(isAdminMiddleware).use(adminCommandComposer.middleware())
 }
