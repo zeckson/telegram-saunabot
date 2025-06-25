@@ -1,5 +1,5 @@
 import { UserContext } from "../type/user.type.ts"
-import { Config } from "./config.ts"
+import { Config } from "../util/config.ts"
 
 const adminSet = new Set<number>(Config.ADMIN_IDS)
 
