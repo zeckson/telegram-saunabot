@@ -28,10 +28,6 @@ const getUser = (ctx: BotContext): User | undefined => {
 		: undefined
 }
 
-bot.command(`start`, (ctx: BotContext) => {
-	return ctx.replyFmt(`Привет, ${ctx.user.identity}!`)
-})
-
 bot.command(`test`, (ctx: BotContext) => {
 	return ctx.replyFmt(
 		Messages.onJoinRequest(asJoinRequest(ctx), undefined),
@@ -106,4 +102,4 @@ bot.command('error', async (ctx: BotContext) => {
 	await ctx.api.sendMessage(12345, `text`)
 })
 
-export const commandComposer = bot
+export const adminCommandComposer = bot
