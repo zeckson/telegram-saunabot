@@ -8,6 +8,7 @@ import {
 } from '../action/admin.ts'
 import { requestUserContact, userContactResponse } from '../action/user.ts'
 import { Bot, ChatJoinRequest, GrammyError } from '../deps.ts'
+import { isAdminMiddleware } from "../predicate/is-admin.ts"
 import { UserStore } from '../store/user-store.ts'
 import { BotContext } from '../type/context.ts'
 
@@ -50,8 +51,7 @@ export const register = (bot: Bot<BotContext>) => {
 	)
 	bot.on(`message:contact`, onPhoneNumber)
 
-	// TODO: Prevent insecure access from unknown account
-	bot.on(`callback_query:data`, async (ctx) => {
+	bot.on(`callback_query:data`, isAdminMiddleware, async (ctx) => {
 		const result = await handleJoinAction(ctx)
 
 		await ctx.answerCallbackQuery(result)
