@@ -18,23 +18,3 @@ export const requestUserContact = (
 		},
 	})
 }
-
-export const userContactResponse = async (ctx: BotContext) => {
-	const contact = ctx.message?.contact
-	if (!contact) {
-		await ctx.replyFmt('Я передам ваши сообщения админу, ' +
-      'но чтобы быстрее попасть в группу, ' +
-      'пришлите пожалуйста контактные данные, ' +
-      'выбрав кнопку снизу')
-		return undefined
-	}
-
-	const message =
-		'Благодарим! Наши админы проверят информацию и добавят вас в группу!'
-	await ctx.replyFmt(message, {
-		reply_markup: {
-			remove_keyboard: true, // Removes the reply keyboard
-		},
-	})
-	return contact.phone_number
-}
