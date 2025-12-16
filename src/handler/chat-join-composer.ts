@@ -1,11 +1,11 @@
 import { Composer, NextFunction } from 'grammy'
 import { Messages } from '../action/admin.messages.ts'
-import { handleJoinAction, notifyAdminsOnPhoneNumber, notifyAllAdmins, validateJoinRequest, } from '../action/admin.ts'
-import { requestUserContact, userContactResponse } from '../action/user.ts'
+import { handleJoinAction, notifyAllAdmins, validateJoinRequest, } from '../action/admin.ts'
+import { requestUserContact } from '../action/user.ts'
 import { ChatJoinRequest, GrammyError } from '../deps.ts'
 import { isAdminMiddleware } from "../predicate/is-admin.ts"
-import { UserStore } from '../store/user-store.ts'
 import { BotContext } from '../type/context.ts'
+import { handleUserMessage } from "../usecase/phone/handle-user-message.ts"
 
 const sendUserContactRequest = async (ctx: BotContext & ChatJoinRequest) => {
 	try {
@@ -27,16 +27,6 @@ const onJoinRequest = async (
 	if (!banned) await next()
 }
 
-const onPhoneNumber = async (ctx: BotContext) => {
-	const phone = await userContactResponse(ctx)
-
-	if (phone) {
-		const userStore = new UserStore(ctx.store)
-		await userStore.savePhone(ctx.user.id, phone)
-		return notifyAdminsOnPhoneNumber(ctx, phone)
-	}
-}
-
 const bot = new Composer<BotContext>()
 
 // noinspection TypeScriptValidateTypes
@@ -45,7 +35,7 @@ bot.on(
 	`chat_join_request`,
 	sendUserContactRequest as (u: unknown) => unknown,
 )
-bot.on(`message:contact`, onPhoneNumber)
+bot.on(`message:contact`, (ctx: BotContext) => handleUserMessage(ctx))
 
 bot.on(`callback_query:data`, isAdminMiddleware, async (ctx) => {
 	const result = await handleJoinAction(ctx)
