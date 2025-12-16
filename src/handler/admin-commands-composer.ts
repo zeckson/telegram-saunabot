@@ -6,6 +6,7 @@ import { requestUserContact } from '../action/user.ts'
 import { ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { User } from '../type/user.type.ts'
+import { handleChatJoinRequest } from "../usecase/join/handle-chat-join-request.ts"
 import { link, text } from '../util/markdown.ts'
 import { int } from '../util/system.ts'
 
@@ -28,14 +29,8 @@ const getUser = (ctx: BotContext): User | undefined => {
 		: undefined
 }
 
-bot.command(`test`, (ctx: BotContext) => {
-	return ctx.replyFmt(
-		Messages.onJoinRequest(asJoinRequest(ctx), undefined),
-		{
-			link_preview_options: { is_disabled: true },
-		},
-	)
-})
+bot.command(`join`, (ctx: BotContext) => {
+	return handleChatJoinRequest(asJoinRequest(ctx, getUser(ctx)))})
 
 bot.command('md2', (ctx) => {
 	// `item` will be "apple pie" if a user sends "/md2 apple pie".

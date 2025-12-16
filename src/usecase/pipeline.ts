@@ -3,7 +3,7 @@ export type StepOutcome = { ok: true } | { ok: false; reason?: string }
 
 export type Step<TCtx> = (ctx: TCtx) => Promise<StepOutcome> | StepOutcome
 
-export const runPipeline = async <TCtx>(ctx: TCtx, steps: Step<TCtx>[]) => {
+export const runPipeline = async <TCtx>(ctx: TCtx, steps: Step<TCtx>[]): Promise<StepOutcome> => {
   for (const step of steps) {
     const res = await step(ctx)
     if (!res.ok) return res
