@@ -35,7 +35,7 @@ bot.on(
 	`chat_join_request`,
 	sendUserContactRequest as (u: unknown) => unknown,
 )
-bot.on(`message:contact`, (ctx: BotContext) => handleUserMessage(ctx))
+bot.on(`message`, (ctx: BotContext) => handleUserMessage(ctx))
 
 bot.on(`callback_query:data`, isAdminMiddleware, async (ctx) => {
 	const result = await handleJoinAction(ctx)
