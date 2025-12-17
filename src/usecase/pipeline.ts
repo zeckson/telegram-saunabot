@@ -1,23 +1,24 @@
 // src/usecase/pipeline.ts
 export type StepOutcome = { ok: true } | { ok: false; reason?: string }
 
-export type Step<TCtx> = (ctx: TCtx) => Promise<StepOutcome> | StepOutcome
+export type Step<TCtx> = (ctx: TCtx, name?: string) => Promise<StepOutcome> | StepOutcome
 
-export const runPipeline = async <TCtx>(ctx: TCtx, steps: Step<TCtx>[]): Promise<StepOutcome> =>
+export const runPipeline = <TCtx>(ctx: TCtx, steps: Step<TCtx>[]): Promise<StepOutcome> =>
   run(`unnamed`, ctx, steps)
 
 export const run = async <TCtx>(name: string, ctx: TCtx, steps: Step<TCtx>[]): Promise<StepOutcome> => {
-  console.debug(`Starting pipeline "${name}" with ${steps.length} steps`)
+  console.debug(`${name}: ${steps.length} steps`)
   for (let i = 0; i < steps.length; i++) {
     const step = steps[i]
-    console.debug(`${name}: executing step ${step.name} ${i + 1}/${steps.length} `)
-    const res = await step(ctx)
+    const stepid = `${step.name ?? `anonymous`} ${i + 1}/${steps.length}`
+    console.debug(`${name}: executing step ${stepid} `)
+    const res = await step(ctx, name)
     if (!res.ok) {
-      console.warn(`Pipeline failed at step ${step.name} ${i + 1}: ${res.reason ?? 'unknown reason'}`)
+      console.warn(`${name}: failed at step ${stepid}: ${res.reason ?? 'unknown reason'}`)
       return res
     }
   }
-  console.debug(`Pipeline "${name}" completed successfully`)
+  console.debug(`${name}: completed successfully`)
   return { ok: true } as const
 }
 
@@ -27,7 +28,9 @@ export const branch =
 		ifTrue: Step<TCtx>[],
 		ifFalse: Step<TCtx>[],
 	): Step<TCtx> =>
-	async (ctx) => {
-		const ok = await predicate(ctx)
-		return runPipeline(ctx, ok ? ifTrue : ifFalse)
+	async (ctx, name) => {
+    name = `${name}:branch`
+    const ok = await predicate(ctx)
+    console.debug(`${name}: predicate evaluated to ${ok}, taking ${ok ? 'first' : 'second'} path`)
+    return run(`${name}:${ok ? 'first' : 'second'}`, ctx, ok ? ifTrue : ifFalse)
 	}
