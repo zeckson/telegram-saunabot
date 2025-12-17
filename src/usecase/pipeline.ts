@@ -10,10 +10,10 @@ export const run = async <TCtx>(name: string, ctx: TCtx, steps: Step<TCtx>[]): P
   console.log(`Starting pipeline "${name}" with ${steps.length} steps`)
   for (let i = 0; i < steps.length; i++) {
     const step = steps[i]
-    console.log(`${name}: executing step ${i + 1}/${steps.length}`)
+    console.log(`${name}: executing step ${step.name} ${i + 1}/${steps.length} `)
     const res = await step(ctx)
     if (!res.ok) {
-      console.warn(`Pipeline failed at step ${i + 1}: ${res.reason ?? 'unknown reason'}`)
+      console.warn(`Pipeline failed at step ${step.name} ${i + 1}: ${res.reason ?? 'unknown reason'}`)
       return res
     }
   }

@@ -4,13 +4,14 @@ import { declineUserJoinRequest, validateJoinRequest } from '../action/admin.ts'
 import { getBanInfo } from '../action/ban.ts'
 import { requestUserContact } from '../action/user.ts'
 import { ChatJoinRequest } from '../deps.ts'
+import { isAdminMiddleware } from "../predicate/is-admin.ts"
 import { BotContext } from '../type/context.ts'
 import { User } from '../type/user.type.ts'
 import { handleChatJoinRequest } from "../usecase/join/handle-chat-join-request.ts"
 import { link, text } from '../util/markdown.ts'
 import { int } from '../util/system.ts'
 
-const bot = new Composer<BotContext>()
+const bot = new Composer<BotContext>(isAdminMiddleware)
 
 const asJoinRequest = (
 	ctx: BotContext,
