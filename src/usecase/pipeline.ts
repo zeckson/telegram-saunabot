@@ -7,17 +7,17 @@ export const runPipeline = async <TCtx>(ctx: TCtx, steps: Step<TCtx>[]): Promise
   run(`unnamed`, ctx, steps)
 
 export const run = async <TCtx>(name: string, ctx: TCtx, steps: Step<TCtx>[]): Promise<StepOutcome> => {
-  console.log(`Starting pipeline "${name}" with ${steps.length} steps`)
+  console.debug(`Starting pipeline "${name}" with ${steps.length} steps`)
   for (let i = 0; i < steps.length; i++) {
     const step = steps[i]
-    console.log(`${name}: executing step ${step.name} ${i + 1}/${steps.length} `)
+    console.debug(`${name}: executing step ${step.name} ${i + 1}/${steps.length} `)
     const res = await step(ctx)
     if (!res.ok) {
       console.warn(`Pipeline failed at step ${step.name} ${i + 1}: ${res.reason ?? 'unknown reason'}`)
       return res
     }
   }
-  console.log(`Pipeline "${name}" completed successfully`)
+  console.debug(`Pipeline "${name}" completed successfully`)
   return { ok: true } as const
 }
 
