@@ -5,7 +5,7 @@ import { adminCommandComposer } from './admin-commands-composer.ts'
 import { userCommandsComposer } from './user-command-composer.ts'
 
 export const registerHandlers = (bot: Bot<BotContext>) => {
-  bot.use(adminCommandComposer.middleware())
   bot.use(chatJoinComposer.middleware())
 	bot.use(userCommandsComposer.middleware())
+  bot.use(adminCommandComposer.middleware())
 }
