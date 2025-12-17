@@ -4,14 +4,13 @@ import { declineUserJoinRequest, validateJoinRequest } from '../action/admin.ts'
 import { getBanInfo } from '../action/ban.ts'
 import { requestUserContact } from '../action/user.ts'
 import { ChatJoinRequest } from '../deps.ts'
-import { isAdminMiddleware } from "../predicate/is-admin.ts"
 import { BotContext } from '../type/context.ts'
 import { User } from '../type/user.type.ts'
 import { handleChatJoinRequest } from "../usecase/join/handle-chat-join-request.ts"
 import { link, text } from '../util/markdown.ts'
 import { int } from '../util/system.ts'
 
-const bot = new Composer<BotContext>(isAdminMiddleware)
+const bot = new Composer<BotContext>()
 
 const asJoinRequest = (
 	ctx: BotContext,
@@ -31,7 +30,8 @@ const getUser = (ctx: BotContext): User | undefined => {
 }
 
 bot.command(`join`, (ctx: BotContext) => {
-	return handleChatJoinRequest(asJoinRequest(ctx, getUser(ctx)))})
+	return handleChatJoinRequest(asJoinRequest(ctx, getUser(ctx)))
+})
 
 bot.command('md2', (ctx) => {
 	// `item` will be "apple pie" if a user sends "/md2 apple pie".
@@ -96,6 +96,23 @@ bot.command('reject', async (ctx: BotContext) => {
 
 bot.command('error', async (ctx: BotContext) => {
 	await ctx.api.sendMessage(12345, `text`)
+})
+
+const AVAILABLE_COMMANDS = [
+  '/join [user_id] - Process join request',
+  '/md2 [text] - Format text as markdown',
+  '/md2link [name] [url] - Create markdown link',
+  '/notify - Validate join request',
+  '/phone - Request phone number',
+  '/demo - Show demo notification',
+  '/status - Show current status',
+  '/reject [user_id] - Reject join request',
+  '/error - Test error handling'
+]
+
+bot.on(`message`, async (ctx) => {
+  const commands = AVAILABLE_COMMANDS.map(cmd => `• ${cmd}`).join('\n')
+  return ctx.reply(`Available commands:\n${text(commands)}`, { parse_mode: 'MarkdownV2' })
 })
 
 export const adminCommandComposer = bot
