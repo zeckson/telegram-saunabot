@@ -6,7 +6,7 @@ import { adminCommandComposer } from './admin-commands-composer.ts'
 import { userCommandsComposer } from './user-command-composer.ts'
 
 export const registerHandlers = (bot: Bot<BotContext>) => {
-  bot.filter(isAdmin, adminCommandComposer.middleware())
+  bot.chatType(`private`).filter(isAdmin, adminCommandComposer.middleware())
 
   bot.use(chatJoinComposer.middleware())
 	bot.use(userCommandsComposer.middleware())
