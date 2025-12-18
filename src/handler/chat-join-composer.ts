@@ -9,7 +9,7 @@ const bot = new Composer<BotContext>()
 
 // noinspection TypeScriptValidateTypes
 bot.on(`chat_join_request`, handleChatJoinRequest as (u: unknown) => unknown)
-bot.on(`message`, (ctx: BotContext) => handleUserMessage(ctx))
+bot.chatType(`private`).on(`message`, (ctx: BotContext) => handleUserMessage(ctx))
 
 bot.on(`callback_query:data`, isAdminMiddleware, async (ctx) => {
 	const result = await handleJoinAction(ctx)
