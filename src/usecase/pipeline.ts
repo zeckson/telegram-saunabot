@@ -1,17 +1,10 @@
-// src/usecase/pipeline.ts
 import { branch } from './branch.ts'
+import { Step, StepOutcome } from "./sequence.type.ts"
 
-export type StepOutcome = { ok: true } | { ok: false; reason?: string }
-
-export type Step<TCtx> = (
-	ctx: TCtx,
-	name?: string,
-) => Promise<StepOutcome> | StepOutcome
-
-export const run = async <TCtx>(
+const run = async <TCtx>(
 	name: string,
-	ctx: TCtx,
 	steps: Step<TCtx>[],
+	ctx: TCtx,
 ): Promise<StepOutcome> => {
 	console.debug(`${name}: ${steps.length} steps`)
 	for (let i = 0; i < steps.length; i++) {
@@ -32,6 +25,6 @@ export const run = async <TCtx>(
 	return { ok: true } as const
 }
 
-export const pipeline = <TCtx>(name: string, steps: Step<TCtx>[]): Step<TCtx> => (ctx) => run(name, ctx, steps)
+export const pipeline = <TCtx>(name: string, steps: Step<TCtx>[]): Step<TCtx> => (ctx) => run(name, steps, ctx)
 
 export { branch }

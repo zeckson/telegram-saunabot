@@ -1,5 +1,5 @@
-// src/usecase/pipeline.ts
-import { run, Step } from "./pipeline.ts"
+import { pipeline } from './pipeline.ts'
+import { Step } from "./sequence.type.ts"
 
 export const branch = <TCtx>(
 	predicate: (ctx: TCtx) => boolean | Promise<boolean>,
@@ -7,6 +7,7 @@ export const branch = <TCtx>(
 	ifFalse: Step<TCtx>[],
 ): Step<TCtx> =>
 async (ctx, name) => {
-  const ok = await predicate(ctx)
-	return run(`${name}:branch:${ok}`, ctx, ok ? ifTrue : ifFalse)
+	const ok = await predicate(ctx)
+	const next = pipeline(`${name}:branch:${ok}`, ok ? ifTrue : ifFalse)
+	return next(ctx)
 }
