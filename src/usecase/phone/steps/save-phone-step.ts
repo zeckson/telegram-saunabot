@@ -1,5 +1,4 @@
-// src/usecase/phone/steps/save-phone-step.ts
-import type { Step } from "../../pipeline.ts"
+import { Step } from "../../sequence.type.ts"
 import type { PhoneFlowContext } from "../phone-context.ts"
 import { UserStore } from "../../../store/user-store.ts"
 

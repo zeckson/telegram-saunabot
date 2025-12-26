@@ -1,4 +1,4 @@
-import type { Step } from "../../pipeline.ts"
+import { Step } from "../../sequence.type.ts"
 import type { JoinFlowContext } from "../join-context.ts"
 import { Messages } from "../../../action/admin.messages.ts"
 import { notifyAllAdmins } from "../../../action/admin.ts"

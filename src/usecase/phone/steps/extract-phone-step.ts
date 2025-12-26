@@ -1,5 +1,4 @@
-// src/usecase/phone/steps/extract-phone-step.ts
-import type { Step } from "../../pipeline.ts"
+import { Step } from "../../sequence.type.ts"
 import type { PhoneFlowContext } from "../phone-context.ts"
 
 export const extractPhoneStep: Step<PhoneFlowContext> = (ctx) => {

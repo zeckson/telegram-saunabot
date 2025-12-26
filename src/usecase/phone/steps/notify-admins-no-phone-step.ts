@@ -1,8 +1,7 @@
-// src/usecase/phone/steps/notify-admins-no-phone-step.ts
 import { notifyAllAdmins } from "../../../action/admin.ts"
 import { blockquote, fmt, link, mentionUser } from "../../../deps.ts"
 import hashtag from "../../../util/hashtag.ts"
-import type { Step } from "../../pipeline.ts"
+import { Step } from "../../sequence.type.ts"
 import type { PhoneFlowContext } from "../phone-context.ts"
 
 export const notifyAdminsNoPhoneStep: Step<PhoneFlowContext> = async (ctx) => {
