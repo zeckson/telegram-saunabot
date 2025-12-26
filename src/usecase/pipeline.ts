@@ -1,4 +1,6 @@
 // src/usecase/pipeline.ts
+import { branch } from './branch.ts'
+
 export type StepOutcome = { ok: true } | { ok: false; reason?: string }
 
 export type Step<TCtx> = (
@@ -30,18 +32,6 @@ export const run = async <TCtx>(
 	return { ok: true } as const
 }
 
-export const branch = <TCtx>(
-	predicate: (ctx: TCtx) => boolean | Promise<boolean>,
-	ifTrue: Step<TCtx>[],
-	ifFalse: Step<TCtx>[],
-): Step<TCtx> =>
-async (ctx, name) => {
-	name = `${name}:branch`
-	const ok = await predicate(ctx)
-	console.debug(
-		`${name}: predicate evaluated to ${ok}, taking ${
-			ok ? 'first' : 'second'
-		} path`,
-	)
-	return run(`${name}:${ok}`, ctx, ok ? ifTrue : ifFalse)
-}
+export const pipeline = <TCtx>(name: string, steps: Step<TCtx>[]): Step<TCtx> => (ctx) => run(name, ctx, steps)
+
+export { branch }
