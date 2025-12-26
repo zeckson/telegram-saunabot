@@ -41,6 +41,16 @@ export class Messages {
 				return `Неизвестная команда`
 		}
 	}
+  static getMessageByError(e: GrammyError): string {
+    switch (e.error_code) {
+      case 400:
+        return `Ошибка 400: ${e.description}`
+      case 403:
+        return `Пользователь деактивирован`
+      default:
+        return e.message
+    }
+  }
 	static notifyError(
 		ctx: BotContext,
 		userId: number,
@@ -48,7 +58,7 @@ export class Messages {
 	): string | FormattedString {
 		return fmt`Не удалось принять/отклонить заявку ${hashtag(userId)}
 Запрос от ${mentionUser(ctx.user.identity, ctx.user.id)}. Текст ошибки:
-  ${e.message}`
+  ${this.getMessageByError(e)}`
 	}
 	static notifyJoinRejected(
 		ctx: BotContext,
