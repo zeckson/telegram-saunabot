@@ -10,7 +10,7 @@ const run = async <TCtx>(
 	console.debug(`${name} ${steps.length} steps`)
 	for (let i = 0; i < steps.length; i++) {
 		const step = steps[i]
-		const stepName = `${name}:${step.name ?? `anonymous`}`
+		const stepName = `${name}:${step.name == `` ? `anonymous` : step.name}`
 		const stepid = `${i + 1}/${steps.length}`
 		console.debug(`${stepName} executing step ${stepid} `)
 		try {
