@@ -8,7 +8,7 @@ import { extractActionStep } from './steps/extract-action-step.ts'
 import { handleJoinRequestStep } from "./steps/handle-join-request-step.ts"
 import { notifyAdminsResultStep } from "./steps/notify-admins-result-step.ts"
 
-const handleCallback = pipeline(`callback-data`, [
+const handleCallbackQueryData = pipeline(`callback-data`, [
 	extractActionStep,
 	handleJoinRequestStep,
 	notifyAdminsResultStep,
@@ -42,6 +42,6 @@ const answerCallbackQuery = async (
 
 	await ctx.editMessageReplyMarkup({ reply_markup: undefined })
 }
-export const handleCallbackData = async (ctx: CallbackContextFlow) => {
-	return await answerCallbackQuery(await handleCallback(ctx), ctx)
+export const handleCallbackQuery = async (ctx: CallbackContextFlow) => {
+	return await answerCallbackQuery(await handleCallbackQueryData(ctx), ctx)
 }
