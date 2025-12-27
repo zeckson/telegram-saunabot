@@ -14,34 +14,30 @@ const handleCallback = pipeline(`callback-data`, [
 	notifyAdminsResultStep,
 ])
 
+const getErrorMessage = (reason: unknown): string => {
+  if (typeof reason === 'string') return reason
+  if (reason instanceof Error) return reason.message
+  return 'Unknown error'
+}
+
 const answerCallbackQuery = async (
-	result: StepOutcome,
-	ctx: CallbackContextFlow,
+  result: StepOutcome,
+  ctx: CallbackContextFlow,
 ) => {
-	if (result.ok) {
-		await ctx.answerCallbackQuery(Messages.chatJoinAction(ctx.data.action))
-	} else {
-		const reason = result.reason
-		switch (typeof reason) {
-			case 'string':
-				await ctx.answerCallbackQuery(reason)
-				break
-			case 'object':
-				if (reason instanceof Error) {
-					await ctx.answerCallbackQuery(reason.message)
-				}
-				if (reason instanceof GrammyError) {
-					const message = Messages.notifyError(
-						ctx,
-						ctx.data.userId,
-						reason as GrammyError,
-					)
-					await notifyAllAdmins(ctx, message)
-				}
-				break
-			default:
-				await ctx.answerCallbackQuery('Unknown error')
-		}
+  if (result.ok) {
+    await ctx.answerCallbackQuery(Messages.chatJoinAction(ctx.data.action))
+  } else {
+    const errorMessage = getErrorMessage(result.reason)
+    await ctx.answerCallbackQuery(errorMessage)
+
+    if (result.reason instanceof GrammyError) {
+      const message = Messages.notifyError(
+        ctx,
+        ctx.data.userId,
+        result.reason,
+      )
+      await notifyAllAdmins(ctx, message)
+    }
 	}
 
 	await ctx.editMessageReplyMarkup({ reply_markup: undefined })
