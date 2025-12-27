@@ -1,10 +1,12 @@
-import { Step, StepOutcome } from './sequence.type.ts'
+import { Sequence, Step, StepOutcome } from './sequence.type.ts'
 
 const run = async <TCtx>(
-	name: string,
-	steps: Step<TCtx>[],
+  sequence: Sequence<TCtx>,
 	ctx: TCtx,
 ): Promise<StepOutcome> => {
+  const name = sequence.name
+  const steps = sequence.steps
+
 	console.debug(`${name} ${steps.length} steps`)
 	for (let i = 0; i < steps.length; i++) {
 		const step = steps[i]
@@ -34,4 +36,4 @@ const run = async <TCtx>(
 
 export const pipeline =
 	<TCtx>(name: string, steps: Step<TCtx>[]): Step<TCtx> => (ctx) =>
-		run(name, steps, ctx)
+		run({ name, steps }, ctx)
