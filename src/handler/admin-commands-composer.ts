@@ -1,12 +1,13 @@
 import { Composer } from 'grammy'
 import { Messages } from '../action/admin.messages.ts'
-import { declineUserJoinRequest, validateJoinRequest } from '../action/admin.ts'
+import { declineUserJoinRequest } from '../action/admin.ts'
 import { getBanInfo } from '../action/ban.ts'
 import { requestUserContact } from '../action/user.ts'
 import { ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { User } from '../type/user.type.ts'
-import { handleChatJoinRequest } from "../usecase/join/handle-chat-join-request.ts"
+import { handleChatJoinRequest } from '../usecase/join/handle-chat-join-request.ts'
+import { validateJoinRequestStep } from '../usecase/join/steps/validate-join-request-step.ts'
 import { link, text } from '../util/markdown.ts'
 import { int } from '../util/system.ts'
 
@@ -48,7 +49,7 @@ bot.command('md2link', (ctx) => {
 bot.command(
 	`notify`,
 	(ctx: BotContext) =>
-		validateJoinRequest(
+		validateJoinRequestStep(
 			Object.assign(ctx, {
 				bio: '',
 				date: 0,
@@ -99,20 +100,22 @@ bot.command('error', async (ctx: BotContext) => {
 })
 
 const AVAILABLE_COMMANDS = [
-  '/join [user_id] - Process join request',
-  '/md2 [text] - Format text as markdown',
-  '/md2link [name] [url] - Create markdown link',
-  '/notify - Validate join request',
-  '/phone - Request phone number',
-  '/demo - Show demo notification',
-  '/status - Show current status',
-  '/reject [user_id] - Reject join request',
-  '/error - Test error handling'
+	'/join [user_id] - Process join request',
+	'/md2 [text] - Format text as markdown',
+	'/md2link [name] [url] - Create markdown link',
+	'/notify - Validate join request',
+	'/phone - Request phone number',
+	'/demo - Show demo notification',
+	'/status - Show current status',
+	'/reject [user_id] - Reject join request',
+	'/error - Test error handling',
 ]
 
 bot.on(`message`, async (ctx) => {
-  const commands = AVAILABLE_COMMANDS.map(cmd => `• ${cmd}`).join('\n')
-  return ctx.reply(`Available commands:\n${text(commands)}`, { parse_mode: 'MarkdownV2' })
+	const commands = AVAILABLE_COMMANDS.map((cmd) => `• ${cmd}`).join('\n')
+	return ctx.reply(`Available commands:\n${text(commands)}`, {
+		parse_mode: 'MarkdownV2',
+	})
 })
 
 export const adminCommandComposer = bot
