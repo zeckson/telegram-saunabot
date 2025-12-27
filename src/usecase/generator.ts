@@ -1,6 +1,6 @@
 import {  Step, StepOutcome } from './sequence.type.ts'
 
-type StepGenerator<TCtx> = (name: string) => Generator<Step<TCtx>>
+type StepGenerator<TCtx> = (name?: string) => Generator<Step<TCtx>>
 
 const run = async <TCtx>(
   generator: StepGenerator<TCtx>,
