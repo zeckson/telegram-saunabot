@@ -43,7 +43,5 @@ const answerCallbackQuery = async (
 	await ctx.editMessageReplyMarkup({ reply_markup: undefined })
 }
 export const handleCallbackData = async (ctx: CallbackContextFlow) => {
-	const result = await handleCallback(ctx)
-	await answerCallbackQuery(result, ctx)
-	return result
+	return await answerCallbackQuery(await handleCallback(ctx), ctx)
 }
