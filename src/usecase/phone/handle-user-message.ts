@@ -1,4 +1,5 @@
-import { branch, pipeline } from "../pipeline.ts"
+import { pipeline } from "../pipeline.ts"
+import { branch } from "../branch.ts"
 import type { PhoneFlowContext } from "./phone-context.ts"
 import { extractPhoneStep } from "./steps/extract-phone-step.ts"
 import { notifyAdminsNoPhoneStep } from "./steps/notify-admins-no-phone-step.ts"
