@@ -144,13 +144,3 @@ export const declineUserJoinRequest = async (
 		entities: text.entities,
 	})
 }
-
-export const handleJoinAction = async (ctx: BotContext): Promise<string> => {
-	const data = ctx.callbackQuery?.data ?? ``
-	const [actionValue, chatId, userId, _updateId] = data.split(`:`)
-	const action = actionValue as JoinRequestAction
-
-	await handleJoinRequest(ctx, action, int(chatId), int(userId))
-
-	return Messages.chatJoinAction(action)
-}
