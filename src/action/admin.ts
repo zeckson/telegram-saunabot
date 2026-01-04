@@ -36,17 +36,6 @@ export const notifyAllAdmins = (
 	)
 }
 
-export const notifyAdminsOnPhoneNumber = (ctx: BotContext, phone: string) => {
-	const message = Messages.chatJoinContactReceivedAdminNotification(
-		ctx,
-		phone,
-	)
-
-	return notifyAllAdmins(ctx, message, {
-		link_preview_options: { is_disabled: true },
-	})
-}
-
 export const validateJoinRequest = async (
 	ctx: BotContext & ChatJoinRequest,
 ): Promise<boolean> => {
