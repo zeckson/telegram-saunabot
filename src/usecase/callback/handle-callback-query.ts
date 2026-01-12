@@ -9,19 +9,22 @@ import { notifyAdminsApprovedStep, notifyAdminsRejectedStep, } from './steps/not
 
 const fail = (reason: string) => () => ({ ok: false, reason })
 
+export const approveJoinRequestPipeline = [
+  handleJoinRequestApproveStep,
+  notifyAdminsApprovedStep,
+]
+export const declineJoinRequestPipeline = [
+  handleJoinRequestDeclineStep,
+  notifyAdminsRejectedStep,
+]
+
 const handleCallbackQueryData = pipeline(`callback-data`, [
 	extractActionStep,
 	when(
 		(ctx: CallbackContextFlow) => ctx.data.action,
 		{
-			[JoinRequestAction.APPROVE]: [
-				handleJoinRequestApproveStep,
-				notifyAdminsApprovedStep,
-			],
-			[JoinRequestAction.DECLINE]: [
-				handleJoinRequestDeclineStep,
-				notifyAdminsRejectedStep,
-			],
+			[JoinRequestAction.APPROVE]: approveJoinRequestPipeline,
+			[JoinRequestAction.DECLINE]: declineJoinRequestPipeline,
 			[other]: [fail(`unknown_action`)],
 		},
 	),

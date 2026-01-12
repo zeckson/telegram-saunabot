@@ -35,5 +35,8 @@ const run = async <TCtx>(
 }
 
 export const pipeline =
-	<TCtx>(name: string, steps: Step<TCtx>[]): Step<TCtx> => (ctx) =>
-		run({ name, steps }, ctx)
+	<TCtx>(name: string, steps: Step<TCtx>[], throwOnFalse = false): Step<TCtx> => async (ctx) => {
+    const result = await run({ name, steps }, ctx)
+    if (throwOnFalse && !result.ok) throw new Error(`Pipeline ${name} failed with reason: ${result.reason}`)
+    return result
+  }
