@@ -22,7 +22,7 @@ export const notifyAllAdmins = (
 	other?: object,
 ) => {
 	let params: object = {}
-	if (message instanceof FormattedString) {
+	if ((message as FormattedString).entities) {
 		params = { entities: message.entities, ...other }
 		message = message.toString()
 	} else {

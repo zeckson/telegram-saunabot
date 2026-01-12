@@ -1,9 +1,8 @@
 import type { PhoneFlowContext } from "../phone-context.ts"
+import { successMessage } from "../phone.messages.ts"
 
 export const notifyUserContactReceived = async (context: PhoneFlowContext) => {
-  const message =
-    'Благодарим! Наши админы проверят информацию и добавят вас в группу!'
-  await context.replyFmt(message, {
+  await context.replyFmt(successMessage(), {
     reply_markup: {
       remove_keyboard: true, // Removes the reply keyboard
     },
