@@ -1,20 +1,11 @@
-import { Messages } from '../../../action/admin.messages.ts'
 import { notifyAllAdmins } from '../../../action/admin.ts'
 import { StepOutcome } from '../../sequence.type.ts'
 import { CallbackContextFlow } from '../callback-context.type.ts'
+import { notifyAdmin } from '../callback.messages.ts'
 
-export const notifyAdminsApprovedStep = async (
+export const notifyAdminsResultStep = async (
 	ctx: CallbackContextFlow,
 ): Promise<StepOutcome> => {
-	const userId = ctx.data.userId
-	await notifyAllAdmins(ctx, Messages.notifyJoinApproved(ctx, userId))
-	return { ok: true }
-}
-
-export const notifyAdminsRejectedStep = async (
-	ctx: CallbackContextFlow,
-): Promise<StepOutcome> => {
-	const userId = ctx.data.userId
-	await notifyAllAdmins(ctx, Messages.notifyJoinRejected(ctx, userId))
+	await notifyAllAdmins(ctx, notifyAdmin(ctx.user, ctx.data))
 	return { ok: true }
 }

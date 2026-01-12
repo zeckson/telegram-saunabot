@@ -5,17 +5,17 @@ import { CallbackContextFlow } from './callback-context.type.ts'
 import { answerCallbackQueryStep } from './steps/answer-callback-query-step.ts'
 import { extractActionStep } from './steps/extract-action-step.ts'
 import { handleJoinRequestApproveStep, handleJoinRequestDeclineStep, } from './steps/handle-join-request-step.ts'
-import { notifyAdminsApprovedStep, notifyAdminsRejectedStep, } from './steps/notify-admins-result-step.ts'
+import { notifyAdminsResultStep, } from './steps/notify-admins-result-step.ts'
 
 const fail = (reason: string) => () => ({ ok: false, reason })
 
 export const approveJoinRequestPipeline = [
   handleJoinRequestApproveStep,
-  notifyAdminsApprovedStep,
+  notifyAdminsResultStep,
 ]
 export const declineJoinRequestPipeline = [
   handleJoinRequestDeclineStep,
-  notifyAdminsRejectedStep,
+  notifyAdminsResultStep,
 ]
 
 const handleCallbackQueryData = pipeline(`callback-data`, [
