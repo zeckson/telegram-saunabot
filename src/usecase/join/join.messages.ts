@@ -1,4 +1,4 @@
-import { bold, Chat, fmt, FormattedString, italic, link, } from '../../deps.ts'
+import { bold, Chat, fmt, FormattedString, italic, link } from '../../deps.ts'
 import { chatLink } from '../../text/chat.ts'
 import { userLink } from '../../text/user.ts'
 import { User } from '../../type/user.type.ts'

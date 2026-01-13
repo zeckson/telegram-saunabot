@@ -1,8 +1,11 @@
 import { GrammyError, mentionUser } from '../../deps.ts'
-import { fmt, FormattedString, } from 'https://deno.land/x/grammy_parse_mode@1.10.0/format.ts'
+import {
+	fmt,
+	FormattedString,
+} from 'https://deno.land/x/grammy_parse_mode@1.10.0/format.ts'
 import { JoinRequestAction } from '../../action/admin.ts'
 import { userLink } from '../../text/user.ts'
-import { BotContext } from "../../type/context.ts"
+import { BotContext } from '../../type/context.ts'
 import { User } from '../../type/user.type.ts'
 import hashtag from '../../util/hashtag.ts'
 import { JoinRequestData } from './callback-context.type.ts'
@@ -19,11 +22,12 @@ export const chatJoinAction = (action: JoinRequestAction): string => {
 }
 
 export const notifyAdmin = (
-  admin: User,
-  data: JoinRequestData,
-): FormattedString => fmt`Заявка ${hashtag(data.userId)} ${data.action == JoinRequestAction.APPROVE ? `принята` : `отклонена`} ${
-  userLink(admin)
-}`
+	admin: User,
+	data: JoinRequestData,
+): FormattedString =>
+	fmt`Заявка ${hashtag(data.userId)} ${
+		data.action == JoinRequestAction.APPROVE ? `принята` : `отклонена`
+	} ${userLink(admin)}`
 
 const status = (data?: JoinRequestData) => {
 	switch (data?.action) {

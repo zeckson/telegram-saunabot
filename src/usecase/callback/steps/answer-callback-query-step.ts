@@ -3,7 +3,7 @@ import { Messages } from '../../../action/admin.messages.ts'
 import { notifyAllAdmins } from '../../../action/admin.ts'
 import { StepOutcome } from '../../sequence.type.ts'
 import { CallbackContextFlow } from '../callback-context.type.ts'
-import { chatJoinAction, notifyError } from "../callback.messages.ts"
+import { chatJoinAction, notifyError } from '../callback.messages.ts'
 
 const getErrorMessage = (reason: unknown): string => {
 	if (typeof reason === 'string') return reason

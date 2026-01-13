@@ -1,5 +1,9 @@
 import { Message } from 'grammy/types'
-import { blockquote, fmt, FormattedString, } from 'https://deno.land/x/grammy_parse_mode@1.10.0/format.ts'
+import {
+	blockquote,
+	fmt,
+	FormattedString,
+} from 'https://deno.land/x/grammy_parse_mode@1.10.0/format.ts'
 import { hashtag } from '../../text/id.ts'
 import { userLink, verifyLink } from '../../text/user.ts'
 import { User } from '../../type/user.type.ts'
@@ -24,7 +28,8 @@ ${blockquote(phone)}
 export const successMessage = () =>
 	fmt`Благодарим! Наши админы проверят информацию и добавят вас в группу!`
 
-export const adminAssistMessage = () => 'Я передал ваши сообщения админу, ' +
-  'но чтобы быстрее попасть в группу, ' +
-  'пришлите пожалуйста контактные данные, ' +
-  'выбрав кнопку снизу'
+export const adminAssistMessage = () =>
+	'Я передал ваши сообщения админу, ' +
+	'но чтобы быстрее попасть в группу, ' +
+	'пришлите пожалуйста контактные данные, ' +
+	'выбрав кнопку снизу'

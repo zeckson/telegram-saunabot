@@ -6,7 +6,6 @@ import {
 } from '../deps.ts'
 import { AccessStore } from '../store/access-store.ts'
 import { BotContext } from '../type/context.ts'
-import { int } from '../util/system.ts'
 import { Messages } from './admin.messages.ts'
 import { getBanInfo } from './ban.ts'
 import { notifyAdmins } from './notify-admin.ts'
@@ -125,22 +124,4 @@ const handleJoinRequest = async (
 	} catch (e) {
 		await notifyErrored(ctx, userId, e as GrammyError)
 	}
-}
-
-export const declineUserJoinRequest = async (
-	ctx: BotContext & ChatJoinRequest,
-	text: FormattedString,
-) => {
-	await handleJoinRequest(
-		ctx,
-		JoinRequestAction.DECLINE,
-		ctx.chat.id,
-		ctx.user.id,
-	)
-
-	return notifyAllAdmins(ctx, text, {
-		link_preview_options: { is_disabled: true },
-		disable_notification: true,
-		entities: text.entities,
-	})
 }

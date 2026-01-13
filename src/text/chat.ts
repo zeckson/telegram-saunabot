@@ -1,4 +1,4 @@
-import { Chat, fmt, FormattedString, link } from "../deps.ts"
+import { Chat, fmt, FormattedString, link } from '../deps.ts'
 
 const UNKNOWN = fmt`<неизвестно>`
 export const chatLink = (chat?: Chat): FormattedString => {

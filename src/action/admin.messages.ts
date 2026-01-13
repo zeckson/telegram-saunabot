@@ -9,7 +9,7 @@ import {
 	mentionUser,
 } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
-import hashtag from "../util/hashtag.ts"
+import hashtag from '../util/hashtag.ts'
 import { getFormattedChatLink } from '../util/link.ts'
 import { JoinRequestAction } from './admin.ts'
 import { BanResult } from './ban.ts'
@@ -41,16 +41,16 @@ export class Messages {
 				return `Неизвестная команда`
 		}
 	}
-  static getMessageByError(e: GrammyError): string {
-    switch (e.error_code) {
-      case 400:
-        return `Ошибка 400: ${e.description}`
-      case 403:
-        return `Пользователь деактивирован`
-      default:
-        return e.message
-    }
-  }
+	static getMessageByError(e: GrammyError): string {
+		switch (e.error_code) {
+			case 400:
+				return `Ошибка 400: ${e.description}`
+			case 403:
+				return `Пользователь деактивирован`
+			default:
+				return e.message
+		}
+	}
 	static notifyError(
 		ctx: BotContext,
 		userId: number,

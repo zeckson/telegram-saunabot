@@ -35,5 +35,5 @@ export const isAllowedMiddleware = async (
 		)
 		return
 	}
-  return next()
+	return next()
 }

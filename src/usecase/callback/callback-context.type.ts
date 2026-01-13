@@ -1,14 +1,14 @@
 import { CallbackQuery } from 'grammy/types'
-import { JoinRequestAction } from "../../action/admin.ts"
-import { BotContext } from "../../type/context.ts"
+import { JoinRequestAction } from '../../action/admin.ts'
+import { BotContext } from '../../type/context.ts'
 
 export interface JoinRequestData {
-  action: JoinRequestAction
-  userId: number
-  chatId: number
+	action: JoinRequestAction
+	userId: number
+	chatId: number
 }
 
 export type CallbackContextFlow = BotContext & {
-  callbackQuery: Required<CallbackQuery>
-  data: JoinRequestData
-};
+	callbackQuery: Required<CallbackQuery>
+	data: JoinRequestData
+}

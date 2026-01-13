@@ -1,5 +1,5 @@
 const openStore = () => {
-  const DENO_KV_URL = Deno.env.get('DENO_KV_URL')
+	const DENO_KV_URL = Deno.env.get('DENO_KV_URL')
 
 	if (DENO_KV_URL) return Deno.openKv(DENO_KV_URL)
 	else return Deno.openKv()

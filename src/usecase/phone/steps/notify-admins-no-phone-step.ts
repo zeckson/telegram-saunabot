@@ -8,6 +8,9 @@ export const notifyAdminsNoPhoneStep: Step<PhoneFlowContext> = async (ctx) => {
 	// Keep it defensive anyway:
 	if (ctx.phone) return { ok: true }
 
-	await notifyAllAdmins(ctx, userSentMessageNoContactAdminNotification(ctx.user, ctx.message))
+	await notifyAllAdmins(
+		ctx,
+		userSentMessageNoContactAdminNotification(ctx.user, ctx.message),
+	)
 	return { ok: true }
 }
