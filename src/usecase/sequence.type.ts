@@ -5,5 +5,3 @@ export type Step<TCtx> = (
 	ctx: TCtx,
 	parentName?: string,
 ) => Promise<StepOutcome> | StepOutcome
-
-export type Sequence<TCtx> = Step<TCtx> | Step<TCtx>[]
