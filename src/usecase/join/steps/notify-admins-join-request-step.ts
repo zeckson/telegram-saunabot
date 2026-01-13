@@ -1,9 +1,8 @@
-import { InlineKeyboard } from '../../../deps.ts'
-import { Messages } from '../../../action/admin.messages.ts'
 import { JoinRequestAction, notifyAllAdmins } from '../../../action/admin.ts'
+import { InlineKeyboard } from '../../../deps.ts'
 import { Step } from '../../sequence.type.ts'
 import { BanStatus, JoinFlowContext } from '../join-context.ts'
-import { onJoinRequest } from '../join.messages.ts'
+import { approveButtonText, declineButtonText, onJoinRequest } from '../join.messages.ts'
 
 export const notifyAdminsJoinRequestStep: Step<JoinFlowContext> = async (
 	ctx,
@@ -20,11 +19,11 @@ export const notifyAdminsJoinRequestStep: Step<JoinFlowContext> = async (
 	const keyboard = new InlineKeyboard()
 	if (banData.status !== BanStatus.BANNED) {
 		keyboard.add(InlineKeyboard.text(
-			Messages.approveButtonText,
+			approveButtonText,
 			`${JoinRequestAction.APPROVE}:${chat.id}:${from.id}:${updateId}`,
 		))
 		keyboard.add(InlineKeyboard.text(
-			Messages.declineButtonText,
+			declineButtonText,
 			`${JoinRequestAction.DECLINE}:${chat.id}:${from.id}:${updateId}`,
 		))
 	}

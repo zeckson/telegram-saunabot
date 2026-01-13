@@ -47,6 +47,9 @@ const getStatus = (status: BanStatus): string => {
 	}
 }
 
+export const approveButtonText = `👍 Подтвердить`
+export const declineButtonText = `👎 Отклонить`
+
 export const onJoinRequest = (
 	user: User,
 	chat: Chat,
