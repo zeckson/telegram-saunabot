@@ -38,7 +38,7 @@ const command2action = {
 		description: 'Process join request',
 		action: (ctx: CommandContext<BotContext>) => {
       // ctx.match contains everything after "/join "
-      const paramUserId = ctx.match ? parseInt(ctx.match) : undefined;
+      const paramUserId = ctx.match ? int(ctx.match) : undefined;
 
       const user = paramUserId
         ? { id: paramUserId, identity: 'User' } as User
