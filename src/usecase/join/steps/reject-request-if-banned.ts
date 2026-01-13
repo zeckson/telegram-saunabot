@@ -8,7 +8,6 @@ import { JoinFlowContext } from '../join-context.ts'
 export const rejectRequestIfBanned: Step<JoinFlowContext> = async (ctx) => {
 	const declinePipeline = pipeline(`reject`, declineJoinRequestPipeline)
 	await declinePipeline(Object.assign(ctx, {
-    callbackQuery: ctx.callbackQuery as CallbackQuery,
 		data: {
 			action: JoinRequestAction.DECLINE,
 			userId: ctx.user.id,

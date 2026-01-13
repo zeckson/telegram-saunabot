@@ -2,7 +2,7 @@ import { JoinRequestAction } from '../../../action/admin.ts'
 import { CallbackContextFlow } from '../callback-context.type.ts'
 
 export const extractActionStep = (ctx: CallbackContextFlow) => {
-	const data = ctx.callbackQuery.data
+	const data = ctx.callbackQuery?.data
 	if (!data) {
 		return { ok: false, reason: 'missing_callback_data' }
 	}
