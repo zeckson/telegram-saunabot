@@ -1,9 +1,9 @@
-import { notifyAllAdmins } from "../action/admin.ts"
-import { blockquote, fmt } from "../deps.ts"
-import { hashtag } from "../text/id.ts"
-import { userLink } from "../text/user.ts"
-import { BotContext } from "../type/context.ts"
-import { StepOutcome } from "./sequence.type.ts"
+import { notifyAllAdmins } from '../action/admin.ts'
+import { blockquote, fmt } from '../deps.ts'
+import { hashtag } from '../text/id.ts'
+import { userLink } from '../text/user.ts'
+import { BotContext } from '../type/context.ts'
+import { StepOutcome } from './sequence.type.ts'
 
 export const failNotify = async (
 	outcome: Promise<StepOutcome> | StepOutcome,

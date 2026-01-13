@@ -1,8 +1,6 @@
-import { CallbackQuery } from "grammy/types"
-
-import { JoinRequestAction } from "../../../type/join-request.ts"
-import { declineJoinRequestPipeline } from "../../callback/handle-callback-query.ts"
-import { pipeline } from "../../pipeline.ts"
+import { JoinRequestAction } from '../../../type/join-request.ts'
+import { declineJoinRequestPipeline } from '../../callback/handle-callback-query.ts'
+import { pipeline } from '../../pipeline.ts'
 import { Step } from '../../sequence.type.ts'
 import { JoinFlowContext } from '../join-context.ts'
 
@@ -16,5 +14,5 @@ export const rejectRequestIfBanned: Step<JoinFlowContext> = async (ctx) => {
 		},
 	}))
 
-  return result.ok ? { ok: false, reason: 'banned' } : result
+	return result.ok ? { ok: false, reason: 'banned' } : result
 }

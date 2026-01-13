@@ -4,7 +4,7 @@ import { userLink, verifyLink } from '../../text/user.ts'
 import { User } from '../../type/user.type.ts'
 import hashtag from '../../util/hashtag.ts'
 import { text } from '../../util/markdown.ts'
-import { BanData, BanStatus } from "./join-context.ts"
+import { BanData, BanStatus } from './join-context.ts'
 
 const privacyPolicy = `https://snezhdanov.ru/privacy-policy`
 

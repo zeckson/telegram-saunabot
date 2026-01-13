@@ -1,4 +1,4 @@
-import { JoinRequestAction } from "../../../type/join-request.ts"
+import { JoinRequestAction } from '../../../type/join-request.ts'
 import { CallbackContextFlow } from '../callback-context.type.ts'
 
 export const extractActionStep = (ctx: CallbackContextFlow) => {

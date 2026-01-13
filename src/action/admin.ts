@@ -1,4 +1,4 @@
-import { FormattedString, } from '../deps.ts'
+import { FormattedString } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { notifyAdmins } from './notify-admin.ts'
 

@@ -1,8 +1,8 @@
 import { Composer } from 'grammy'
-import { CommandContext } from "grammy"
+import { CommandContext } from 'grammy'
 import { ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
-import { JoinRequestAction } from "../type/join-request.ts"
+import { JoinRequestAction } from '../type/join-request.ts'
 import { User } from '../type/user.type.ts'
 import {
 	CallbackContextFlow,
@@ -37,12 +37,12 @@ const command2action = {
 	'join': {
 		description: 'Process join request',
 		action: (ctx: CommandContext<BotContext>) => {
-      // ctx.match contains everything after "/join "
-      const paramUserId = ctx.match ? int(ctx.match) : undefined;
+			// ctx.match contains everything after "/join "
+			const paramUserId = ctx.match ? int(ctx.match) : undefined
 
-      const user = paramUserId
-        ? { id: paramUserId, identity: 'User' } as User
-        : ctx.user;
+			const user = paramUserId
+				? { id: paramUserId, identity: 'User' } as User
+				: ctx.user
 			return handleChatJoinRequest(asJoinRequest(ctx, user))
 		},
 	},
