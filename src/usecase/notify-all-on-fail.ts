@@ -5,13 +5,13 @@ import { userLink } from '../text/user.ts'
 import { BotContext } from '../type/context.ts'
 import { StepOutcome } from './sequence.type.ts'
 
-export const failNotify = async (
+export const notifyAllOnFail = async (
 	outcome: Promise<StepOutcome> | StepOutcome,
 	ctx: BotContext,
 ) => {
 	const result = await outcome
 	if (!result.ok) {
-		const reason = result.reason!!
+		const reason = result.reason!
 		const message = reason instanceof Error ? reason.message : reason
 		await notifyAllAdmins(
 			ctx,

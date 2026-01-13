@@ -1,5 +1,5 @@
 import { branch } from '../branch.ts'
-import { failNotify } from '../fail-notify.ts'
+import { notifyAllOnFail } from '../notify-all-on-fail.ts'
 import { pipeline } from '../pipeline.ts'
 import { BanStatus, JoinFlowContext } from './join-context.ts'
 import { fetchBanStatus } from './steps/fetch-ban-status.ts'
@@ -21,4 +21,4 @@ const joinFlowPipeline = pipeline<JoinFlowContext>(`chat_join_request`, [
 ])
 
 export const handleChatJoinRequest = (ctx: JoinFlowContext) =>
-	failNotify(joinFlowPipeline(ctx), ctx)
+	notifyAllOnFail(joinFlowPipeline(ctx), ctx)
