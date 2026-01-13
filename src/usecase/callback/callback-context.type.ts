@@ -9,6 +9,6 @@ export interface JoinRequestData {
 }
 
 export type CallbackContextFlow = BotContext & {
-	callbackQuery: Required<CallbackQuery>
+	callbackQuery: CallbackQuery
 	data: JoinRequestData
 }

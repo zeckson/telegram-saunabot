@@ -1,9 +1,10 @@
 import { bold, Chat, fmt, FormattedString, italic, link } from '../../deps.ts'
 import { chatLink } from '../../text/chat.ts'
-import { userLink } from '../../text/user.ts'
+import { userLink, verifyLink } from '../../text/user.ts'
 import { User } from '../../type/user.type.ts'
 import hashtag from '../../util/hashtag.ts'
 import { text } from '../../util/markdown.ts'
+import { BanData, BanStatus } from "./join-context.ts"
 
 const privacyPolicy = `https://snezhdanov.ru/privacy-policy`
 
@@ -34,3 +35,34 @@ export const requestContactError = (
 	fmt`Не удалось отправись запрос пользователю ${hashtag(user.id)}
 Запрос от ${userLink(user)}. Текст ошибки:
   ${errorMessage}`
+
+const getStatus = (status: BanStatus): string => {
+	switch (status) {
+		case BanStatus.BANNED:
+			return `забанен`
+		case BanStatus.UNKNOWN:
+			return `не удалось загрузить данные`
+		case BanStatus.NOT_BANNED:
+			return `в базах не упоминается`
+	}
+}
+
+export const onJoinRequest = (
+	user: User,
+	chat: Chat,
+	banData: BanData,
+): FormattedString => {
+	return fmt`Заявка ${hashtag(user.id)} ${
+		banData.status === BanStatus.BANNED ? bold(`🚫 Заблокирована!`) : ``
+	}
+Запрос на добавление пользователя ${userLink(user)} в чат ${chatLink(chat)}
+Проверить пользователя можно по ${verifyLink(user.id)}
+Информация о бане пользователя: ${bold(getStatus(banData.status))}
+    ${
+		fmt([
+			...(banData.info.map((it) =>
+				fmt`- в базе данных ${it.name}: ${link(`детали`, it.url)}\n`
+			)),
+		])
+	}`
+}
