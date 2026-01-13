@@ -83,7 +83,7 @@ for (const [command, descriptor] of Object.entries(command2action)) {
 	AVAILABLE_COMMANDS.push(`/${command} - ${descriptor.description}`)
 }
 
-bot.on(`message`, async (ctx) => {
+bot.on(`message`, (ctx) => {
 	const commands = AVAILABLE_COMMANDS.map((cmd) => `• ${cmd}`).join('\n')
 	return ctx.reply(`Available commands:\n${text(commands)}`, {
 		parse_mode: 'MarkdownV2',
