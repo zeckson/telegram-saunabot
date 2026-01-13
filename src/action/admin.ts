@@ -2,11 +2,6 @@ import { FormattedString, } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { notifyAdmins } from './notify-admin.ts'
 
-export const enum JoinRequestAction {
-	APPROVE = `approve`,
-	DECLINE = `decline`,
-}
-
 export const notifyAllAdmins = (
 	ctx: BotContext,
 	message: string | FormattedString,

@@ -1,5 +1,6 @@
-import { JoinRequestAction, notifyAllAdmins } from '../../../action/admin.ts'
+import { notifyAllAdmins } from '../../../action/admin.ts'
 import { InlineKeyboard } from '../../../deps.ts'
+import { JoinRequestAction } from "../../../type/join-request.ts"
 import { Step } from '../../sequence.type.ts'
 import { BanStatus, JoinFlowContext } from '../join-context.ts'
 import { approveButtonText, declineButtonText, onJoinRequest } from '../join.messages.ts'

@@ -1,5 +1,6 @@
 import { CallbackQuery } from "grammy/types"
-import { JoinRequestAction } from "../../../action/admin.ts"
+
+import { JoinRequestAction } from "../../../type/join-request.ts"
 import { declineJoinRequestPipeline } from "../../callback/handle-callback-query.ts"
 import { pipeline } from "../../pipeline.ts"
 import { Step } from '../../sequence.type.ts'

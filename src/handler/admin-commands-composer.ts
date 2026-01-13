@@ -1,8 +1,8 @@
 import { Composer } from 'grammy'
 import { CommandContext } from "grammy"
-import { JoinRequestAction } from '../action/admin.ts'
 import { ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
+import { JoinRequestAction } from "../type/join-request.ts"
 import { User } from '../type/user.type.ts'
 import {
 	CallbackContextFlow,

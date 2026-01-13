@@ -1,4 +1,4 @@
-import { JoinRequestAction } from '../../action/admin.ts'
+import { JoinRequestAction } from "../../type/join-request.ts"
 import { pipeline } from '../pipeline.ts'
 import { other, when } from '../when.ts'
 import { CallbackContextFlow } from './callback-context.type.ts'

@@ -1,7 +1,7 @@
-import { fmt, FormattedString, } from 'https://deno.land/x/grammy_parse_mode@1.10.0/format.ts'
-import { JoinRequestAction } from '../../action/admin.ts'
+import { fmt, FormattedString, } from '../../deps.ts'
 import { GrammyError } from '../../deps.ts'
 import { userLink } from '../../text/user.ts'
+import { JoinRequestAction } from "../../type/join-request.ts"
 import { User } from '../../type/user.type.ts'
 import hashtag from '../../util/hashtag.ts'
 import { JoinRequestData } from './callback-context.type.ts'
