@@ -1,4 +1,5 @@
 import { Composer } from 'grammy'
+import { CommandContext } from "grammy"
 import { JoinRequestAction } from '../action/admin.ts'
 import { ChatJoinRequest } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
@@ -27,14 +28,6 @@ const asJoinRequest = (
 	}) as BotContext & ChatJoinRequest
 }
 
-const getUser = (ctx: BotContext): User | undefined => {
-	const params = ctx.message?.text?.split(' ').slice(1)
-	const param_user_id = params?.[0] ? int(params[0]) : undefined
-	return param_user_id
-		? { id: param_user_id, identity: `Пользователь` } as User
-		: undefined
-}
-
 const withData = (
 	ctx: BotContext,
 	data: JoinRequestData,
@@ -43,8 +36,14 @@ const withData = (
 const command2action = {
 	'join': {
 		description: 'Process join request',
-		action: (ctx: BotContext) => {
-			return handleChatJoinRequest(asJoinRequest(ctx, getUser(ctx)))
+		action: (ctx: CommandContext<BotContext>) => {
+      // ctx.match contains everything after "/join "
+      const paramUserId = ctx.match ? parseInt(ctx.match) : undefined;
+
+      const user = paramUserId
+        ? { id: paramUserId, identity: 'User' } as User
+        : ctx.user;
+			return handleChatJoinRequest(asJoinRequest(ctx, user))
 		},
 	},
 	'approve': {
