@@ -39,7 +39,7 @@ const command2action = {
 			const paramUserId = ctx.match ? int(ctx.match) : undefined
 
 			const user = paramUserId
-				? { id: paramUserId, identity: 'User' } as User
+				? { id: paramUserId, identity: 'User', fullName: 'Fake Name' } as User
 				: ctx.user
 			return handleChatJoinRequest(asJoinRequest(ctx, user))
 		},
