@@ -1,4 +1,4 @@
-import { notifyAllAdmins } from "../../../util/notifier.ts"
+import { notifyAllAdmins } from '../../../util/notifier.ts'
 import { StepOutcome } from '../../sequence.type.ts'
 import { CallbackContextFlow } from '../callback-context.type.ts'
 import { notifyAdmin } from '../callback.messages.ts'

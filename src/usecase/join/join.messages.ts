@@ -1,6 +1,6 @@
 import { bold, Chat, fmt, FormattedString, italic, link } from '../../deps.ts'
 import { chatLink } from '../../text/chat.ts'
-import { hashtag } from "../../text/id.ts"
+import { hashtag } from '../../text/id.ts'
 import { userLink, verifyLink } from '../../text/user.ts'
 import { User } from '../../type/user.type.ts'
 import { BanData, BanStatus } from './join-context.ts'

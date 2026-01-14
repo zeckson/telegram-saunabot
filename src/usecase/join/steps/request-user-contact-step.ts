@@ -1,8 +1,12 @@
 import { Keyboard } from '../../../deps.ts'
-import { notifyAllAdmins } from "../../../util/notifier.ts"
+import { notifyAllAdmins } from '../../../util/notifier.ts'
 import { Step } from '../../sequence.type.ts'
 import type { JoinFlowContext } from '../join-context.ts'
-import { chatJoinVerifyMessage, requestContactError, shareContactButtonName, } from '../join.messages.ts'
+import {
+	chatJoinVerifyMessage,
+	requestContactError,
+	shareContactButtonName,
+} from '../join.messages.ts'
 
 export const requestUserContactStep: Step<JoinFlowContext> = async (ctx) => {
 	try {

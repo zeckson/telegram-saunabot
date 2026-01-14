@@ -8,16 +8,19 @@ export const handleJoinRequestStep = async (
 	const chatId = ctx.data.chatId
 	const userId = ctx.data.userId
 	try {
-    switch (ctx.data.action) {
-      case JoinRequestAction.APPROVE:
-        await ctx.api.approveChatJoinRequest(chatId, userId)
-        break
-      case JoinRequestAction.DECLINE:
-        await ctx.api.declineChatJoinRequest(chatId, userId)
-        break
-      default:
-        return { ok: false, reason: `invalid action: ${ctx.data.action}` }
-    }
+		switch (ctx.data.action) {
+			case JoinRequestAction.APPROVE:
+				await ctx.api.approveChatJoinRequest(chatId, userId)
+				break
+			case JoinRequestAction.DECLINE:
+				await ctx.api.declineChatJoinRequest(chatId, userId)
+				break
+			default:
+				return {
+					ok: false,
+					reason: `invalid action: ${ctx.data.action}`,
+				}
+		}
 		return { ok: true }
 	} catch (e: unknown) {
 		const error = e instanceof Error ? e : new Error(String(e))

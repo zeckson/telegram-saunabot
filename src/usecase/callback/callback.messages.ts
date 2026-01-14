@@ -1,6 +1,6 @@
 import { fmt, FormattedString } from '../../deps.ts'
 import { GrammyError } from '../../deps.ts'
-import { hashtag } from "../../text/id.ts"
+import { hashtag } from '../../text/id.ts'
 import { userLink } from '../../text/user.ts'
 import { JoinRequestAction } from '../../type/join-request.ts'
 import { User } from '../../type/user.type.ts'
