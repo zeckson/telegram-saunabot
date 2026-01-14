@@ -31,7 +31,7 @@ export const requestContactError = (
 	user: User,
 	errorMessage: string,
 ): FormattedString =>
-	fmt`Не удалось отправись запрос пользователю ${hashtag(user.id)}
+	fmt`Не удалось отправить запрос пользователю ${hashtag(user.id)}
 Запрос от ${userLink(user)}. Текст ошибки:
   ${errorMessage}`
 
