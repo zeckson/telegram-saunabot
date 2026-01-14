@@ -51,7 +51,7 @@ export const notifyError = (
 	user: User,
 	data: JoinRequestData,
 	e: GrammyError,
-): string | FormattedString => {
+): FormattedString => {
 	return fmt`Не удалось ${status(data)} заявку ${hashtag(data.userId)}
 Запрос от ${userLink(user)}. Текст ошибки:
   ${getMessageByError(e)}`

@@ -4,20 +4,13 @@ import { notifyAdmins } from './notify-admin.ts'
 
 export const notifyAllAdmins = (
 	ctx: BotContext,
-	message: string | FormattedString,
+	message: FormattedString,
 	other?: object,
 ) => {
-	let params: object = {}
-	if ((message as FormattedString).entities) {
-		params = { entities: message.entities, ...other }
-		message = message.toString()
-	} else {
-		params = { parse_mode: 'MarkdownV2', ...other }
-	}
 	return notifyAdmins((id: number) =>
-		ctx.api.sendMessage(id, message as string, {
+		ctx.api.sendMessage(id, message.toString(), {
 			link_preview_options: { is_disabled: true },
-			...params,
+			...{ entities: message.entities, ...other },
 		})
 	)
 }

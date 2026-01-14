@@ -10,14 +10,14 @@ export const notifyAllOnFail = async (
 	ctx: BotContext,
 ) => {
 	const result = await outcome
-	if (!result.ok) {
-		const reason = result.reason!
-		const message = reason instanceof Error ? reason.message : reason
+	if (!result.ok && result.error) {
+		const error = result.error
+
 		await notifyAllAdmins(
 			ctx,
 			fmt`Ошибка при обработке заявки ${hashtag(ctx.user.id)}
 Запрос от ${userLink(ctx.user)}. Текст ошибки:
-  ${blockquote(message)}`,
+  ${blockquote(error.message)}`,
 		)
 	}
 }

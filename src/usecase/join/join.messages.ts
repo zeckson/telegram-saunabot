@@ -3,7 +3,6 @@ import { chatLink } from '../../text/chat.ts'
 import { hashtag } from "../../text/id.ts"
 import { userLink, verifyLink } from '../../text/user.ts'
 import { User } from '../../type/user.type.ts'
-import { text } from '../../util/markdown.ts'
 import { BanData, BanStatus } from './join-context.ts'
 
 const privacyPolicy = `https://snezhdanov.ru/privacy-policy`
@@ -14,7 +13,7 @@ export const chatJoinVerifyMessage = (
 	from: User,
 	chat: Chat,
 ): FormattedString =>
-	fmt`Здравствуйте, ${bold(text(from.fullName))}!
+	fmt`Здравствуйте, ${bold(from.fullName)}!
     
 Вы подали заявку на вступление в чат ${chatLink(chat)}.
 В целях борьбы со спамом и спам-аккаунтами мы просим вас поделиться с нами вашими контактными данными.
