@@ -9,8 +9,9 @@ export const handleJoinRequestApproveStep = async (
 	try {
 		await ctx.api.approveChatJoinRequest(chatId, userId)
 		return { ok: true }
-	} catch (e: Error | unknown) {
-		return { ok: false, reason: e as Error }
+	} catch (e: unknown) {
+		const error = e instanceof Error ? e : new Error(String(e))
+		return { ok: false, error }
 	}
 }
 
@@ -22,7 +23,8 @@ export const handleJoinRequestDeclineStep = async (
 	try {
 		await ctx.api.declineChatJoinRequest(chatId, userId)
 		return { ok: true }
-	} catch (e: Error | unknown) {
-		return { ok: false, reason: e as Error }
+	} catch (e: unknown) {
+		const error = e instanceof Error ? e : new Error(String(e))
+		return { ok: false, error }
 	}
 }

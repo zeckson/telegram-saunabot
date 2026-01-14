@@ -27,10 +27,11 @@ export const requestUserContactStep: Step<JoinFlowContext> = async (ctx) => {
 		)
 		return { ok: true }
 	} catch (e: unknown) {
+		const error = e instanceof Error ? e : new Error(String(e))
 		await notifyAllAdmins(
 			ctx,
-			requestContactError(ctx.user, (e as GrammyError).message),
+			requestContactError(ctx.user, error.message),
 		)
-		return { ok: false, reason: 'request_contact_failed' }
+		return { ok: false, reason: 'request_contact_failed', error }
 	}
 }

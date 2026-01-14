@@ -23,16 +23,16 @@ const run = async <TCtx>(
 			if (!res.ok) {
 				console.warn(
 					`${stepName} returned "false" with reason: ${
-						res.reason ?? 'unknown reason'
+						res.reason ?? res.error?.message ?? 'unknown reason'
 					}`,
 				)
 				return res
 			}
 			console.debug(`${stepName} completed successfully`)
 		} catch (e) {
-			const message = e instanceof Error ? e.message : String(e)
-			console.error(`${stepName} failed with error: ${message}`)
-			return { ok: false, reason: message } as const
+			const error = e instanceof Error ? e : new Error(String(e))
+			console.error(`${stepName} failed with error: ${error.message}`)
+			return { ok: false, error } as const
 		}
 		it = iterator.next(name)
 	}

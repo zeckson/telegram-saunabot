@@ -17,14 +17,14 @@ export const answerCallbackQueryStep = async (
 	if (result.ok) {
 		await ctx.answerCallbackQuery(chatJoinAction(ctx.data.action))
 	} else {
-		const errorMessage = getErrorMessage(result.reason)
+		const errorMessage = getErrorMessage(result.reason ?? result.error)
 		await ctx.answerCallbackQuery(errorMessage)
 
-		if (result.reason instanceof GrammyError) {
+		if (result.error instanceof GrammyError) {
 			const message = notifyError(
 				ctx.user,
 				ctx.data,
-				result.reason,
+				result.error,
 			)
 			await notifyAllAdmins(ctx, message)
 		}
