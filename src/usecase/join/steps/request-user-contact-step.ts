@@ -1,5 +1,5 @@
-import { notifyAllAdmins } from '../../../action/admin.ts'
 import { Keyboard } from '../../../deps.ts'
+import { notifyAllAdmins } from "../../../util/notifier.ts"
 import { Step } from '../../sequence.type.ts'
 import type { JoinFlowContext } from '../join-context.ts'
 import { chatJoinVerifyMessage, requestContactError, shareContactButtonName, } from '../join.messages.ts'

@@ -1,5 +1,5 @@
-import { notifyAllAdmins } from '../../../action/admin.ts'
 import { GrammyError } from '../../../deps.ts'
+import { notifyAllAdmins } from "../../../util/notifier.ts"
 import { StepOutcome } from '../../sequence.type.ts'
 import { CallbackContextFlow } from '../callback-context.type.ts'
 import { chatJoinAction, notifyError } from '../callback.messages.ts'

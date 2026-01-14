@@ -1,6 +1,6 @@
-import { notifyAllAdmins } from '../../../action/admin.ts'
 import { InlineKeyboard } from '../../../deps.ts'
 import { JoinRequestAction } from '../../../type/join-request.ts'
+import { notifyAllAdmins } from "../../../util/notifier.ts"
 import { Step } from '../../sequence.type.ts'
 import { BanStatus, JoinFlowContext } from '../join-context.ts'
 import {

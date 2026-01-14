@@ -1,3 +1,5 @@
+import { FormattedString } from "../deps.ts"
+import { BotContext } from "../type/context.ts"
 import { Config } from './config.ts'
 
 export const notifyAdmins = (
@@ -11,17 +13,15 @@ export const notifyAdmins = (
 
 	return Promise.all(responses)
 }
-
-abstract class Notifier<T> {
-	abstract notify(action: (param: T) => Promise<unknown>): Promise<unknown>
+export const notifyAllAdmins = (
+  ctx: BotContext,
+  message: FormattedString,
+  other?: object,
+) => {
+  return notifyAdmins((id: number) =>
+    ctx.api.sendMessage(id, message.toString(), {
+      link_preview_options: { is_disabled: true },
+      ...{ entities: message.entities, ...other },
+    })
+  )
 }
-
-export class AllAdminNotifier extends Notifier<number> {
-	override notify(
-		action: (id: number) => Promise<unknown>,
-	): Promise<unknown> {
-		return notifyAdmins(action)
-	}
-}
-
-export class UserNotifier {}
