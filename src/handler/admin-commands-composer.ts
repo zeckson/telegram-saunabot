@@ -12,6 +12,7 @@ import {
 	declineJoinRequestPipeline,
 } from '../usecase/callback/handle-callback-query.ts'
 import { handleChatJoinRequest } from '../usecase/join/handle-chat-join-request.ts'
+import { inviteMessage } from '../usecase/join/join.messages.ts'
 import { pipeline } from '../usecase/pipeline.ts'
 import { int } from '../util/system.ts'
 
@@ -65,6 +66,34 @@ const command2action = {
 					chatId: ctx.chat?.id ?? ctx.user.id,
 				}),
 			),
+	},
+	'invite': {
+		description: 'Invite user by ID: /invite <userId> <chatId>',
+		action: async (ctx: CommandContext<BotContext>) => {
+			const args = ctx.match.split(/\s+/)
+			const userId = int(args[0])
+			if (!userId) {
+				return ctx.reply(`Usage: /invite <userId> <chatId>`)
+			}
+			const chatId = args[1] ? int(args[1]) : ctx.chat?.id
+			if (!chatId) {
+				return ctx.reply(`Could not determine chatId. Usage: /invite <userId> <chatId>`)
+			}
+
+			try {
+				const invite = await ctx.api.createChatInviteLink(chatId, {
+					member_limit: 1,
+				})
+				const message = inviteMessage(await ctx.api.getChat(chatId), invite)
+				await ctx.api.sendMessage(userId, message.text, {
+					entities: message.entities,
+				})
+				return ctx.reply(`Invite link sent to user ${userId}`)
+			} catch (e) {
+				const error = e instanceof Error ? e.message : String(e)
+				return ctx.reply(`Failed to invite user: ${error}`)
+			}
+		},
 	},
 	'error': {
 		description: 'Test error handling',

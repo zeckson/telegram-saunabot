@@ -1,3 +1,4 @@
+import { ChatInviteLink } from 'grammy/types'
 import { bold, Chat, fmt, FormattedString, italic, link } from '../../deps.ts'
 import { chatLink } from '../../text/chat.ts'
 import { hashtag } from '../../text/id.ts'
@@ -68,3 +69,12 @@ export const onJoinRequest = (
 		])
 	}`
 }
+
+export const inviteMessage = (
+	chat: Chat,
+  invite: ChatInviteLink,
+): FormattedString =>
+	fmt`Здравствуйте! Вас пригласили в чат ${chatLink(chat)}.
+Нажмите на ссылку ниже, чтобы вступить:
+${invite.invite_link}
+`
