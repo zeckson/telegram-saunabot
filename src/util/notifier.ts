@@ -21,7 +21,7 @@ export const notifyAllAdmins = (
 	return notifyAdmins((id: number) =>
 		ctx.api.sendMessage(id, message.toString(), {
 			link_preview_options: { is_disabled: true },
-      disable_notification: true,
+			disable_notification: true,
 			...{ entities: message.entities, ...other },
 		})
 	)

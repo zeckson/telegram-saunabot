@@ -3,8 +3,14 @@ import { ChatJoinRequest, fmt, italic } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { JoinRequestAction } from '../type/join-request.ts'
 import { User } from '../type/user.type.ts'
-import { CallbackContextFlow, JoinRequestData, } from '../usecase/callback/callback-context.type.ts'
-import { approveJoinRequestPipeline, declineJoinRequestPipeline, } from '../usecase/callback/handle-callback-query.ts'
+import {
+	CallbackContextFlow,
+	JoinRequestData,
+} from '../usecase/callback/callback-context.type.ts'
+import {
+	approveJoinRequestPipeline,
+	declineJoinRequestPipeline,
+} from '../usecase/callback/handle-callback-query.ts'
 import { handleChatJoinRequest } from '../usecase/join/handle-chat-join-request.ts'
 import { inviteMessage } from '../usecase/join/join.messages.ts'
 import { pipeline } from '../usecase/pipeline.ts'
@@ -34,7 +40,11 @@ const command2action = {
 			const paramUserId = ctx.match ? int(ctx.match) : undefined
 
 			const user = paramUserId
-				? { id: paramUserId, identity: 'User', fullName: 'Fake Name' } as User
+				? {
+					id: paramUserId,
+					identity: 'User',
+					fullName: 'Fake Name',
+				} as User
 				: ctx.user
 			return handleChatJoinRequest(asJoinRequest(ctx, user))
 		},
@@ -71,14 +81,19 @@ const command2action = {
 			}
 			const chatId = args[1] ? int(args[1]) : ctx.chat?.id
 			if (!chatId) {
-				return ctx.reply(`Could not determine chatId. Usage: /invite <userId> <chatId>`)
+				return ctx.reply(
+					`Could not determine chatId. Usage: /invite <userId> <chatId>`,
+				)
 			}
 
 			try {
 				const invite = await ctx.api.createChatInviteLink(chatId, {
 					member_limit: 1,
 				})
-				const message = inviteMessage(await ctx.api.getChat(chatId), invite)
+				const message = inviteMessage(
+					await ctx.api.getChat(chatId),
+					invite,
+				)
 				await ctx.api.sendMessage(userId, message.text, {
 					entities: message.entities,
 				})
@@ -103,9 +118,13 @@ const command2action = {
 				return ctx.reply(`Bot is not attached to any chats yet.`)
 			}
 			const chatList = chats.map((c) => {
-        return fmt`• ${(c.title || c.first_name || 'Unknown')} (${italic(c.id)})`
+				return fmt`• ${(c.title || c.first_name || 'Unknown')} (${
+					italic(c.id)
+				})`
 			}).join(`\n`)
-			return ctx.replyFmt(`Bot is attached to following chats:\n${chatList}`)
+			return ctx.replyFmt(
+				`Bot is attached to following chats:\n${chatList}`,
+			)
 		},
 	},
 }

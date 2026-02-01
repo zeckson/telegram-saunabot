@@ -72,7 +72,7 @@ export const onJoinRequest = (
 
 export const inviteMessage = (
 	chat: Chat,
-  invite: ChatInviteLink,
+	invite: ChatInviteLink,
 ): FormattedString =>
 	fmt`Здравствуйте! Вас пригласили в чат ${chatLink(chat)}.
 Нажмите на ссылку ниже, чтобы вступить:
