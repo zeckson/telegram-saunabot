@@ -1,16 +1,10 @@
 import { CommandContext, Composer } from 'grammy'
-import { ChatJoinRequest, fmt } from '../deps.ts'
+import { ChatJoinRequest, fmt, italic } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { JoinRequestAction } from '../type/join-request.ts'
 import { User } from '../type/user.type.ts'
-import {
-	CallbackContextFlow,
-	JoinRequestData,
-} from '../usecase/callback/callback-context.type.ts'
-import {
-	approveJoinRequestPipeline,
-	declineJoinRequestPipeline,
-} from '../usecase/callback/handle-callback-query.ts'
+import { CallbackContextFlow, JoinRequestData, } from '../usecase/callback/callback-context.type.ts'
+import { approveJoinRequestPipeline, declineJoinRequestPipeline, } from '../usecase/callback/handle-callback-query.ts'
 import { handleChatJoinRequest } from '../usecase/join/handle-chat-join-request.ts'
 import { inviteMessage } from '../usecase/join/join.messages.ts'
 import { pipeline } from '../usecase/pipeline.ts'
@@ -99,6 +93,19 @@ const command2action = {
 		description: 'Test error handling',
 		action: async (ctx: BotContext) => {
 			await ctx.api.sendMessage(12345, `text`)
+		},
+	},
+	'chats': {
+		description: 'Get all chats bot is attached to',
+		action: async (ctx: BotContext) => {
+			const chats = await ctx.chatStore.getAll()
+			if (chats.length === 0) {
+				return ctx.reply(`Bot is not attached to any chats yet.`)
+			}
+			const chatList = chats.map((c) => {
+        return fmt`• ${(c.title || c.first_name || 'Unknown')} (${italic(c.id)})`
+			}).join(`\n`)
+			return ctx.replyFmt(`Bot is attached to following chats:\n${chatList}`)
 		},
 	},
 }

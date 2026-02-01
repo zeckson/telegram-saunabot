@@ -1,4 +1,5 @@
 import { MiddlewareFn } from 'grammy'
+import { ChatStore } from '../store/chat-store.ts'
 import { DenoStore } from '../store/denostore.ts'
 import { UserStore } from '../store/user-store.ts'
 import { User, UserContext } from '../type/user.type.ts'
@@ -11,9 +12,11 @@ const EMPTY_USER = new User({
 
 const store = await DenoStore.get()
 const userStore = new UserStore(store)
+const chatStore = new ChatStore(store)
 
 export const context: MiddlewareFn<UserContext> = async (ctx, next) => {
 	const from = ctx.from
+	const chat = ctx.chat
 	const type = Object.keys(ctx.update)
 		.find((it) => it !== `update_id`) ?? `unknown`
 
@@ -30,7 +33,14 @@ export const context: MiddlewareFn<UserContext> = async (ctx, next) => {
 		await userStore.saveOrUpdate(user)
 		ctx.user = new User(user)
 	}
+
+	if (chat && chat.type !== 'private') {
+		await chatStore.saveOrUpdate(chat)
+	}
+
 	ctx.store = store
+	ctx.userStore = userStore
+	ctx.chatStore = chatStore
 	ctx.type = type
 
 	return next()

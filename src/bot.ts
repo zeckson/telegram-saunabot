@@ -10,8 +10,14 @@ const bot = new Bot<BotContext>(Config.TELEGRAM_TOKEN)
 registerMiddleware(bot)
 registerHandlers(bot)
 
-bot.on(`my_chat_member`, (ctx) => {
-	console.dir(ctx.myChatMember)
+bot.on(`my_chat_member`, async (ctx) => {
+	const chat = ctx.myChatMember.chat
+	const status = ctx.myChatMember.new_chat_member.status
+	if (status === 'left' || status === 'kicked') {
+		await ctx.chatStore.delete(chat.id)
+	} else {
+		await ctx.chatStore.saveOrUpdate(chat)
+	}
 })
 
 export { bot }

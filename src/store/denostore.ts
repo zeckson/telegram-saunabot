@@ -23,6 +23,14 @@ export class DenoStore {
 		return value.value == null ? undefined : value.value
 	}
 
+	async delete(key: Deno.KvKey): Promise<void> {
+		await this.db.delete(key)
+	}
+
+	list<T>(selector: Deno.KvListSelector): Deno.KvListIterator<T> {
+		return this.db.list<T>(selector)
+	}
+
 	close() {
 		this.db.close()
 	}

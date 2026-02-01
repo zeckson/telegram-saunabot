@@ -1,5 +1,7 @@
 import { Context, User as GrammyUser } from '../deps.ts'
+import { ChatStore } from '../store/chat-store.ts'
 import { DenoStore } from '../store/denostore.ts'
+import { UserStore } from '../store/user-store.ts'
 import { Config } from '../util/config.ts'
 import { emojis } from '../util/emoji.ts'
 
@@ -90,4 +92,6 @@ export interface UserContext extends Context {
 	type: string
 	user: User
 	store: DenoStore
+	userStore: UserStore
+	chatStore: ChatStore
 }
