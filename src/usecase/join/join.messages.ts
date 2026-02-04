@@ -4,7 +4,7 @@ import { chatLink } from '../../text/chat.ts'
 import { hashtag } from '../../text/id.ts'
 import { userLink, verifyLink } from '../../text/user.ts'
 import { User } from '../../type/user.type.ts'
-import { BanData, BanStatus } from './join-context.ts'
+import { BanCheckResult, BanStatus } from '../../tools/ban.ts'
 
 const privacyPolicy = `https://snezhdanov.ru/privacy-policy`
 
@@ -53,7 +53,7 @@ export const declineButtonText = `👎 Отклонить`
 export const onJoinRequest = (
 	user: User,
 	chat: Chat,
-	banData: BanData,
+	banData: BanCheckResult,
 ): FormattedString => {
 	return fmt`Заявка ${hashtag(user.id)} ${
 		banData.status === BanStatus.BANNED ? bold(`🚫 Заблокирована!`) : ``
