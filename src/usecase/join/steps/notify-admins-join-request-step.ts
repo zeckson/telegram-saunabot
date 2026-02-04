@@ -4,7 +4,11 @@ import { JoinRequestAction } from '../../../type/join-request.ts'
 import { notifyAllAdmins } from '../../../util/notifier.ts'
 import { Step } from '../../sequence.type.ts'
 import { JoinFlowContext } from '../join-context.ts'
-import { approveButtonText, declineButtonText, onJoinRequest, } from '../join.messages.ts'
+import {
+	approveButtonText,
+	declineButtonText,
+	onJoinRequest,
+} from '../join.messages.ts'
 
 export const notifyAdminsJoinRequestStep: Step<JoinFlowContext> = async (
 	ctx,

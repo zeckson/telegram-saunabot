@@ -12,7 +12,9 @@ type MockResponse = {
 const setupMockFetch = (handlers: Record<string, MockResponse>) => {
 	globalThis.fetch = (url: string | URL | Request) => {
 		const urlStr = url.toString()
-		const entry = Object.entries(handlers).find(([key]) => urlStr.includes(key))
+		const entry = Object.entries(handlers).find(([key]) =>
+			urlStr.includes(key)
+		)
 
 		if (entry) {
 			const [_, mock] = entry
@@ -151,7 +153,7 @@ Deno.test('getBanInfo tests', async (t) => {
 		globalThis.fetch = () => Promise.reject(timeoutError)
 
 		const result = await getBanInfo(123)
-    assertEquals(result.status, BanStatus.UNKNOWN)
+		assertEquals(result.status, BanStatus.UNKNOWN)
 		assertEquals(result.info, [])
 	})
 

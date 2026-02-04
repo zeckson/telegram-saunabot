@@ -1,4 +1,4 @@
-import { BanStatus } from "../../tools/ban.ts"
+import { BanStatus } from '../../tools/ban.ts'
 import { branch } from '../branch.ts'
 import { notifyAllOnFail } from '../notify-all-on-fail.ts'
 import { pipeline } from '../pipeline.ts'

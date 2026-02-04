@@ -1,5 +1,5 @@
 import { assert, assertEquals } from '@std/assert'
-import { int } from "../util/system.ts"
+import { int } from '../util/system.ts'
 import { BanStatus, getBanInfo } from './ban.ts'
 
 const CAS_BANNED_ID = `7954858414`
@@ -13,7 +13,7 @@ Deno.test('getBanInfo integration tests', async (t) => {
 			const result = await getBanInfo(int(LOS_BANNED_ID))
 			console.log(`Result for ID ${LOS_BANNED_ID}:`, result)
 
-      assertEquals(result.status, BanStatus.BANNED)
+			assertEquals(result.status, BanStatus.BANNED)
 
 			assert(
 				result.info.some((r) => r.name === 'LOLS'),
@@ -28,7 +28,7 @@ Deno.test('getBanInfo integration tests', async (t) => {
 			const result = await getBanInfo(int(CAS_BANNED_ID))
 			console.log(`Result for ID ${CAS_BANNED_ID}:`, result)
 
-      assertEquals(result.status, BanStatus.BANNED)
+			assertEquals(result.status, BanStatus.BANNED)
 
 			assert(
 				result.info.some((r) => r.name === 'CAS'),
@@ -37,23 +37,23 @@ Deno.test('getBanInfo integration tests', async (t) => {
 		},
 	)
 
-  await t.step(
-    `should timeout`,
-    async () => {
-      const result = await getBanInfo(int(NOT_BANNED_ID), 0)
+	await t.step(
+		`should timeout`,
+		async () => {
+			const result = await getBanInfo(int(NOT_BANNED_ID), 0)
 
-      assertEquals(result.status, BanStatus.UNKNOWN)
+			assertEquals(result.status, BanStatus.UNKNOWN)
 
-      assertEquals(result.info, [])
-    },
-  )
+			assertEquals(result.info, [])
+		},
+	)
 
 	await t.step('should return empty for a likely clean ID', async () => {
 		// Using a very large ID that is unlikely to be banned
 		const result = await getBanInfo(int(NOT_BANNED_ID))
 		console.log(`Result for ID ${NOT_BANNED_ID}:`, result)
 
-    assertEquals(result.status, BanStatus.NOT_BANNED)
+		assertEquals(result.status, BanStatus.NOT_BANNED)
 		assertEquals(result.info, [])
 	})
 })
