@@ -1,7 +1,8 @@
+import { BanStatus } from "../../tools/ban.ts"
 import { branch } from '../branch.ts'
 import { notifyAllOnFail } from '../notify-all-on-fail.ts'
 import { pipeline } from '../pipeline.ts'
-import { BanStatus, JoinFlowContext } from './join-context.ts'
+import { JoinFlowContext } from './join-context.ts'
 import { fetchBanStatus } from './steps/fetch-ban-status.ts'
 import { notifyAdminsJoinRequestStep } from './steps/notify-admins-join-request-step.ts'
 import { rejectRequestIfBanned } from './steps/reject-request-if-banned.ts'
