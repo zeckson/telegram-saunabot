@@ -18,12 +18,13 @@ const DEFAULT_TIMEOUT = 1000
 
 export const getBanInfo = async (
 	id: number,
+  timeout = DEFAULT_TIMEOUT,
 ): Promise<BanResult> => {
 	const promises = [
 		CAS.api + id,
 		LOLS.api + id,
 	].map((it) =>
-		fetchJson<DataType>(it, {}, DEFAULT_TIMEOUT).catch(() => undefined)
+		fetchJson<DataType>(it, {}, timeout).catch(() => undefined)
 	)
 	const [cas_ban, lols_ban] = (await Promise.all(promises)).map((
 		it: DataType | undefined,
