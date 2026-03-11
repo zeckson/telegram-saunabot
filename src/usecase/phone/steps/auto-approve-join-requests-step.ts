@@ -1,5 +1,8 @@
 import { GrammyError } from "grammy"
 import { AccessStore } from '../../../store/access-store.ts'
+import { JoinRequestAction } from "../../../type/join-request.ts"
+import { approveJoinRequestPipeline, toCallbackContext } from "../../callback/handle-callback-query.ts"
+import { pipeline } from "../../pipeline.ts"
 import { Step } from '../../sequence.type.ts'
 import { PhoneFlowContext } from '../phone-context.ts'
 
@@ -19,8 +22,13 @@ export const autoApproveJoinRequestsStep: Step<PhoneFlowContext> = async (
 	const approvedChats = []
 	for (const chat of pendingRequests) {
 		try {
-			await ctx.api.approveChatJoinRequest(chat.id, userId)
-			await accessStore.approve(ctx.user, chat)
+      await pipeline(`approve`, approveJoinRequestPipeline, true)(
+        toCallbackContext(ctx, {
+          action: JoinRequestAction.APPROVE,
+          userId: userId,
+          chatId: chat.id,
+        }),
+      )
 			approvedChats.push(chat)
 		} catch (e) {
 			if (e instanceof GrammyError) {
@@ -32,6 +40,12 @@ export const autoApproveJoinRequestsStep: Step<PhoneFlowContext> = async (
 			)
 		}
 	}
+
+  const approved = []
+  for (const chat of approvedChats) {
+    approved.push(accessStore.approve(ctx.user, chat))
+  }
+  await Promise.all(approved)
 
 	if (approvedChats.length > 0) {
 		ctx.approvedChats = approvedChats

@@ -37,7 +37,13 @@ export class AccessStore {
 			user.id,
 			`chat`,
 			chat.id,
-		], error)
+		], {
+			message: error.message,
+			error_code: error.error_code,
+			description: error.description,
+			method: error.method,
+			payload: error.payload,
+		})
 	}
 
 	async listPendingRequests(userId: number): Promise<Chat[]> {

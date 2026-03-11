@@ -7,6 +7,9 @@ import { User } from '../../../type/user.type.ts'
 import { PhoneFlowContext } from '../phone-context.ts'
 import { autoApproveJoinRequestsStep } from './auto-approve-join-requests-step.ts'
 
+Deno.env.set('ADMIN_ID', 'test')
+Deno.env.set('TELEGRAM_TOKEN', 'test')
+
 Deno.test({
 	name: 'autoApproveJoinRequestsStep tests',
 	sanitizeResources: false,
@@ -26,6 +29,8 @@ Deno.test({
 			type: 'group',
 			title: 'Test Group',
 		}
+
+    const ok = async () => {}
 
 		await t.step('should do nothing when there are no pending requests', async () => {
 			const approveCalls: any[] = []
@@ -50,13 +55,15 @@ Deno.test({
 			await accessStore.request(mockUser, mockChat)
 
 			const approveCalls: any[] = []
-			const ctx = {
+
+      const ctx = {
 				user: mockUser,
 				store: denoStore,
 				api: {
 					approveChatJoinRequest: async (chatId: number, userId: number) => {
 						approveCalls.push({ chatId, userId })
 					},
+          sendMessage: ok,
 				},
 			} as unknown as PhoneFlowContext
 
@@ -92,6 +99,7 @@ Deno.test({
 					approveChatJoinRequest: async () => {
 						throw grammyError
 					},
+          sendMessage: ok,
 				},
 			} as unknown as PhoneFlowContext
 
@@ -126,6 +134,7 @@ Deno.test({
 						}
 						approveCalls.push(chatId)
 					},
+          sendMessage: ok,
 				},
 			} as unknown as PhoneFlowContext
 

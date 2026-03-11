@@ -1,7 +1,8 @@
+import { BotContext } from "../../type/context.ts"
 import { JoinRequestAction } from '../../type/join-request.ts'
 import { pipeline } from '../pipeline.ts'
 import { other, when } from '../when.ts'
-import { CallbackContextFlow } from './callback-context.type.ts'
+import { CallbackContextFlow, JoinRequestData } from './callback-context.type.ts'
 import { answerCallbackQueryStep } from './steps/answer-callback-query-step.ts'
 import { extractActionStep } from './steps/extract-action-step.ts'
 import { handleJoinRequestStep } from './steps/handle-join-request-step.ts'
@@ -17,6 +18,12 @@ export const declineJoinRequestPipeline = [
 	handleJoinRequestStep,
 	notifyAdminsResultStep,
 ]
+
+export const toCallbackContext = (
+  ctx: BotContext,
+  data: JoinRequestData,
+): CallbackContextFlow => Object.assign(ctx, { data }) as CallbackContextFlow
+
 
 const handleCallbackQueryData = pipeline(`callback-data`, [
 	extractActionStep,

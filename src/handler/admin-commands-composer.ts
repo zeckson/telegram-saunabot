@@ -4,12 +4,9 @@ import { BotContext } from '../type/context.ts'
 import { JoinRequestAction } from '../type/join-request.ts'
 import { User } from '../type/user.type.ts'
 import {
-	CallbackContextFlow,
-	JoinRequestData,
-} from '../usecase/callback/callback-context.type.ts'
-import {
-	approveJoinRequestPipeline,
-	declineJoinRequestPipeline,
+  approveJoinRequestPipeline,
+  declineJoinRequestPipeline,
+  toCallbackContext,
 } from '../usecase/callback/handle-callback-query.ts'
 import { handleChatJoinRequest } from '../usecase/join/handle-chat-join-request.ts'
 import { inviteMessage } from '../usecase/join/join.messages.ts'
@@ -26,11 +23,6 @@ const asJoinRequest = (
 		user: withUser ?? ctx.user,
 	}) as BotContext & ChatJoinRequest
 }
-
-const withData = (
-	ctx: BotContext,
-	data: JoinRequestData,
-): CallbackContextFlow => Object.assign(ctx, { data }) as CallbackContextFlow
 
 const command2action = {
 	'join': {
@@ -53,7 +45,7 @@ const command2action = {
 		description: 'Approve join request',
 		action: (ctx: BotContext) =>
 			pipeline(`approve`, approveJoinRequestPipeline, true)(
-				withData(ctx, {
+				toCallbackContext(ctx, {
 					action: JoinRequestAction.APPROVE,
 					userId: ctx.user.id,
 					chatId: ctx.chat?.id ?? ctx.user.id,
@@ -64,7 +56,7 @@ const command2action = {
 		description: 'Decline join request',
 		action: (ctx: BotContext) =>
 			pipeline(`decline`, declineJoinRequestPipeline, true)(
-				withData(ctx, {
+				toCallbackContext(ctx, {
 					action: JoinRequestAction.DECLINE,
 					userId: ctx.user.id,
 					chatId: ctx.chat?.id ?? ctx.user.id,
