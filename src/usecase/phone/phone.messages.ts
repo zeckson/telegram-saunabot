@@ -25,8 +25,12 @@ export const userSentContactAdminNotification = (
 ${blockquote(phone)}
 Проверить пользователя можно по ${verifyLink(from.id, `ссылке`)}`
 
-export const successMessage = () =>
-	fmt`Благодарим! Наши админы проверят информацию и добавят вас в группу!`
+export const successMessage = (approvedChatsCount = 0) => {
+	if (approvedChatsCount > 0) {
+		return fmt`Благодарим! Мы добавили вас в группу. Приятного общения!`
+	}
+	return fmt`Благодарим! Наши админы проверят информацию и добавят вас в группу!`
+}
 
 export const adminAssistMessage = () =>
 	'Я передал ваши сообщения админу, ' +

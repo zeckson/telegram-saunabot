@@ -39,4 +39,22 @@ export class AccessStore {
 			chat.id,
 		], error)
 	}
+
+	async listPendingRequests(userId: number): Promise<Chat[]> {
+		const prefix = [`access`, `request`, userId, `chat`]
+		const entries = this.store.list<Chat>({ prefix })
+		const chats: Chat[] = []
+		for await (const entry of entries) {
+			chats.push(entry.value)
+		}
+		return chats
+	}
+
+	async clearRequests(userId: number): Promise<void> {
+		const prefix = [`access`, `request`, userId, `chat`]
+		const entries = this.store.list<Chat>({ prefix })
+		for await (const entry of entries) {
+			await this.store.delete(entry.key)
+		}
+	}
 }
