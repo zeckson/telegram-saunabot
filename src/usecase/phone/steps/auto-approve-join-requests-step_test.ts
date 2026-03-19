@@ -59,6 +59,7 @@ Deno.test({
       const ctx = {
 				user: mockUser,
 				store: denoStore,
+				phone: '79991234567',
 				api: {
 					approveChatJoinRequest: async (chatId: number, userId: number) => {
 						approveCalls.push({ chatId, userId })
@@ -83,6 +84,78 @@ Deno.test({
 			assertEquals(approved, mockChat)
 		})
 
+		await t.step('should NOT approve if phone is NOT Russian', async () => {
+			await accessStore.request(mockUser, mockChat)
+
+			const approveCalls: any[] = []
+			const ctx = {
+				user: mockUser,
+				store: denoStore,
+				phone: '1234567890', // non-Russian
+				api: {
+					approveChatJoinRequest: async (chatId: number, userId: number) => {
+						approveCalls.push({ chatId, userId })
+					},
+				},
+			} as unknown as PhoneFlowContext
+
+			const result = await autoApproveJoinRequestsStep(ctx)
+
+			assertEquals(result.ok, true)
+			assertEquals(approveCalls.length, 0)
+			assertEquals(ctx.approvedChats, undefined)
+
+			// Pending requests should be cleared
+			const pending = await accessStore.listPendingRequests(1)
+			assertEquals(pending.length, 0)
+		})
+
+		await t.step('should approve if phone IS Russian (starts with 7)', async () => {
+			await accessStore.request(mockUser, mockChat)
+
+			const approveCalls: any[] = []
+			const ctx = {
+				user: mockUser,
+				store: denoStore,
+				phone: '79991234567',
+				api: {
+					approveChatJoinRequest: async (chatId: number, userId: number) => {
+						approveCalls.push({ chatId, userId })
+					},
+					sendMessage: ok,
+				},
+			} as unknown as PhoneFlowContext
+
+			const result = await autoApproveJoinRequestsStep(ctx)
+
+			assertEquals(result.ok, true)
+			assertEquals(approveCalls.length, 1)
+			assertEquals(ctx.approvedChats, [mockChat])
+		})
+
+		await t.step('should approve if phone IS Russian (starts with +7)', async () => {
+			await accessStore.request(mockUser, mockChat)
+
+			const approveCalls: any[] = []
+			const ctx = {
+				user: mockUser,
+				store: denoStore,
+				phone: '+79991234567',
+				api: {
+					approveChatJoinRequest: async (chatId: number, userId: number) => {
+						approveCalls.push({ chatId, userId })
+					},
+					sendMessage: ok,
+				},
+			} as unknown as PhoneFlowContext
+
+			const result = await autoApproveJoinRequestsStep(ctx)
+
+			assertEquals(result.ok, true)
+			assertEquals(approveCalls.length, 1)
+			assertEquals(ctx.approvedChats, [mockChat])
+		})
+
 		await t.step('should handle GrammyError during approval', async () => {
 			await accessStore.request(mockUser, mockChat)
 
@@ -95,6 +168,7 @@ Deno.test({
 			const ctx = {
 				user: mockUser,
 				store: denoStore,
+				phone: '79991234567',
 				api: {
 					approveChatJoinRequest: async () => {
 						throw grammyError
@@ -127,6 +201,7 @@ Deno.test({
 			const ctx = {
 				user: mockUser,
 				store: denoStore,
+				phone: '79991234567',
 				api: {
 					approveChatJoinRequest: async (chatId: number) => {
 						if (chatId === 123) {

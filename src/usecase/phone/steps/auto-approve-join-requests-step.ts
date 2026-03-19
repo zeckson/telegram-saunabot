@@ -13,9 +13,16 @@ export const autoApproveJoinRequestsStep: Step<PhoneFlowContext> = async (
 	const accessStore = new AccessStore(ctx.store)
 
 	const pendingRequests = await accessStore.listPendingRequests(userId)
+  const phone = ctx.phone
+  const isRussian = phone?.startsWith('7') || phone?.startsWith('+7')
 
-	if (pendingRequests.length === 0) {
-    console.log(`No pending requests for user ${userId}`)
+	if (pendingRequests.length === 0 || !isRussian) {
+    if (!isRussian && pendingRequests.length > 0) {
+      console.log(`User ${userId} with phone ${phone} is NOT Russian, skipping auto-approve`)
+      await accessStore.clearRequests(userId)
+    } else {
+      console.log(`No pending requests for user ${userId}`)
+    }
 		return { ok: true }
 	}
 
