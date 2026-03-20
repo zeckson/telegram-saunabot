@@ -7,7 +7,7 @@ export {
 	Keyboard,
 	webhookCallback,
 } from 'grammy'
-export type { NextFunction } from 'grammy'
+export type { NextFunction, Middleware } from 'grammy'
 export type { Chat, ChatJoinRequest, User } from 'grammy/types'
 
 export {

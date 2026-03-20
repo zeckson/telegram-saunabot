@@ -1,4 +1,4 @@
-import { Bot, hydrateReply } from '../deps.ts'
+import { Bot, hydrateReply, Middleware } from '../deps.ts'
 import { BotContext } from '../type/context.ts'
 import { log } from './log.ts'
 import { error } from './error.ts'
@@ -15,5 +15,5 @@ export const registerMiddleware = (bot: Bot<BotContext>) => {
 	bot.use(log)
 
 	// Install format reply variant to ctx
-	bot.use(hydrateReply)
+	bot.use(hydrateReply as unknown as Middleware<BotContext>)
 }
