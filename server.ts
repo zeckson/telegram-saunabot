@@ -7,11 +7,8 @@ const handleUpdate: (...args: Request[]) => Promise<Response> = webhookCallback(
 )
 
 const projectId = Deno.env.get(`DENO_PROJECT_ID`) || `telegram-saunabot`
-const deploymentId = Deno.env.get(`DENO_DEPLOYMENT_ID`)
 
-const deployUrl = deploymentId
-  ? `https://${projectId}${deploymentId ? `-${deploymentId}` : ``}.deno.dev`
-  : `http://localhost:8000`
+const deployUrl = `https://${projectId}.zeckson.deno.net`
 
 const getDefaultResponse = () => new Response(
   `Hello World!
@@ -49,10 +46,14 @@ Deno.serve(async (req) => {
 
 console.log(`Deno deploy url: ${deployUrl}`)
 
-// 5. Set webhook on start
-await bot.api.setWebhook(`${deployUrl}/${bot.token}`, DEFAULT_CONFIG)
+if (Deno.env.get(`SETUP_WEBHOOK`)) {
+  // 5. Set webhook on start
+  await bot.api.setWebhook(`${deployUrl}/${bot.token}`, DEFAULT_CONFIG)
 
-console.log(`Webhook is set to production url: ${deployUrl}`)
+  console.log(`Webhook is set to production url: ${deployUrl}`)
+} else {
+  console.log(`Webhook is not set`)
+}
 
 await bot.init()
 
